@@ -77,7 +77,7 @@ CUDA_VISIBLE_DEVICES=GPU_UUID bash examples/ru_normalizer/train_hidden.sh /path/
 
 The run root contains `venv`, `models/qwen3-4b-instruct-2507`,
 `models/agent-tokenizer`, and `data/hidden-plan-v1/{train,validation}.jsonl`.
-Defaults: BF16, SDPA, batch 16, accumulation 2, one epoch, LR 1e-4,
+Defaults: BF16, SDPA, batch 8, accumulation 4, one epoch, LR 1e-4,
 cosine schedule, 3% warmup. Logs and metrics use stock Trainer/TensorBoard.
 Resume by adding `--resume_from_checkpoint /path/to/checkpoint-N`.
 

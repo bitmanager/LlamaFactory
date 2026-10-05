@@ -1,98 +1,100 @@
-# Russian hidden-to-spoken-text pilot
+# Original Freeze-Omni decoder with Russian text output
 
-This experiment predicts a spoken Russian form (normalization and `+` stress
-marks) from **answer hidden states**, without synthesizing audio yet. It uses
-the same Qwen3-4B-Instruct-2507 base as the existing ASR/agent experiment.
+This replaces the stopped custom embedding-prefix experiment. The frozen source
+is the same Qwen3-4B-Instruct-2507 and tokenizer used by the ASR/agent branch.
 
-The frozen source Qwen reads the original answer with its system prompt and,
-when supplied, real conversation history. Only answer-token hidden states
-after the final norm enter a LayerNorm + Linear projector. Its output prefixes
-a second Qwen3-4B-Instruct-2507 decoder with PEFT LoRA. Training uses native
-causal cross-entropy, `transformers.Trainer`, and native Qwen generation.
-Only projector and decoder LoRA parameters update. The source never sees the
-normalized target. This is a text-only adaptation inspired by Freeze-Omni's
-hidden-conditioned decoder, **not a reproduction of its speech training**.
+## Reused code
 
-## Reused implementation
+`third_party/Freeze-Omni` is an **unmodified** submodule at
+`163a24880e533b2a07038fb8dcfe02dbbb8457e6`.
+`models/decoder/decoder.py:LLM2TTSCodecAR` supplies the noncausal prefix layers,
+per-layer DynamicCache K/V, masks, text preprocessing, AR decoder, teacher-forced
+forward, summed CE and native `infer()` with EOS termination. Validation uses
+its top-k=1 mode. Input/output lengths are independent.
 
-- Qwen models, tokenizer, CE, SDPA, collation, Trainer, optimizer, scheduler,
-  checkpoint/resume and decoding: Transformers.
-- LoRA: PEFT, rank 16, alpha 32, all linear layers.
-- Dataset loading: Hugging Face Datasets.
-- Local code: model interface/prefix adapter and existing-label format adapter.
+Like upstream inference, this uses both original text embeddings and contextual
+hidden states. Two upstream `LinearAdapter`s map Qwen's 2560 dimensions to 896.
+The 1024-token speech vocabulary becomes the agent's 151670-token text vocabulary:
+only embedding/output weights are newly initialized. Other decoder weights load
+from the release with an explicit mismatch allowlist. All small-decoder and
+adapter parameters train (439,416,570); source Qwen is frozen. This is the approved
+text-output adaptation, **not** the authors' prefix-only speech alignment stage.
 
-This example lives in the LLaMA-Factory fork but invokes **HF Trainer directly**;
-the standard LLaMA-Factory SFT command does not natively implement this
-two-model hidden-prefix input. No upstream model or training loop is patched.
+The released config is preserved as `freeze_decoder.json`: 4 decoder layers,
+4 prefix layers, 2 text-preprocessing layers. The local wrapper normalizes the
+upstream summed CE by target tokens plus EOS. HF Trainer handles optimization,
+evaluation, checkpoints and resume. A complete author training driver/data
+pipeline is not published. No upstream model file is patched.
 
-Verified environment: Python 3.12, PyTorch 2.9.1+cu130, Transformers 5.3.0,
-PEFT 0.18.1, Datasets 4.0.0, PyArrow 25.0.0, Accelerate and TensorBoard.
-The example uses a `PreTrainedModel` composition so native safetensors saving
-understands Qwen's tied embedding/output weights. Checkpoints currently include
-both frozen models, not just the trainable adapter; allow about 16 GB each.
+## Features and environments
 
-## Source compatibility
+Original Freeze-Omni requires Transformers 4.45.2, while our Qwen environment uses
+5.3.0. `export_qwen_features.py` runs frozen Qwen once in the modern environment
+and caches BF16 features. Training then uses the original decoder API without
+rerunning Qwen or changing the ASR environment.
 
-Base revision: `Qwen/Qwen3-4B-Instruct-2507` at
-`cdbee75f17c01a7cc42f958dc650907174af0554`.
-Pass the ASR branch's tokenizer via `--agent_tokenizer`: that branch uses a
-151670-entry resized vocabulary, including its audio placeholder. Both models
-resize to that exact tokenizer; common text rows are preserved. The source
-base is frozen in the ASR experiment too. This pilot does not load its audio
-projector or ASR head.
+Cache: `x` = original text embeddings, `x_prefix` = contextual hidden, `y` = target
+spoken-text tokens, plus original/reference text and source ID. The source never
+receives the normalized target. Hidden states are **pre-token, final-normalized**,
+matching `_generate_one_step`: the state that predicts the sampled token. Real
+history is preserved when supplied; this pilot has no history and invents none.
 
-Integration must extract the **same post-token, final-normalized hidden state**.
-The state predicting a token, before consuming it, is a different interface.
-Compatibility of weights does not establish equality of text-only and
-audio-conditioned hidden distributions; test the latter before production.
+Source revision: `Qwen/Qwen3-4B-Instruct-2507` at
+`cdbee75f17c01a7cc42f958dc650907174af0554`. Copied base files were SHA256-verified.
+Use the exact ASR tokenizer (151670 entries after vocabulary resizing).
 
-## Data
-
-JSONL fields: `written`, `spoken_stressed`, `source_id`; optional `history`
-(user/assistant chat messages) and `system`. `+` precedes the stressed vowel.
-The decoder only receives projected hidden states and a fixed task prompt.
-Targets are passed as teacher-forcing labels. Overlength examples raise an
-error; there is no silent truncation.
-
-`prepare_local.py --root LOCAL_DATA_ROOT --output NEW_OUTPUT_DIRECTORY` exports
-existing campaign/Gemini labels, excludes existing evaluation text aliases,
-splits by template/scenario groups, rejects malformed stress and conflicting
-targets, and records provenance hashes and rejection reasons. No new text or
-stress labels are generated.
-
-Prepared pilot: 30,173 train, 1,493 validation, 2,302 separate existing evaluation
-examples. Most training pairs are stress-only; only 1,975 training pairs use
-Gemini written-to-voiced text. Labels have automatic stress, not human gold.
-History is absent from these sources and is not fabricated. Template grouping
-does not prove original recording/speaker independence. The numeric held-out
-set tests a skill poorly covered by the initial training mix.
-
-## Run and validate
-
-On an explicitly reserved GPU, run:
+Keep the modern environment intact. Install a separate decoder dependency overlay:
 
 ```bash
-CUDA_VISIBLE_DEVICES=GPU_UUID bash examples/ru_normalizer/train_hidden.sh /path/to/run-root
+git submodule update --init third_party/Freeze-Omni
+python -m pip install --target "$RUN_ROOT/freeze-omni-deps" --no-deps \
+  transformers==4.45.2 tokenizers==0.20.3 huggingface-hub==0.36.2 peft==0.13.2
 ```
 
-The run root contains `venv`, `models/qwen3-4b-instruct-2507`,
-`models/agent-tokenizer`, and `data/hidden-plan-v1/{train,validation}.jsonl`.
-Defaults: BF16, SDPA, batch 8, accumulation 4, one epoch, LR 1e-4,
-cosine schedule, 3% warmup. Logs and metrics use stock Trainer/TensorBoard.
-Resume by adding `--resume_from_checkpoint /path/to/checkpoint-N`.
+Tested base: Python 3.12, Torch 2.9.1+cu130 for Blackwell, NumPy, PyArrow,
+Accelerate and TensorBoard. Download `VITA-MLLM/Freeze-Omni/checkpoints/decoder/final.pt`
+to `models/freeze-omni/final.pt` under the run root. Verified SHA256:
+`2911cc3dc0cd8ad94756b45fda0a8f78f3d6fb92b5f5df8ad6b9961fd4f02228`.
+
+The launcher sets `TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD=1` for the old Trainer's
+own RNG/optimizer checkpoint restore under Torch 2.9. Resume only trusted local
+runs. Feature/pretrained loads explicitly use `weights_only=True` and are unaffected.
 
 ```bash
-python -m pytest -q examples/ru_normalizer/test_hidden_plan.py
+CUDA_VISIBLE_DEVICES=GPU_UUID "$RUN_ROOT/venv/bin/python" \
+  examples/ru_normalizer/export_qwen_features.py --root "$RUN_ROOT" \
+  --data "$RUN_ROOT/data/hidden-plan-v1" --output "$RUN_ROOT/data/freeze-features-v1"
+CUDA_VISIBLE_DEVICES=GPU_UUID bash examples/ru_normalizer/train_freeze_text.sh "$RUN_ROOT"
 ```
 
-Tests cover frozen/trainable gradients, padded-vs-individual logits, native
-greedy generation, and actual Trainer checkpoint/optimizer resume with tied
-weights. For generation, pass **only the decoder task prompt**, never the
-target suffix from a training batch. The fixed prompt is the same length for
-all rows; variable prompts would require left-padded generation inputs.
+Training requires cache `metadata.json`, written only after successful export.
+Defaults: BF16 autocast, batch 16/accumulation 2, one epoch, LR 1e-4, cosine and
+3% warmup. Resume with `--resume /path/to/checkpoint-N`. Checkpoints contain the
+small decoder/adapters, not source Qwen. Every 100 steps, validation CE and four
+**target-free** generations are saved (`examples-N.json`).
 
-Evaluate stress accuracy, normalized output and semantic preservation on
-held-out examples; CE alone cannot establish pronunciation quality. Compare
-against a text-input decoder and a shuffled/zero-prefix ablation to verify
-that the decoder actually uses the source hidden states. Audio/TTS quality is
-outside this text-only pilot.
+## Data and checks
+
+`prepare_local.py` exports existing labels, records provenance, rejects conflicts
+and malformed stress, and excludes held-out aliases before template/scenario
+splitting. Pilot: 30,173 train, 1,493 validation; separate existing evaluation:
+2,302. Most training pairs are stress-only, with automatic stress rather than
+human gold. Number expansion is underrepresented; template grouping does not
+prove original speaker/recording independence. Audio/TTS quality is not tested.
+
+```bash
+PYTHONPATH="$RUN_ROOT/freeze-omni-deps" python -m pytest -q \
+  examples/ru_normalizer/test_freeze_text.py
+```
+
+Tests check gradients through original KV-prefix/decoder/adapters and agreement
+between first teacher-forced and native inference logits. Evaluate content
+preservation and stress using free generation: the stopped custom-prefix pilot
+had validation CE 1.211 at step 100 but generated unrelated responses. Compare
+text-only and contextual-prefix paths before claiming a benefit from history.
+
+## License
+
+Freeze-Omni restricts its code/weights to academic, research and education and
+excludes commercial/production use. This pilot is research; inclusion in this
+framework does not relicense it. Its complete license remains in the submodule.

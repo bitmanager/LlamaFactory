@@ -99,6 +99,29 @@ The first 943-step pass finished with validation CE 0.949, but native free
 generation still repeated and omitted words. This is not a quality pass. Training
 continues with corrected positions/labels; inspect generations alongside CE.
 
+`prepare_abbreviations.py` restores a written acronym only when its recorded
+expansion has one reversible span in the source. Targets are retained, with
+malformed stress, known faulty acronym families, audited stress errors, conflicts,
+duplicates and held-out aliases quarantined. Its optional `--merged-output`
+combines accepted examples with an existing train split and hardlinks unchanged
+validation/evaluation. The v3 mixture contains 38,196 train rows: v2 plus 8,023
+abbreviation pairs. These are reconstructed inputs and automatic labels, not gold.
+
+```bash
+python examples/ru_normalizer/prepare_abbreviations.py \
+  --root "$RU_DATA_ROOT" --existing-data "$RUN_ROOT/data/hidden-plan-v2" \
+  --label-audit "$LABEL_AUDIT" --tokenizer "$RUN_ROOT/models/agent-tokenizer" \
+  --output "$RUN_ROOT/data/abbrev-reconstructed-v1" \
+  --merged-output "$RUN_ROOT/data/hidden-plan-v3"
+```
+
+`prepare_google.py` vendors the original NeMo v1.23.0 Google TSV reader and only
+exports train-shard numeric pairs; `accent_pairs.py` calls stock GPU RUAccent with
+reviewed dictionary/homograph overrides. The Google corpus has **not** been added
+to v3: inspection found numeric meaning/case errors and sports scores labeled as
+time. Its accented export is explicitly staging (`training_eligible=false`), not
+an approved train set. Stress annotation cannot repair incorrect normalization.
+
 ```bash
 PYTHONPATH="$RUN_ROOT/freeze-omni-deps" python -m pytest -q \
   examples/ru_normalizer/test_freeze_text.py

@@ -5,8 +5,11 @@ is the same Qwen3-4B-Instruct-2507 and tokenizer used by the ASR/agent branch.
 
 ## Reused code
 
-`third_party/Freeze-Omni` is an **unmodified** submodule at
-`163a24880e533b2a07038fb8dcfe02dbbb8457e6`.
+`third_party/Freeze-Omni` uses the author implementation at
+`163a24880e533b2a07038fb8dcfe02dbbb8457e6` plus one isolated padding bugfix
+in the Bitmanager fork: target RoPE positions follow the item's true text length,
+not the batch's maximum padded length. Masks, cache construction and inference
+are unchanged. This makes batched training match individual inference.
 `models/decoder/decoder.py:LLM2TTSCodecAR` supplies the noncausal prefix layers,
 per-layer DynamicCache K/V, masks, text preprocessing, AR decoder, teacher-forced
 forward, summed CE and native `infer()` with EOS termination. Validation uses
@@ -24,7 +27,7 @@ The released config is preserved as `freeze_decoder.json`: 4 decoder layers,
 4 prefix layers, 2 text-preprocessing layers. The local wrapper normalizes the
 upstream summed CE by target tokens plus EOS. HF Trainer handles optimization,
 evaluation, checkpoints and resume. A complete author training driver/data
-pipeline is not published. No upstream model file is patched.
+pipeline is not published. The positional-ID fix is the only upstream model change.
 
 ## Features and environments
 

@@ -72,9 +72,13 @@ CUDA_VISIBLE_DEVICES=GPU_UUID bash examples/ru_normalizer/train_freeze_text.sh "
 
 Training requires cache `metadata.json`, written only after successful export.
 Defaults: BF16 autocast, batch 16/accumulation 2, one epoch, LR 1e-4, cosine and
-3% warmup. Resume with `--resume /path/to/checkpoint-N`. Checkpoints contain the
-small decoder/adapters, not source Qwen. Every 100 steps, validation CE and four
-**target-free** generations are saved (`examples-N.json`).
+3% warmup. Resume the same ordered dataset with `--resume /path/to/checkpoint-N`.
+For a new data mixture, use `--warm_start /path/to/checkpoint-N` and a fresh output
+directory: this strictly loads model weights but starts a new optimizer/schedule,
+without skipping examples based on the old dataset's step count. The two modes
+are mutually exclusive. Checkpoints contain the small decoder/adapters, not source
+Qwen. Every 100 steps, validation CE and **target-free** generations are saved
+(`examples-N.json`), including held-out Russian abbreviations and Latin words.
 
 ## Data and checks
 
@@ -84,6 +88,16 @@ splitting. Pilot: 30,173 train, 1,493 validation; separate existing evaluation:
 2,302. Most training pairs are stress-only, with automatic stress rather than
 human gold. Number expansion is underrepresented; template grouping does not
 prove original speaker/recording independence. Audio/TTS quality is not tested.
+
+`correct_labels.py` applies a reviewed, source-ID-scoped audit of stress mistakes.
+It preserves data order and counts, verifies source hashes, and changes only cached
+target tokens/reference text. Frozen Qwen features are reused; v1 remains immutable.
+The v2 correction affected 107 train, 8 validation and 11 separate-evaluation rows.
+Ambiguous pronunciation variants are not automatically corrected.
+
+The first 943-step pass finished with validation CE 0.949, but native free
+generation still repeated and omitted words. This is not a quality pass. Training
+continues with corrected positions/labels; inspect generations alongside CE.
 
 ```bash
 PYTHONPATH="$RUN_ROOT/freeze-omni-deps" python -m pytest -q \

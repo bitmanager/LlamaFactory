@@ -1,9 +1,11 @@
 """Stock HF Trainer with original Freeze-Omni forward, CE, KV-prefix and infer."""
 import json
+import re
 from dataclasses import dataclass
 from pathlib import Path
 
 import torch
+from safetensors.torch import load_model
 from transformers import AutoTokenizer, HfArgumentParser, Trainer, TrainerCallback, TrainingArguments, set_seed
 from freeze_text import FreezeText, FeatureDataset, collate
 
@@ -14,11 +16,24 @@ class Inputs:
     model_config: str
     pretrained: str
     resume: str = None
+    warm_start: str = None
 
 
 class Examples(TrainerCallback):
     def __init__(self, dataset, tokenizer):
         self.rows = [dataset[i] for i in range(min(4, len(dataset)))]
+        # Include held-out abbreviation/foreign-word cases, not only stress copying.
+        selected = {r["source_id"] for r in self.rows}
+        for pattern in (r"[А-ЯЁ]{2,}", r"[A-Za-z]"):
+            count = 0
+            for i in range(len(dataset)):
+                row = dataset[i]
+                if row["source_id"] not in selected and re.search(pattern, row["written"]):
+                    self.rows.append(row)
+                    selected.add(row["source_id"])
+                    count += 1
+                    if count == 2:
+                        break
         self.tokenizer = tokenizer
 
     def on_evaluate(self, args, state, control, model=None, **kwargs):
@@ -41,6 +56,8 @@ def main():
     inputs, args = HfArgumentParser((Inputs, TrainingArguments)).parse_args_into_dataclasses()
     if not args.bf16 or args.remove_unused_columns or not args.prediction_loss_only:
         raise ValueError("Require BF16, retain input columns, and prediction_loss_only")
+    if inputs.resume and inputs.warm_start:
+        raise ValueError("Choose exact resume or model-only warm start, not both")
     root = Path(inputs.features)
     metadata = json.loads((root / "metadata.json").read_text())
     output = Path(args.output_dir)
@@ -49,6 +66,8 @@ def main():
     output.mkdir(parents=True, exist_ok=True)
     set_seed(args.seed)
     model = FreezeText(inputs.model_config, metadata["source_dim"], metadata["vocab_size"], inputs.pretrained)
+    if inputs.warm_start:
+        load_model(model, str(Path(inputs.warm_start) / "model.safetensors"), strict=True)
     train, validation = (FeatureDataset(root / s) for s in ("train", "validation"))
     tokenizer = AutoTokenizer.from_pretrained(root / "tokenizer")
     params = sum(p.numel() for p in model.parameters() if p.requires_grad)

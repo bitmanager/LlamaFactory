@@ -1070,3 +1070,74 @@ V34 reached approximately step285 with finite loss/gradients and no OOM.
 GPU0 utilization was 93% in that sample. Disk free space was 82GB on drive1
 and 543GB on drive2; feature assembly used hardlinks rather than copying
 the base cache. No model/trainer implementation or live training input changed.
+
+## V34 native checks, additional contextual data and batch measurement
+
+V34 is still training. All ten callback triples at steps 1,800, 2,400 and
+3,000 were read. Archive repetitions persist; the telephone-number output
+regresses at step 3,000. The unchanged greedy evaluator completed four native
+panels at steps 600 and 3,000, each covering 107 heldout rows and exiting zero
+without OOM. Both snapshots are evaluation-only, never continuation weights.
+
+At step600, combined22 content WER is 11.80% versus the separately checked
+latest-V33-final baseline of 16.89%. Combined34 is 10.64% versus 14.54% at
+V33 final. Combined46 regresses to 8.88% from 8.02%; protected user-demo5
+regresses to 37.23% from 34.04%. All 30 changed triples were read; another
+77 predictions match previously reviewed full outputs with unchanged sources,
+references, histories and system prompts.
+
+At step3000, content WER is 12.33%, 11.24%, 9.17% and 37.23% on those
+same four panels. All 32 changed triples and all five demo triples were read
+(35 distinct triples); 72 remaining predictions match the prior full review.
+Long outputs still omit words and repeat spans, while MFTI and time expansion
+remain wrong. These are text-normalization checks, not audio ASR, and do not
+establish general improvement. No demo promotion. Receipts are under
+`research/v34-context-followup/step600` and `step3000`.
+
+Independent reference review found incorrect automatic imperative stress
+`Из+учите` in the climate task: the intended imperative is `Изуч+ите`.
+The [Gramota conjugation table](https://gramota.ru/poisk?mode=all&query=%D0%B8%D0%B7%D1%83%D1%87%D0%B8%D1%82%D0%B5&simple=0)
+distinguishes the imperative from the future indicative. This is recorded
+out of band in `label-errata.json`; active and protected labels were not
+changed. Content WER strips stress; this automatic reference cannot serve
+as independent stress gold.
+
+The 150 eligible Saiga followup sources were read in full, including their
+actual preceding Qwen answers. Source QA retained 86; all 86 accent targets
+were then read, and six questionable labels/sources were quarantined without
+rewriting them. The retained 80 followups preserve their original groups,
+histories and splits. Together with the 150 already reviewed first turns,
+they give 214 new train and 16 validation rows. Other raw followups remain
+unreviewed and are not admitted. Every one of the 230 combined feature
+artifacts passed the existing identity, token, finite-BF16, shape, length and
+metadata audit. Metadata SHA256 is
+`fc39e8c9a2ab2d928eb9bf207045864a3e5b2aee3a2fbea5176d00d4b472892a`.
+
+The existing assembler created fresh V35-combined and V36-context-numeric
+caches without modifying active inputs. `next-plan-combined.json` supersedes
+the unlaunched V35-first423 plan: 88,856 unique train, 3,332 validation and
+2,302 frozen-eval rows. Replay includes 2,505 contextual and 400 existing
+numeric rows at factor64, giving 271,871 positions. The following
+`next-plan-context-numeric.json` appends the already audited 10,000 numeral
+train / 214 validation rows: 98,856 train, 3,546 validation and 281,871
+positions. The new numeral rows occur once per epoch. Both require the
+latest preceding final checkpoint and native review; neither has launched.
+
+An isolated stock-trainer benchmark on GPU1 compared batches32/48/64 over
+120 optimizer steps each, using the same active V34 corpus, replay selection,
+seed and immutable V33-final starting weights. All three exited zero without
+OOM. Measured training throughput was 72.016 / 93.403 / 113.207 samples/s;
+batch48 is approximately 30% faster than32 in this short probe. Batch64's
+observed physical GPU usage reached 92,329MiB including the unrelated
+allocation, so it has limited headroom. Batch48 additionally recorded stock
+HF allocator-memory metrics; those do not include reserved-memory peaks.
+Variable-length full-epoch peaks and quality are not established by this
+benchmark. No benchmark weights are promoted or used for continuation.
+
+Future plans select batch48, giving 5,664 V35 and 5,873 V36 steps. Live V34
+remains at batch32. Benchmark results and limitations are recorded under
+`research/v34-context-followup/batch-benchmark`. No model, trainer, exporter
+or normalization implementation changed; only existing data tools and stock
+CLI parameters were used. All continuations retain LR1e-6, one epoch and
+latest-final model-only warmstart with a fresh optimizer/schedule. Demo stays
+stopped; the existing PR remains open for user review and is not merged.

@@ -129,4 +129,17 @@ numeric replay pool. All 86,443 unique base rows remain included; this yields
 have V25 baseline WER 14.01%; their labels and split were fixed before fitting.
 Final generation checks for new10, context200, demo5, numeric32 and original64
 are queued after training. The required JiWER dependency is present in the dev
-evaluation environment. No V26 quality improvement is claimed before completion.
+evaluation environment.
+
+V26 completed in 1,185 seconds. Train CE was 0.02856 and validation CE 0.07447.
+All five generation panels completed: new10 WER 11.11% (V25 14.01%),
+context200 4.79% (4.61%), demo5 46.81% (45.74%), numeric32 30.20% (29.34%),
+original64 5.21% (4.73%). This is a narrow improvement on ten new answers,
+with regressions elsewhere, not an overall improvement or a deployment result.
+
+At the user's explicit request to continue, V27 starts from the immutable V26
+final (SHA256 4778c2c977618dc371363064728cfd36b5b4ced6ee167ed4d30a24b1a02ab4e9).
+It is one bounded additional epoch on the unchanged V26 data/replay mixture,
+with LR reduced to 5e-7 and a fresh optimizer/schedule. There are no new rows,
+architecture or trainer changes. The same five generation panels are queued
+after training; research manifests are under research/v27-context-continued.

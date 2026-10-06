@@ -348,11 +348,44 @@ inflection and copying still fail.
 
 The existing reviewed-data/cache assembler appends the 80 accepted rows, yielding
 **70,760 train / 3,104 validation**, with frozen evaluation unchanged. All new cached
-features/targets and all old hardlinks were verified. V9 starts from selected V8
+features/targets and all old hardlinks were verified. V9 started from selected V8
 for one bounded additional epoch, batch 32, LR 5e-6, with a fresh optimizer/cosine
 schedule. This is model-only continuation, not an exact optimizer resume. Its
 purpose is to measure the small DATE addition while tracking old content/stress
 panels; 55 examples do not establish broad numeric generalization.
+
+V9 completed 2,212 steps in 14.2 minutes, final validation CE 0.08229.
+All eight native-generation checks completed. Original-panel WER worsened from
+5.07% to 5.55% (content exact 49 to 47 of 64); literary WER improved slightly
+from 9.93% to 9.64%, but raw stressed exact fell from 69 to 66 of 256.
+Independent full-context review found four genuine stress regressions among
+lost raw matches, plus copying errors and optional monosyllabic differences.
+DATE WER improved from 48.40% to 43.09%, still **0/25 complete exact outputs**.
+All 160 bounded-number/clock/currency outputs now match including stress.
+**Selected V8 remains the main research reference; V9 is not promoted.**
+V9 final weights SHA256:
+`5185dec976d4d680d80b22beae9e32cbef3362ee09a5e2c393f2a407b9b9e96b`.
+
+A separate training-fit diagnostic used only the 55 reviewed DATE train rows,
+starting from V9, with the unchanged Trainer: batch 8, LR 3e-5, 20 epochs/140
+steps, 52.4 seconds. On the same ten **training** probes, correct date fragments
+rose from 0/10 to 10/10; complete stressed text matched in 9/10. On the fixed
+held-out DATE panel, only 2/25 complete outputs matched (8/25 correct date
+fragments after full-context review), WER 34.57%. Original-panel WER worsened
+to 6.85%. This establishes trainability, not generalization; both exposure and
+LR changed, so it does not isolate a sampling effect. The diagnostic checkpoint
+is retained separately and is not the main model.
+
+The next bounded mixture contains 2,000 unique train rows: 100 reviewed DATE,
+400 Latin, 400 Russian-acronym, 400 other numeric, and 700 literary replay.
+The additional DATE source has 45 accepted/12 quarantined stressed contexts;
+uncertain proper names, missing required marks and one confirmed contextual
+`Корпус+а` error remain outside training. Original silver targets are preserved.
+Replay is selected by a fixed source-ID hash, independently of generated output;
+held-out IDs, normalized full texts and source groups are excluded. The complete
+3,104-row validation and existing frozen panels are unchanged. Preparation uses
+the existing feature exporter and Trainer, with no new sampler or loss code.
+The mixture is an experiment in retention, not a claim of broad date coverage.
 
 `eval_freeze_text.py` uses original greedy inference and JiWER on a fixed panel:
 16 Russian-abbreviation, 16 Latin, 16 long and 16 short held-out examples, chosen

@@ -64,6 +64,7 @@ def main():
     mode.add_argument("--csv", type=Path)
     mode.add_argument("--source", type=Path, help="Prepared source; stock outputs are sibling staging-train/staging-validation")
     parser.add_argument("--exclude", nargs="+", type=Path)
+    parser.add_argument("--tokenizer", type=Path, help="Required in consensus mode to validate the retained original target")
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
     splits = {"train": [], "validation": []}; rejected = []; inputs = {}; ids = set()
@@ -95,6 +96,11 @@ def main():
             else:
                 splits[row["split"]].append(row)
     else:
+        if args.tokenizer is None:
+            parser.error("Consensus mode requires --tokenizer")
+        from transformers import AutoTokenizer
+        tokenizer = AutoTokenizer.from_pretrained(args.tokenizer, local_files_only=True)
+        inputs.update({str(p): sha(p) for p in sorted(args.tokenizer.rglob("*")) if p.is_file()})
         manifest_path = args.source / "manifest.json"; source_meta = json.loads(manifest_path.read_text(encoding="utf-8"))
         if source_meta["source_csv_sha256"] != CSV_SHA or source_meta["source_revision"] != REVISION:
             raise ValueError("Unpinned source provenance")
@@ -106,6 +112,8 @@ def main():
         for split in splits:
             path = args.source / f"{split}.jsonl"; accent = args.source.parent / f"staging-{split}"
             summary_path = accent / "summary.json"; summary = json.loads(summary_path.read_text(encoding="utf-8"))
+            if Path(summary["tokenizer"]).resolve() != args.tokenizer.resolve() or summary["max_target_tokens"] != 192:
+                raise ValueError("Accent tokenizer/target limit mismatch")
             if sha(path) != source_meta["files_sha256"][split] or sha(path) != summary["source_sha256"] or sha(accent / "train.jsonl") != summary["output_sha256"]:
                 raise ValueError("Source/accent hash mismatch")
             inputs.update({str(p): sha(p) for p in [path, summary_path, accent / "train.jsonl", accent / "rejected.jsonl"]})
@@ -131,6 +139,8 @@ def main():
                         raise ValueError("accent_rejected:" + item["rejection_reason"])
                     if signature(row["reference_stressed"]) != signature(item["spoken_stressed"]):
                         raise ValueError("stress_or_content_disagreement")
+                    if len(tokenizer.encode(row["spoken_stressed"], add_special_tokens=False)) > 192:
+                        raise ValueError("original_target_overlength")
                     splits[split].append(row)  # Original target, never RUAccent replacement.
                 except ValueError as exc:
                     rejected.append(dict(row, reason=str(exc), ruaccent_stressed=item["spoken_stressed"]))

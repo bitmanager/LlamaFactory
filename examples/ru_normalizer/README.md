@@ -166,6 +166,19 @@ plus one confirmed `смес+и` stress error. These 30 rows are excluded from t
 reviewed next mix: **55,341 train / 2,004 validation**, including clock/currency
 data above. Targets are never silently rewritten to make checks pass.
 
+A subsequent full-context audit found a task-format conflict inherited from the
+original stress-only numeric corpus: 124 targets retain raw `СМС/смс`, four retain
+`НДС`, and 33 retain other unambiguous letter abbreviations. These written forms
+are not spelling errors, but do not specify the spoken expansion required here.
+The same quarantine adapter prepared a separate v6 candidate with **55,180 train /
+2,004 validation**, excluding exactly those 161 audited IDs without relabeling.
+It preserves the earlier 30 exclusions in provenance and all held-out data.
+The running v5 dataset is unchanged. Ambiguous brand/time shorthand and
+word-pronounced acronyms are not automatically excluded. Three old diagnostic
+references also retain raw `СМС/НДС`: exact match there is a content-copy check,
+not evidence of correct spoken expansion. Keep this limitation when comparing
+checkpoints; do not silently rewrite the panel to improve metrics.
+
 `eval_freeze_text.py` uses original greedy inference and JiWER on a fixed panel:
 16 Russian-abbreviation, 16 Latin, 16 long and 16 short held-out examples, chosen
 by source-ID hash before generation. `--numeric` selects the separate 32-example

@@ -865,6 +865,36 @@ and omitted words. Old reference stress for the company is not used to reject
 its newly correct pronunciation. These are early diagnostic results, not a
 uniform improvement or a production-quality claim.
 
+V21 completed 3,059 steps in 1,213.5 seconds, final validation CE 0.0730341.
+Its final SHA256 is
+`9c5da7dcc14652c5f0346dfabd64efbbada24bcceea821d14306eac15b37bc39`.
+All eight native panels completed. Large-number content exact reaches 336/342,
+with six remaining value errors and ten optional monosyllabic-mark differences.
+Contextual numeric32 still has only one exact output. Fullmix512 WER worsens
+3.41% to 3.70% with 413 content-exact rows unchanged. Three unique literary
+examples acquire an unrelated `енеджер` fragment. This is an observed regression;
+its association with focused brand replay does not establish causation.
+
+A full-context audit of 61 matching training rows found correct stress in all
+21 `письмен*` and two `чистить` targets. The 38 `оплатите` contexts require
+indicative/imperative distinctions; a blanket override would damage valid labels.
+Five independently confirmed source-case errors were excluded without rewriting.
+The follow-up read all 503 remaining `в размере` contexts: 373 definite source
+case/amount/structure defects, 109 passing the narrow case check, 20 documentary
+ambiguities and one without an amount. Only the 373 definite defects were removed.
+This is a bounded source-family audit, not an estimate of overall corpus quality.
+
+V22 starts from V21 final with **86,131 unique training rows**: 398 new reviewed
+Gemini contexts added and 378 faulty older source examples removed. Protected
+validation/evaluation bytes and all 319 user-confirmed brand corrections are
+retained. Independent integrity checks cover the removed IDs, retained byte
+order, features, tokenizer, replay and latest weights. Focused repetition of the
+319 brand examples is now removed; they remain once per epoch, as do the 398
+new contexts. The existing 989 Google numeric contexts retain factor-10 replay,
+for 95,032 epoch positions and 2,970 batch-32 steps. BF16, LR `1e-6`, one epoch,
+original decoder architecture and the frozen Qwen source are unchanged. This
+uses a model-only warm start and a fresh optimizer/schedule, not a rollback.
+
 Further primary-source research found
 [TVI/f5_tts_ru_accent](https://huggingface.co/datasets/TVI/f5_tts_ru_accent),
 172,520 stress-labeled rows. In 100 inspected pairs there are no digits or Latin

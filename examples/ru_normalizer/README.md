@@ -455,6 +455,37 @@ so this is continued training, not a single-variable ablation. Independent
 integrity review checks all 74,131 feature hardlinks, every new tensor, target
 identity, tokenizer hashes, repeat positions and heldout exclusions.
 
+V12 completed 2,311 steps in 886 seconds, validation CE 0.07208. All nine
+native-generation panels completed without token-limit failures. Compared with
+V11, the identical 512-row validation sample improves content WER 4.07%→3.87%,
+content exact 402→410 and raw stressed exact 309→315. Literary WER improves
+8.31%→7.83%, raw stressed exact 65→74/256. DATE WER improves 26.33%→18.88%,
+with 7/25 complete content matches and 5/25 raw stressed matches. Full-context
+review credits 16/25 numeric date fragments, sometimes amid corrupted words.
+All 160 bounded numeric outputs still match including stress.
+
+These gains are not uniform: original64 WER worsens 4.25%→4.80%, and mixed
+numeric32 worsens 33.90%→38.46%, with no complete matches. Some outputs omit
+sentence endings or duplicate digits even when aggregate WER improves. Keep V11
+and V8 for comparisons; this is research continuation, not a general-purpose
+normalizer release. V12 final SHA256:
+`1165d8139413eb0c2b686aab89739ded75e2595009effcfe0eaa79cfe3247da0`.
+
+A full-context source audit checked 80 abbreviation contexts and all 87 targets
+containing uppercase abbreviations. It identified 17 incomplete spoken-letter
+plans and three adjacent label defects; the existing quarantine adapter excludes
+exactly these 20 IDs from a new V13 dataset, without rewriting targets or changing
+validation. V12 remains immutable. V13 contains **71,007 train / 3,104 validation**;
+the same 322 DATE IDs at factor 10 give 73,905 positions and 2,310 batch-32 steps.
+Independent checks cover all 74,111 retained hardlinks, source/target byte order,
+the 20 exclusions, unchanged heldouts, tokenizer and fresh repeat-selection hashes.
+These are data-integrity checks, not proof that every remaining label is correct.
+
+A separate review of 62 train contexts for observed stress failures found no
+confirmed errors on the queried words. Several failing word forms are absent
+from training. Model errors therefore cannot simply be repaired by relabeling
+these correct source examples; coverage and generalization remain open problems.
+
 The newly located original SOVA RUSLAN stress annotations were verified against
 their public archive, but do not justify replacing current targets wholesale.
 Most texts overlap existing data or previous quarantine, and full-context

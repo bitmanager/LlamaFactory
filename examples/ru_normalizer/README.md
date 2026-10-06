@@ -657,6 +657,14 @@ Before V15, V12 scored WER **31.03%** on the six new Pikabu contexts, with
 substantive content errors in all six. This is a small diagnostic, not an
 estimate of general accuracy. Training has started; improvement is unproven.
 
+Continuation policy was subsequently changed by the user: **start each next
+training run from the latest completed checkpoint**, including when its measured
+quality is below V12. Retain older checkpoints as comparison baselines rather
+than automatically rolling training back. Accordingly, the next data addition
+will continue from V15's final weights. New data uses a fresh run with an explicit
+model-only warm start; it is not an exact optimizer/scheduler resume. Continue
+reporting regressions and preserve heldout isolation and label-quality checks.
+
 Further primary-source research found
 [TVI/f5_tts_ru_accent](https://huggingface.co/datasets/TVI/f5_tts_ru_accent),
 172,520 stress-labeled rows. In 100 inspected pairs there are no digits or Latin

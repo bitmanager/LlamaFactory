@@ -426,3 +426,11 @@ positions and 5,322 optimizer steps. Earlier caches remain intact, and this
 plan is still prepared rather than launched. Another 207 followup source
 bodies remain unreviewed and outside training. V30's step-2400 callback was
 also read in full; the long TBC/PayMe repetition persists.
+
+All 42 native step-2400 control outputs were read. Followup18 WER is 11.54%
+(baseline 13.85%) and first4 is 16.36% (22.73%), but prior new20 regresses to
+17.34% from the 15.99% baseline and 11.92% at step 1200. The Titanic answer
+now stops early; other long answers corrupt beginnings and repeat words.
+These fluctuations do not establish reliable normalization. The bounded V30
+epoch continues; the latest final and all queued panels must still be reviewed
+before any subsequent continuation. No demo promotion is made.

@@ -48,7 +48,7 @@ def main():
         session.disable_fallback()  # CPU shape operators are not provider fallback.
     tokenizer = AutoTokenizer.from_pretrained(args.tokenizer)
     prefix = tokenizer.apply_chat_template([{"role": "system", "content": AGENT_SYSTEM}],
-                                          tokenize=True, add_generation_prompt=True)
+                                          tokenize=True, add_generation_prompt=True, return_dict=False)
     args.output.mkdir(parents=True, exist_ok=False)
     shutil.copyfile(args.source, args.output / "source.jsonl")
     manifest = {"source": str(args.source), "source_sha256": hashlib.sha256(args.source.read_bytes()).hexdigest(),

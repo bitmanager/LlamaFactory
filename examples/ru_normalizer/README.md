@@ -622,6 +622,18 @@ panel, not an export failure; it does not certify all possible input lengths or
 domains. V12 remains a research checkpoint, and another template-heavy epoch
 has not been launched in response to this result.
 
+Further Pikabu review leaves 95 of 106 preliminary candidates eligible for
+accent processing only; 11 already exceed 192 target tokens without stress.
+No source/group/full-text overlaps were found in the checked training,
+validation and evaluation files. Stressed lengths and labels still need review.
+The check also exposed a Transformers 5.3 API compatibility issue: chat-template
+tokenization defaults to a `BatchEncoding`, whose length counts fields, not
+tokens. `accent_pairs.py` now requests `return_dict=False`, matching the exporter.
+A real 739-token source correctly counts as 782 with its prefix and fails the
+768-token input limit; the old calculation gave 741. A short control still
+passes. Target-length logic and feature export are unchanged; this source-gate
+issue changes none of the 106 candidate decisions.
+
 `eval_freeze_text.py` uses original greedy inference and JiWER on a fixed panel:
 16 Russian-abbreviation, 16 Latin, 16 long and 16 short held-out examples, chosen
 by source-ID hash before generation. `--numeric` selects the separate 32-example

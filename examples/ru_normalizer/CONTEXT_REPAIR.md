@@ -753,3 +753,47 @@ train rows at factor 64, giving 245,503 positions and 7,672 steps at batch 32.
 warmstart must be the latest completed V32 final after final native review,
 with a fresh optimizer/scheduler as before. No model, loss, trainer or
 exporter changes were made. The demo remains stopped.
+
+## V32 step 3600 native review and V34 source preparation
+
+The immutable step-3,600 snapshot SHA256 is
+`9c50c3a76729dd73015ae4e67257991e46d8494f07696b7db5780325f22b9e42`.
+Three native panels completed successfully, and all 85 source/prediction
+pairs were read. User-demo5 WER is 27.66% versus V31 final 31.91%, but
+MFTI/time and both pizza replies remain corrupted. New46 WER is 10.03%,
+with 28/46 normalized-content and 12/46 stress matches; long repetition,
+word loss, and the short rain/soil and `Никто ещё` failures persist.
+
+Before V33 fitting, its complete new34 validation panel has WER 15.89%,
+17/34 normalized-content and 11/34 stress matches, with six invalid-stress
+outputs. A grammar quote loses its sentence, names corrupt, and long
+neuron/toothpaste/culture answers repeat or lose content. This intermediate
+baseline is not a V33 training result. Targets were not rewritten to match
+predictions. Its receipts are under `research/v32-context-followup/step3600`.
+The ten step-4,200 callback examples were also read; archive duplication
+persists once and `нормализов+ана` is still wrong.
+
+V33's replay-weighted length audit counts 150,907 short (at most 110
+characters), 65,117 medium and 29,479 long (at least 180 characters)
+positions. These are character lengths, not token lengths; long examples
+are present but remain the weakest generation cases.
+
+V34 uses the same pinned source, excluding 2,304 prior source indices and
+normalized prior questions. Its remaining 216 eligible literal questions
+produced 423 complete and nine truncated two-turn answers using the unchanged
+GPU/BF16 generator. Whole groups were held out before generation; original
+dataset answers are not targets. All 185 scoped first-turn questions and
+answers were read, and 46 malformed, incorrect or uncertain examples were
+quarantined unchanged. The existing CUDA accent adapter processed 139 rows;
+all 139 targets were read. Eight further exclusions include missing lexical
+stresses and two source-review amendments caught before fitting.
+
+`qwen-context-reviewed-v34-first` contains 120 train and 11 validation rows,
+with unchanged histories and no normalized full-text overlap with prepared
+V33 or frozen evaluation. These are checked automatic labels, not independent
+human gold. The unchanged GPU feature exporter completed; all 131 records
+passed identity, token, shape, length, finite-BF16 and metadata checks. Metadata
+SHA256 is `ad7cc5ec1cbb5f12e338abeec258d4da7699b1821781ba826d7cf25a3b483d21`.
+The V34 followup review is still pending. Neither V33 nor V34 has
+started fitting; active V32 continues. No model, loss, trainer, generation or
+exporter code changed.

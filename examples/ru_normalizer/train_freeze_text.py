@@ -7,6 +7,7 @@ from pathlib import Path
 
 import torch
 from safetensors.torch import load_model
+from torch.utils.data import ConcatDataset, Subset
 from transformers import AutoTokenizer, HfArgumentParser, Trainer, TrainerCallback, TrainingArguments, set_seed
 from freeze_text import FreezeText, FeatureDataset, collate
 
@@ -18,6 +19,7 @@ class Inputs:
     pretrained: str
     resume: str = None
     warm_start: str = None
+    repeat_selection: str = None
 
 
 class Examples(TrainerCallback):
@@ -66,6 +68,8 @@ def main():
         if complete["metadata_sha256"] != hashlib.sha256((root / "metadata.json").read_bytes()).hexdigest():
             raise ValueError("Assembled feature cache completion hash mismatch")
     output = Path(args.output_dir)
+    if inputs.resume and Path(inputs.resume).resolve().parent != output.resolve():
+        raise ValueError("Exact resume requires the checkpoint's original run directory; use warm_start for a new run")
     if output.exists() and any(output.iterdir()) and not inputs.resume:
         raise FileExistsError("Choose a fresh run directory or explicitly resume")
     output.mkdir(parents=True, exist_ok=True)
@@ -74,6 +78,29 @@ def main():
     if inputs.warm_start:
         load_model(model, str(Path(inputs.warm_start) / "model.safetensors"), strict=True)
     train, validation = (FeatureDataset(root / s) for s in ("train", "validation"))
+    if inputs.resume and (output / "repeat_selection.json").exists() and not inputs.repeat_selection:
+        raise ValueError("Exact resume must retain the saved repeat selection")
+    if inputs.repeat_selection:
+        selection = json.loads(Path(inputs.repeat_selection).read_text())
+        if selection["metadata_sha256"] != hashlib.sha256((root / "metadata.json").read_bytes()).hexdigest():
+            raise ValueError("Repeat selection belongs to a different feature cache")
+        indices, factor = selection["indices"], selection["factor"]
+        if (type(factor) is not int or factor < 2 or not indices
+                or any(type(i) is not int or not 0 <= i < len(train) for i in indices)
+                or len(indices) != len(set(indices)) or len(train) != metadata["train"]):
+            raise ValueError("Invalid repeat indices, factor or cache length")
+        subset = Subset(train, indices)
+        ids = [subset[i]["source_id"] for i in range(len(subset))]
+        if ids != selection["source_ids"] or len(ids) != len(set(ids)):
+            raise ValueError("Repeat source IDs do not match cached feature positions")
+        record = dict(selection=selection, unique_train_rows=len(train),
+                      epoch_positions=len(train) + (factor - 1) * len(subset))
+        saved = output / "repeat_selection.json"
+        if inputs.resume and (not saved.exists() or json.loads(saved.read_text()) != record):
+            raise ValueError("Exact resume requires the same repeat selection")
+        saved.write_text(json.dumps(record, indent=2) + "\n")
+        # Stock random sampling shuffles positions; IDs and targets remain unchanged.
+        train = ConcatDataset([train] + [subset] * (factor - 1))
     tokenizer = AutoTokenizer.from_pretrained(root / "tokenizer")
     params = sum(p.numel() for p in model.parameters() if p.requires_grad)
     (output / "run_inputs.json").write_text(json.dumps(vars(inputs) | {"trainable_parameters": params}, indent=2))

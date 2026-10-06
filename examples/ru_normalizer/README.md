@@ -387,6 +387,45 @@ held-out IDs, normalized full texts and source groups are excluded. The complete
 the existing feature exporter and Trainer, with no new sampler or loss code.
 The mixture is an experiment in retention, not a claim of broad date coverage.
 
+V10 completed 20 short epochs / 1,260 steps in 8.3 minutes, batch 32, LR 1e-5,
+starting from selected V8 with a fresh optimizer. Final validation CE is 0.08949.
+DATE WER improved to 28.19%, but only 2/25 full outputs matched; manual review
+found 11/25 correct date fragments amid frequent surrounding-text corruption.
+Original-panel content exact fell 49→48/64; literary content exact 123→113 and
+raw stressed exact 69→56/256. Independent review of every raw-match transition
+found 25 losses: 12 copy errors, 12 stress errors and one optional monosyllabic
+mark. Acronym spans remain 50/53, with a duplicate ООО. All 160 bounded numeric
+contents are retained. **V10 is not promoted; selected V8 remains unchanged.**
+Final weights SHA256:
+`98ff5bf2c941764baee91a2db9631638367bedb0ae7080b2b6030d7efa5df3c2`.
+
+The next unique corpus restores all old rows and adds 64 further reviewed DATE
+contexts, totaling **70,869 train / 3,104 validation**. Of 180 new source contexts,
+78 passed normalization review and 64 passed subsequent stress review; original
+targets are retained, with quarantine for missing marks/uncertain proper names.
+For example, `зем+ель` was retained after dictionary verification; isolated-word
+checks must not reject valid stress transfer in `н+е было`.
+
+For full-corpus replay, optional `--repeat_selection path.json` uses **stock
+PyTorch Subset + ConcatDataset**, preserving every base row and repeating only
+specified train positions. No new sampler, loss or generation code is introduced.
+The JSON contains `metadata_sha256`, ordered `indices`/`source_ids`, and integer
+`factor` (total exposures including the base copy). Hash, positions, IDs and
+cache length must match; validation is never repeated. Original IDs/targets are
+preserved and intentional repetitions are recorded in `repeat_selection.json`
+alongside the run. Exact resume requires the original run directory and the same
+selection; use model-only `warm_start` for a different run.
+With all 164 reviewed DATE rows and factor 20, one epoch has **73,985 positions**:
+70,705 other examples once and 164 DATE examples 20 times. At batch 32 this is
+2,313 optimizer steps (accumulation 1, no drop-last). This restores full replay
+coverage without materializing duplicate examples or inventing new source IDs.
+Keep `num_train_epochs=1`; carrying over V10's 20 epochs would multiply the DATE
+exposure again. Repetition does not establish unseen-date generalization.
+A two-step GPU smoke run verified the stock Trainer with this 73,985-position
+view, finite loss/gradients and unchanged 3,104-row evaluation. A cross-run exact
+resume was explicitly rejected before creating its output directory. These are
+integration checks, not evidence of pronunciation improvement.
+
 `eval_freeze_text.py` uses original greedy inference and JiWER on a fixed panel:
 16 Russian-abbreviation, 16 Latin, 16 long and 16 short held-out examples, chosen
 by source-ID hash before generation. `--numeric` selects the separate 32-example

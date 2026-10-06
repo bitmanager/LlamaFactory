@@ -1401,3 +1401,43 @@ weights, native results and each run's complete final optimizer checkpoint
 remain. Exact optimizer resume from those six older intermediate checkpoints
 is no longer available; latest-final model-only continuation is unaffected.
 Evidence is `research/v35-context-followup/retired-optimizer-cleanup.json`.
+
+## V35 step 4200 and expanded first384 cohort
+
+V35 is still running. At step 4,200, validation CE is 0.0788929; all ten
+callback source/reference/prediction triples exactly match the fully
+reviewed step 3,600 callback. Archive repetitions, telephone-number
+corruption and wrong stress persist. The equality and callback hash are
+recorded in `step4200-callback-manual-review.json`. This is not evidence
+that the remaining full native panels improved.
+
+All 62 complete first question/actual-Qwen-answer pairs from indices 320
+through 383 were read; two incomplete first answers were excluded.
+Ten first answers and seven of their ten followups were retained. All
+seventeen complete automatic accent targets were read. Rejected sources
+and followups remain unchanged; no targets are rewritten from predictions.
+Original frozen-Qwen history, system prompt and whole-conversation split
+are preserved. These remain checked automatic accent labels rather than
+independent human gold.
+
+The fresh first384 cohort contains 167 records: 159 train and the same
+eight held-out validation rows. All 167 paired feature artifacts pass the
+existing source/reference/token/shape/length/finite-BF16/hash audit.
+Metadata SHA256 is
+`875d4b3270d97a644534d5c6e0203e62bf4cf48479ad0947d589f8803d228deb`.
+Prompt indices 384 through 511 remain unreviewed and excluded.
+
+Fresh full V37 data/features now contain 99,015 unique train / 3,554
+validation / unchanged 2,302 frozen-eval rows. Replay covers 2,664
+contextual and 400 existing numeric train rows, factor 64: 292,047
+positions / 6,085 steps at batch 48. Source-ID ordering and metadata-hash
+preflight passes for active V35, prepared V36 and this newest V37 cache.
+Earlier first320/first256 caches remain immutable historical preparations.
+
+Use the newest future launch
+`research/v37-saiga-next/training-launch-prepared-combined-first384-memory.json`.
+It remains prepared only: 19 native panels / 737 rows, latest V36 final
+model-only warmstart, fresh optimizer/schedule, unchanged LR 1e-6 and
+stock memory metrics. V36 numeric-million data remain the immediate next
+party after V35 final review. No model, trainer, exporter or normalization
+source changed. Demo remains stopped.

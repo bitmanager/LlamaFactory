@@ -708,3 +708,48 @@ Long answers still repeat/drop words, and a short quoted grammar answer also
 corrupts. This is a pre-V33 reference, not a result from active V32 or a claim
 of improvement. It did not drive label rewrites. Its manual receipt is under
 `research/v33-alpaca-next/baseline-first22`.
+
+## V32 step 1800 review and prepared V33 continuation
+
+All 126 native source/prediction pairs at step 1,800 were read. The immutable
+snapshot SHA256 is
+`02f959656a374e8c213ecad2193e1954aa25d1b69e43996d727724477d57aaa6`.
+Compared with step 600, New20 WER improved from 13.28% to 8.40% and Followup18
+from 10.77% to 8.46%; New46 changed from 9.74% to 9.89%, and user-demo5
+regressed from 28.72% to 32.98%. Short book replies improved, but rain/soil
+and `Никто ещё` remain corrupted, and another reply loses `футбол`. Long
+outputs still repeat or omit words, and MFTI/time errors remain. This is mixed
+small-panel evidence, not a deployment result. The receipt is under
+`research/v32-context-followup/step1800`.
+
+All ten callback examples at each of steps 2,400, 3,000 and 3,600 were read.
+Archive duplication persists; step 3,000 and 3,600 repeat `поврхив` twice.
+The wrong stress in `нормализов+ана` remains. At step 3,600, validation CE is
+0.078281 and 53.49% of the epoch is complete; V32 continues without rollback.
+
+All 280 V33 followup candidates were read with their actual preceding
+questions and answers. Fifty-three malformed, irrelevant, uncertain or
+foreign-script examples were quarantined without rewriting. The existing
+CUDA accent adapter processed 227 remaining rows; all 227 targets were read.
+Ten further exclusions include missing/wrong lexical stress and two source
+review amendments, recorded before fitting. Eight normalized full-text
+duplicates were removed against active data and retained V33 first turns.
+The eligible followups contain 197 train and 12 validation rows, with
+unchanged actual histories and the same groups held out before generation.
+These are checked automatic labels, not independent human gold.
+
+The unchanged GPU exporter completed, and every one of the 209 followup
+records passed identity, token, shape, length, finite-BF16 and metadata checks.
+Its metadata SHA256 is
+`e748227d8e50c67e66a5a3d0e2efa35abcfa4d48a1957b6428a7c566f6dda774`.
+The existing assembler combined these with the 296 audited first-turn records
+and then appended them to the V32 dataset/cache using hardlinks. No active
+V32 inputs were changed. The prepared V33 cache has 88,444 unique train and
+3,294 validation rows, adding 471 and 34 respectively; the frozen 2,302-row
+evaluation set is retained. Replay selects 2,093 contextual and 400 numeric
+train rows at factor 64, giving 245,503 positions and 7,672 steps at batch 32.
+
+`research/v33-alpaca-next/next-plan.json` is prepared, not launched. Its
+warmstart must be the latest completed V32 final after final native review,
+with a fresh optimizer/scheduler as before. No model, loss, trainer or
+exporter changes were made. The demo remains stopped.

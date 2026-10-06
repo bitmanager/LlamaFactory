@@ -586,6 +586,42 @@ The additional quality research now separates ready models from label sources:
   normalization of original prose. The resulting pairs remain automatically
   constructed and need review; they are not a replacement for heldout gold.
 
+Pinned stock Silero and Omogre CUDA APIs have now checked all 84 Google candidates.
+The 63 previously reviewed candidates remain unchanged. Disagreements sometimes
+expose errors in the independent models: both predict `учител+я` where the complete
+sentence requires singular accusative `уч+ителя`. Agreement also misses shared
+errors. Consequently these APIs prioritize review; their majority is not a label
+generator. Omogre's lack of ё restoration is recorded separately. The 63 Google
+and 46 original SOVA candidates now have 109 verified BF16 feature payloads in a
+separate staging directory, with no active-training admission.
+
+The complete pinned Pikabu normalization source (1,062,552 rows; 2,713,656,527
+bytes) was downloaded and SHA256-verified on dev. A preselected sample of 100
+distinct source posts yielded 60 plausible pairs, 22 unresolved cases and 18
+defective or incompletely verbalized targets. Five pairs contain confirmed
+semantic ITN corruption. This sample is predominantly small cardinal/ordinal
+numbers and does not establish telephone or calendar-date coverage. Further
+selection targets larger numbers in full contexts; the raw corpus is not an
+approved million-example training set.
+
+A new evaluation-only panel uses 15 source-preserved full-context expectations
+from [ru-normalizr](https://github.com/NickZaitsev/ru-normalizr), revision
+`ae4b78512f0fd948579fd51b51669b7c4145041e`, with reviewed RUAccent stress.
+V12 achieves **0/15 complete content matches, WER 58.96%**. Independent full-text
+review confirms substantive failures in every case, including `08:45` becoming
+`02:45`, `2/3` becoming «две тысячи», and lost `C++` pronunciation. Valid partial
+numbers are recorded rather than treating every mismatch as a changed value.
+One reference omits stress on `двадцать`; that row is only a content diagnostic.
+
+To check whether these failures came from feature export drift, the existing
+canonical validation was exported again through the same stock script. All 64
+selected control rows have bit-identical embeddings and hidden states, identical
+tokenizer/chat-template files, and V12 again produces **64/64 exact stressed
+outputs**. This bounded control supports a generalization failure on the new
+panel, not an export failure; it does not certify all possible input lengths or
+domains. V12 remains a research checkpoint, and another template-heavy epoch
+has not been launched in response to this result.
+
 `eval_freeze_text.py` uses original greedy inference and JiWER on a fixed panel:
 16 Russian-abbreviation, 16 Latin, 16 long and 16 short held-out examples, chosen
 by source-ID hash before generation. `--numeric` selects the separate 32-example

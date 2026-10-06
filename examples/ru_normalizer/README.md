@@ -481,6 +481,32 @@ Independent checks cover all 74,111 retained hardlinks, source/target byte order
 the 20 exclusions, unchanged heldouts, tokenizer and fresh repeat-selection hashes.
 These are data-integrity checks, not proof that every remaining label is correct.
 
+V13 completed 2,310 steps in 886 seconds, validation CE 0.07055. All nine
+native-generation checks finished successfully with identical panel inputs and
+references. Compared with V12, fullmix512 content WER improves 3.87%→3.59%,
+but complete content matches fall 410→408 and raw stressed matches 315→311.
+Literary WER remains 7.83%, with content exact 138→136 and raw exact 74→72.
+DATE content exact falls 7→5/25; mixed numeric WER improves 38.46%→35.33%
+but still has no complete matches. Bounded numeric content remains 160/160;
+raw stressed exact is 159/160. Fixed expanded abbreviation spans improve
+50→51/53, but this measures fidelity to the existing pronunciation policy,
+not independently certified pronunciation.
+
+Full-context review found new content substitutions and omissions in previously
+correct outputs, including «кровавая»→«ночная» and «разрешили печататься»→
+«разрешататься». Keep **V12 as the conservative research warm-start**, retaining
+V13 for comparison: lower average WER alone does not establish better retention.
+These repeatedly inspected development panels are not an untouched gold test.
+V13 final SHA256:
+`19e6b18129d0d30ac6d62f3e7fe493a447f44e7b14b895751f2eb33f07507cd1`.
+
+A separate read-only diagnostic compared native cached decoding with the complete
+teacher-forced forward pass using the same generated token histories, actual V12
+weights and FP32. All 246 compared steps across three examples have identical
+argmax tokens; maximum absolute logit difference is 2.48e-5. This supplements the
+first-step unit test and found no discrepancy in these cases. It does not certify
+all sequence lengths or BF16 behavior. No model or inference source was changed.
+
 A separate review of 62 train contexts for observed stress failures found no
 confirmed errors on the queried words. Several failing word forms are absent
 from training. Model errors therefore cannot simply be repaired by relabeling

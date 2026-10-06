@@ -994,3 +994,79 @@ does not prove correct syllables or pronunciation. All ten callback triples
 at V33 steps 4,800, 5,400 and 6,000 were read: the telephone number remains correct,
 but malformed archive repetitions and `нормализов+ана` persist. These cases
 do not support demo promotion. No model, loss, trainer or exporter code changed.
+
+## V33 final review and V34 continuation
+
+V33 completed one epoch and 7,672 steps in 2,966 seconds. Train CE is
+0.024444 and validation CE is 0.078236. Its container then completed all
+15 native generation panels and exited zero without OOM. Final callback
+triples exactly match the already reviewed steps 6,600/7,200/6,000.
+The final review reads all 54 changed source/reference/prediction triples
+and all five user-demo triples. Another 154 small-panel predictions match
+previously reviewed outputs with unchanged source, reference, history and
+system prompt. Context200 and original64 are metrics-only checks.
+Receipts and file hashes are under `research/v33-context-followup`.
+
+Results remain mixed: combined46 WER is 8.02% versus V32 final 8.60%, and
+combined34 is 14.54% versus the matched V32 final 15.44%. Both are worse
+than V33 step 4,200 on those panels. Protected user-demo5 remains 34.04%
+versus V32 final 28.72%. Numeric32 remains 30.20%; context200 is 4.32%
+and original64 is 3.15%. These are text-normalization comparisons, not
+audio ASR. Long replies still repeat or omit spans; time, abbreviation,
+numeric-value and grammatical-gender errors persist. No demo promotion.
+
+As requested, continuation uses latest final weights, not the better
+intermediate checkpoint. The immutable V33 final snapshot has SHA256
+`f604afb6768b095a5dc69c2dfcb98f458e49be55d130ca0e96448d2a5605af61`.
+`normalizer-train-v34` is running on reserved GPU0 with those model weights
+and a fresh optimizer/schedule. It uses 88,642 unique train rows, 3,316
+validation rows, batch32, BF16, LR1e-6 and one epoch: 258,175 replay
+positions / 8,068 steps. Its 198 new train and 22 new heldout rows were
+already reviewed and audited. All preceding panels plus the new 22-row
+panel are queued after training. First optimizer steps were observed.
+
+## Prepared first423 cohort and new numeric-million data
+
+All 423 scoped Saiga first-turn questions and actual frozen-Qwen answers
+have now been read. All followups remain unreviewed and are not admitted.
+Further source/target quarantines include wrong imperative stress,
+unexpanded `ИИ`, incorrect stress in `без вести`, and awkward or unsupported
+source answers. The final first-turn cohort retains 139 train and 11
+heldout rows, preserving actual histories and the original whole-group
+split. Every one of its 150 frozen feature artifacts passed the existing
+identity, token, shape, length, finite-BF16 and metadata audit.
+
+A separate stock `num2words==0.5.14` run produced 10,000 new train and 214
+heldout numeral pairs, excluding previous numeric values and normalized
+full texts. This covers nominative integers from one million to below
+one billion; it does not cover times, dates, money or grammatical cases.
+The first attempt failed before output creation because the image lacked
+num2words. A corrected run used isolated pinned formatter dependencies;
+no model, trainer, exporter or normalization implementation changed.
+
+Manual numeric QA covered all 30 source edge pairs, all 47 distinct
+stressed lexical forms and ten complete sampled pairs. Every one of the
+10,214 rows passed source/content/metadata checks, and every frozen feature
+artifact passed the existing audit. This is scoped review of automatic
+labels, not independent manual verification of all number expansions.
+Artifacts and receipts are under `research/v36-numeric-millions-next`.
+These fresh cohorts are separate from active V34 inputs and require their
+preceding final checkpoint and native review before training. Demo remains
+stopped; all changes stay in the existing PR for user review.
+
+Both future caches were assembled successfully with the unchanged hardlink
+assembler. `next-plan-first423.json` supersedes older unlaunched V35 plans:
+88,781 train / 3,327 validation rows, 267,071 replay positions and 8,346
+steps. It requires latest V34 final. The following V36 numeric plan has
+98,781 train / 3,541 validation rows, 277,071 positions and 8,659 steps;
+it requires latest V35 final. All 10,000 new numeral examples occur once per
+epoch, while the existing reviewed replay selection is preserved. Both
+retain the same 2,302 frozen-eval rows. Neither future run has launched.
+
+The first assembly attempt rejected a malformed `GO150` metadata tag before
+output creation. A separate approved review file uses the required `GO`
+word with unchanged data hashes and QA; the gate was not weakened. Active
+V34 reached approximately step285 with finite loss/gradients and no OOM.
+GPU0 utilization was 93% in that sample. Disk free space was 82GB on drive1
+and 543GB on drive2; feature assembly used hardlinks rather than copying
+the base cache. No model/trainer implementation or live training input changed.

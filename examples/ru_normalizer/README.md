@@ -191,6 +191,14 @@ references also retain raw `СМС/НДС`: exact match there is a content-copy 
 not evidence of correct spoken expansion. Keep this limitation when comparing
 checkpoints; do not silently rewrite the panel to improve metrics.
 
+Letter-preservation checks do not certify every pronunciation convention. For
+example, all 326 current training examples containing written `МФК` use
+`эм фэ ка`. General alphabet rules suggest `эм эф ка`, while established
+abbreviation-specific exceptions to letter names exist. The audit did not find
+an МФК-specific normative source. This remains an explicit pronunciation-policy
+limitation; these source-consistent targets have not been silently rewritten or
+declared universally incorrect.
+
 V5 completed three epochs (5,190 steps, 39.4 minutes). Its end checkpoint gave
 6.58% content WER on the original 64-example panel, 64/64 exact canonical-number
 outputs, 32/32 clock outputs and 32/32 currency outputs ignoring stress marks.

@@ -488,3 +488,26 @@ batch 32, one epoch, LR `1e-6`, a fresh optimizer/schedule and unchanged
 were introduced. Thirteen native generation panels are queued after training.
 Exact launch, baseline/manual reviews and cache hashes are under
 `research/v31-context-next`; V30 final review is under `research/v30-context-followup`.
+
+At V31 step 600, separate native evaluation on dev GPU1 completed eight panels.
+All 80 source/prediction pairs and ten callback outputs were read. Prior new20
+WER improves from 15.72% to 13.55%, and new followup14 from 4.52% to 3.17%.
+Prior followup18 worsens from 11.92% to 12.31%; new first10 from 18.04% to
+18.56%, and first6 from 10.28% to 14.95%. Protected demo5 remains 32.98%,
+first4 is 18.18% versus 17.27%, and followup3 stays content-exact on all three
+cases. Long answers still corrupt openings, drop words and repeat spans.
+The callback retains corrupt `поврхив`, though its repeated body span is absent
+in this particular sample. This mixed early result does not justify promotion.
+
+The unchanged stock generator is now preparing another 512 two-turn source
+prompts on dev GPU1, while V31 trains on GPU0. Source is the same pinned
+[ru_turbo_alpaca revision](https://huggingface.co/datasets/IlyaGusev/ru_turbo_alpaca/tree/460b1f3312aa21ef774e916e532a9576f7938a0d).
+Both compressed and decompressed source hashes match the preceding batches.
+All 1,280 prior source indices are excluded; normalized full questions have
+zero overlap with prior prompts and zero internal duplicates. Forty-one whole
+conversation groups are fixed as held out before generation or fitting.
+The generator uses the same frozen Qwen/system prompt, BF16 CUDA, SDPA,
+stock HF generation and greedy 96-token bound. Original dataset answers are
+not training targets. Artifacts are under `research/v32-alpaca-next`; all raw
+output remains ineligible until full source/target review, incomplete-history
+exclusion and overlap checks. Active V31 data and training settings are unchanged.

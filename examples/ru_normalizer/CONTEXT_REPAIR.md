@@ -376,3 +376,10 @@ is retained. Existing replay includes 754 contextual rows and 400 numeric rows,
 giving 159,807 positions and 4,994 steps. Its plan under
 `research/v31-context-next` is not launched and must use V30's latest final
 after its native generation review. Active V30 inputs remain unchanged.
+
+At V30 step 600, CE is 0.077446. A separate stock generation evaluation on
+dev GPU1 completed all 42 control cases: followup18 WER 13.85% -> 12.31%,
+first4 22.73% -> 29.09%, and prior new20 15.99% -> 15.45%. All 42 sources and
+predictions and all ten callback examples were read. The tiny first-turn panel
+regresses, while the other panels show modest gains; corruption and repetition
+remain. This is an intermediate mixed result, not a quality fix or deployment.

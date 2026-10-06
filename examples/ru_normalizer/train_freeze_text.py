@@ -61,7 +61,7 @@ def main():
         raise ValueError("Choose exact resume or model-only warm start, not both")
     root = Path(inputs.features)
     metadata = json.loads((root / "metadata.json").read_text())
-    if "assembled_from" in metadata:
+    if "assembled_from" in metadata or "filtered_from" in metadata:
         complete = json.loads((root / "COMPLETE.json").read_text())
         if complete["metadata_sha256"] != hashlib.sha256((root / "metadata.json").read_bytes()).hexdigest():
             raise ValueError("Assembled feature cache completion hash mismatch")

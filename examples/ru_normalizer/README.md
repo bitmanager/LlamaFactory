@@ -155,6 +155,13 @@ texts are excluded against supplied train/holdout files. Its candidate starts as
 staging too; after RUAccent, 39 rows with missing polysyllabic stress marks were
 quarantined without relabeling (3,962 train / 127 validation retained).
 
+`quarantine_features.py` excludes only explicitly audited training IDs whose
+written text and target match the audit and cached feature exactly. Retained
+features are hardlinked in the new order; validation and frozen evaluation stay
+unchanged. Unknown, duplicate or held-out IDs fail before output creation. A new
+manifest and completion marker bind the filtered data and cache to their source
+hashes. This removed two confirmed faulty abbreviation labels from the next mix.
+
 `eval_freeze_text.py` uses original greedy inference and JiWER on a fixed panel:
 16 Russian-abbreviation, 16 Latin, 16 long and 16 short held-out examples, chosen
 by source-ID hash before generation. `--numeric` selects the separate 32-example

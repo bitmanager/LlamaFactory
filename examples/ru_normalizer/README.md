@@ -842,6 +842,29 @@ context-dependent stress errors and some meaning-changing е→ё substitutions.
 The new dictionary fixes only the confirmed project name; other defects remain
 quarantined or pending review rather than being silently rewritten.
 
+All 1,248 new Gemini candidate contexts were subsequently read in full. The
+three disjoint reviewed blocks retained 166, 106 and 126 examples after holding
+unconfirmed company-name pronunciation, missing meaningful stress marks, source
+syntax defects and actual accent/е→ё errors. The resulting **398 new unique
+contexts** preserve the exact source records; they are reviewed synthetic labels,
+not human gold or new digit-normalization supervision. A separate admitted
+manifest binds the accepted lines and reviews; original staging flags remain as
+provenance. Fresh checks exclude protected IDs, full texts and heldout scenarios.
+Stock export and assembly prepared 86,509 train / 3,110 validation / 2,302 frozen
+evaluation rows for V22. All 398 new payloads, 89,619 feature hardlinks and the
+319 earlier corrections were independently checked. Replay membership remains
+1,308 IDs at factor 10; the 398 additions occur once per epoch. Training is not
+yet launched: it must start from the latest completed V21 weights.
+
+V21 step 600 correctly produces `Битм+енеджер` in all six relevant fixed-panel
+contexts. Five of these six also preserve complete content, but surrounding
+stress/copy errors remain. Large-number template content exact improves from
+316 to 323/342, while the original 64-row WER worsens from 3.77% to 4.32% despite
+content-exact improving from 48 to 49. Genuine new errors include `письм+енное`
+and omitted words. Old reference stress for the company is not used to reject
+its newly correct pronunciation. These are early diagnostic results, not a
+uniform improvement or a production-quality claim.
+
 Further primary-source research found
 [TVI/f5_tts_ru_accent](https://huggingface.co/datasets/TVI/f5_tts_ru_accent),
 172,520 stress-labeled rows. In 100 inspected pairs there are no digits or Latin

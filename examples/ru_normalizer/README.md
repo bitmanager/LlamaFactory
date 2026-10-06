@@ -312,6 +312,48 @@ copying but still corrupts unfamiliar words and fails broad numeric normalizatio
 Its final/end2210 weights SHA256 is
 `fc1f3c916e3a6938e2a107ba5ae3291c54ea29015cbbd7a532dfdfd82bbbd4a2`.
 
+V8 completed two additional epochs (4,420 steps, 27.8 minutes) with final
+validation CE 0.07717. The expanded literary panel uses the same 256 held-out
+rows for V7, V8 step 3200 and V8 final:
+
+| Panel | V7 final | V8 step 3200 | V8 final |
+|---|---:|---:|---:|
+| Literary 256, content WER | 16.63% | 9.93% | 9.51% |
+| Literary 256, exact content | 81 | 123 | 123 |
+| Literary 256, raw stressed exact | 28 | 69 | 64 |
+| Original 64, content WER | 4.32% | 5.07% | 4.66% |
+| Original 64, exact content | 49 | 49 | 48 |
+| Mixed-context numeric, exact | 0/32 | 0/32 | 0/32 |
+
+Step 3200 is selected for research continuation because stress and complete-text
+preservation are co-primary. Full-context delta review found five real stress-only
+regressions in the final snapshot, including `+умные → умн+ые` and
+`ст+оящее → сто+ящее` in “написать что-то стоящее”, plus three copy failures among
+eight lost raw matches. These are not optional monosyllabic marks. This selection
+is a task-priority judgment, not statistical proof; final has lower aggregate WER
+and both snapshots remain available. Step 3200 preserves all 160 bounded-number,
+clock and currency texts. Its sole currency raw mismatch is optional `две/дв+е`.
+Selected weights SHA256:
+`51035790933d1453a3353a9c7546abce6b18bcdd72cc9ae04262de50e97594a3`.
+
+A separate, limited Google DATE pilot now admits **55 train / 25 validation**
+full contexts after original-target review and stock RUAccent stress review.
+Original normalization labels are retained, not regenerated. Train and validation
+come from different source shards and exclude existing protected examples. Rejected
+contexts and uncertain names remain quarantined; for example, RUAccent's `в+ёсны`
+in “не пережило весны 1942 года” was rejected, not silently corrected. These are
+reviewed automatic labels, not human gold or general date coverage. On the 25 new
+held-out contexts, selected V8 has 48.40% content WER and **0/25 exact**: date values,
+inflection and copying still fail.
+
+The existing reviewed-data/cache assembler appends the 80 accepted rows, yielding
+**70,760 train / 3,104 validation**, with frozen evaluation unchanged. All new cached
+features/targets and all old hardlinks were verified. V9 starts from selected V8
+for one bounded additional epoch, batch 32, LR 5e-6, with a fresh optimizer/cosine
+schedule. This is model-only continuation, not an exact optimizer resume. Its
+purpose is to measure the small DATE addition while tracking old content/stress
+panels; 55 examples do not establish broad numeric generalization.
+
 `eval_freeze_text.py` uses original greedy inference and JiWER on a fixed panel:
 16 Russian-abbreviation, 16 Latin, 16 long and 16 short held-out examples, chosen
 by source-ID hash before generation. `--numeric` selects the separate 32-example

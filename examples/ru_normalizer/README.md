@@ -137,6 +137,25 @@ Stock RUAccent adds stress, followed by an independent review. The reviewed
 in v4. Dates, money, negative numbers and context-dependent inflection are outside
 this added data's scope; performance there must be measured separately.
 
+Both `prepare_numeric.py` and `prepare_currency.py` now accept an optional
+`--millions` flag. It generates only values from one million (inclusive) to one
+billion (exclusive), using the same pinned num2words implementation and existing
+nominative templates. Numeric mode creates 10,000 integer training candidates
+and 214 reserved candidates; currency mode creates 4,000/128 exact-Decimal RUB
+candidates with two decimal places. The default range and generation remain
+unchanged. Neither mode supplies contextual inflection or extends decimal
+cardinal generation. Outputs remain staged until normalization/stress review.
+Both adapters exclude explicit `numeric_value` entries from supplied holdout
+files using Decimal equality, including JSON numbers parsed without binary
+float conversion. Pass current training and protected heldout files too when
+preparing a new corpus; the new reserved rows do not replace existing evaluation.
+CLI regression checks verify byte-identical default train/validation/edge files
+against the previous revision with the same empty holdout. Independent checks
+cover all 14,342 large-number candidate rows, protected-value exclusions,
+train/reserved disjointness, JSON fractional values and nonfinite rejection.
+The 50 edge verbalizations were read separately. This verifies source generation,
+not future automatic stress labels or contextual pronunciation quality.
+
 `assemble_features.py --merge-data` retains all original rows and requires a GO
 review bound to exact train/validation hashes before admitting explicitly staged
 data. Feature assembly then reuses existing caches and appends only the new
@@ -723,6 +742,12 @@ Fullmix512 WER changes 3.49% to 3.52%, while content-exact rows improve 410 to
 412. Literary content-exact rows improve 137 to 139/256, but DATE25 falls from
 five to three exact-content rows despite lower WER. Known-gaps15 WER worsens
 61.32% to 65.57%. These mixed results do not establish reliable normalization.
+The original canonical 64-row integer/decimal panel still has 64/64 exact
+stressed outputs (WER 0), with identical panel rows and feature metadata to V12.
+That bounded retention control does not imply transfer to financial contexts.
+In the fixed abbreviation-span check, expected expansions improve 51 to 53/53,
+but surrounding text can still be corrupted. Full-context DATE review finds
+14/25 correct date fragments versus 16/25 previously.
 
 The next fixed 600 Google candidates (pool ranks 1501–2100) yielded 149 new
 contexts after full normalization and stress review: 51, 55 and 43 across the
@@ -738,6 +763,16 @@ volume; data, cached features, environment and reserved GPU stay in place.
 V18 launched from V17 final after the independent data and warm-start/code
 checks, with the same BF16, batch 32, LR `1e-6` and one-epoch configuration.
 It uses a model-only warm start with a fresh optimizer/scheduler, as before.
+
+V18 completed all 2,487 steps in 981.5 seconds, with training CE 0.04588 and
+validation CE 0.07285. Its final weights were copied from drive2 into an immutable
+shared snapshot and SHA256-checked before continuing. The next 600 Google
+candidates (ranks 2101–2700) yielded 146 accepted contexts after independent
+normalization/stress checks: 50, 43 and 53. V19 contains 72,114 unique train rows,
+unchanged heldouts and 989 Google replay IDs at factor 10 (81,015 epoch positions,
+2,532 steps). It started from V18 final with the same configuration after all
+75,224 feature hardlinks, 146 new payloads and protected-panel checks passed.
+The optional millions-mode data is separate and is not included in V19.
 
 Further primary-source research found
 [TVI/f5_tts_ru_accent](https://huggingface.co/datasets/TVI/f5_tts_ru_accent),

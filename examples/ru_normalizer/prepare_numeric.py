@@ -32,22 +32,35 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--holdout", type=Path, nargs="+", required=True)
+    parser.add_argument("--millions", action="store_true", help="Integers only: 1,000,000 <= value < 1,000,000,000")
     args = parser.parse_args()
     assert importlib.metadata.version("num2words") == "0.5.14"
     rng = random.Random(SEED)
+    blocked_values = set(map(Decimal, PROTECTED_VALUES))
     blocked_text, source_hashes = set(), {}
     for path in args.holdout:
         source_hashes[str(path)] = hashlib.sha256(path.read_bytes()).hexdigest()
         for line in path.read_text().splitlines():
-            row = json.loads(line)
+            row = json.loads(line, parse_float=Decimal)
             blocked_text.update(text_key(row[k]) for k in ("written", "spoken", "spoken_stressed") if k in row)
-    used_values = set(map(Decimal, PROTECTED_VALUES))
+            if "numeric_value" in row:
+                value = Decimal(row["numeric_value"])
+                assert value.is_finite(), f"Nonfinite numeric_value in {path}"
+                blocked_values.add(value)
+    used_values = set(blocked_values)
     used_text = set(blocked_text)
+    lower, upper = (1000000, 1000000000) if args.millions else (0, 1000000)
+    source_name = "numeric-millions-v1" if args.millions else "numeric-canonical-v1"
+    expected = {"validation": {"integer": 214}, "train": {"integer": 10000}}
+    if not args.millions:
+        expected["validation"]["decimal"] = 42
+        expected["train"]["decimal"] = 2000
 
     def row_for(raw, split):
         value = Decimal(raw)
-        assert value.is_finite() and 0 <= value < 1000000
+        assert value.is_finite() and lower <= value < upper
         kind = "decimal" if "." in raw else "integer"
+        assert not args.millions or kind == "integer"
         if kind == "decimal":
             assert 1 <= len(raw.split(".")[1]) <= 3 and value > 0 and value != int(value)
         if value in used_values:
@@ -62,16 +75,19 @@ def main():
         value_key = format(value.normalize(), "f")
         return dict(written=written, spoken=spoken, number=raw, numeric_value=value_key,
                     decimal_scale=max(0, -value.as_tuple().exponent), category=kind, split=split,
-                    source_id=f"numeric-canonical-v1:{value_key}", source_group=f"numeric-value:{value_key}",
+                    source_id=f"{source_name}:{value_key}", source_group=f"numeric-value:{value_key}",
                     provenance="num2words 0.5.14, LGPL-2.1-or-later; bounded nominative cardinal; exact Decimal strings")
 
     splits = {"validation": [], "train": []}
-    for split, counts in [("validation", {"integer": 214, "decimal": 42}),
-                          ("train", {"integer": 10000, "decimal": 2000})]:
+    for split, counts in expected.items():
         for kind, count in counts.items():
             accepted = 0
             while accepted < count:
-                whole = rng.randrange(10 ** rng.randrange(1, 7))
+                if args.millions:
+                    magnitude = rng.randrange(6, 9)
+                    whole = rng.randrange(10 ** magnitude, 10 ** (magnitude + 1))
+                else:
+                    whole = rng.randrange(10 ** rng.randrange(1, 7))
                 if split == "validation" and kind == "integer" and whole < 10:
                     continue  # Keep all ten base digits available for training.
                 if kind == "decimal":
@@ -86,7 +102,9 @@ def main():
     train_values = {Decimal(r["number"]) for r in splits["train"]}
     val_values = {Decimal(r["number"]) for r in splits["validation"]}
     assert not train_values & val_values
-    assert len(train_values) == 12000 and len(val_values) == 256
+    assert len(train_values) == sum(expected["train"].values())
+    assert len(val_values) == sum(expected["validation"].values())
+    assert not (train_values | val_values) & blocked_values
     for rows in splits.values():
         rng.shuffle(rows)
     args.output.mkdir(parents=True, exist_ok=False)
@@ -95,18 +113,27 @@ def main():
         path = args.output / f"{split}.jsonl"
         path.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows))
         hashes[split] = hashlib.sha256(path.read_bytes()).hexdigest()
-    edges = [{"number": n, "spoken": num2words(n, lang="ru"), "qa_only": True} for n in EDGE_INPUTS]
+    edge_inputs = ([str(n) for n in [1000000, 1000001, 1000010, 1000011, 1000021, 1000100,
+                    1001000, 1010000, 1100000, 1111111, 2000000, 2100001, 5000000, 9000000,
+                    9999999, 10000000, 10000001, 10101010, 11000000, 11111111, 21000000,
+                    99999999, 100000000, 100000001, 101000000, 111111111, 200000000,
+                    500000000, 999999998, 999999999]] if args.millions else EDGE_INPUTS)
+    edges = [{"number": n, "spoken": num2words(n, lang="ru"), "qa_only": True} for n in edge_inputs]
     (args.output / "edge-review-30.json").write_text(json.dumps(edges, ensure_ascii=False, indent=2))
     manifest = dict(seed=SEED, num2words_version="0.5.14", license="LGPL-2.1-or-later",
                     upstream="https://github.com/savoirfairelinux/num2words/tree/v0.5.14",
                     counts={s: dict(Counter(r["category"] for r in rows)) for s, rows in splits.items()},
+                    mode=source_name, expected_counts=expected, range_inclusive_exclusive=[lower, upper],
                     templates=TEMPLATES, protected_numeric32_values=PROTECTED_VALUES,
-                    small_values_policy="Below10 may occur in train; numeric32 evaluates contextual phrases",
+                    small_values_policy=("Not applicable: millions-only integers" if args.millions else
+                                         "Below10 may occur in train; numeric32 evaluates contextual phrases"),
                     numeric_dedup="Decimal equality across splits and scales; no float arithmetic",
                     fulltext_dedup="casefold/yo/stress/punctuation-normalized written AND spoken",
                     validation_value_overlap=0, heldout_keys=len(blocked_text), holdout_sha256=source_hashes,
+                    blocked_numeric_values=len(blocked_values),
                     files_sha256=hashes, adapter_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-                    limits="No negatives, millions, dates, money, case or ordinal tasks; stress not yet added",
+                    limits=("1e6 <= integer < 1e9; no decimals, negatives, dates, money, case or ordinal tasks; stress not yet added"
+                            if args.millions else "No negatives, millions, dates, money, case or ordinal tasks; stress not yet added"),
                     training_eligible=False, pending="Manual edge review and stock RUAccent stress review")
     (args.output / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2))
     print(json.dumps(manifest, ensure_ascii=False), flush=True)

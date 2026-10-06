@@ -809,13 +809,29 @@ valid alternative time readings, so full written/reference/prediction review
 distinguishes changed numbers from acceptable wording. The protected references
 remain unchanged; their own ambiguities are recorded separately.
 
+V20 completed 2,970 steps in 1,140.7 seconds with validation CE 0.0725353.
+All eight final native evaluation panels completed. On the reserved 342
+large-number templates, 316 outputs preserve the complete content exactly and
+307 match the raw stressed reference. All nine stress-only differences are
+optional monosyllabic marks. The 26 remaining content mismatches comprise 24
+value/copy errors and two number-preserving agreement errors. Contextual
+numeric32 remains poor: only 1/32 exact, WER 32.19%, with examples such as
+`1011` acquiring an incorrect million. Success on the nominal templates does
+not establish contextual number normalization. Final weights SHA256:
+`a589d75e8598dc73c19e8aabe91d69f53cfd02ec5c8484b811df43bf7ca7b8b0`.
+
 The user confirmed the project-name pronunciation **битмЕнеджер** on
 2026-10-06. The existing RUAccent dictionary now specifies `битм+енеджер`
 and the observed inflected form `битм+енеджера`. The original data is retained.
 The existing stress-only correction adapter produced a separate copy with
 319 training labels corrected; only target tokens/reference text changed,
-not frozen Qwen features. Its cache is subject to an independent review before
-training. Protected validation/evaluation bytes remain unchanged; their 16/17
+not frozen Qwen features. Independent checks verified all 319 changed payloads
+and the unchanged feature mappings. V21 started from V20 final on the same GPU,
+with 86,111 unique training rows and no new unique examples. Factor-10 replay now
+covers the 319 corrected labels as well as the existing 989 Google contexts:
+97,883 epoch positions, 3,059 batch-32 steps, one epoch and LR `1e-6`.
+First observed losses and gradients are finite; this is not yet a pronunciation
+quality result. Protected validation/evaluation bytes remain unchanged; their 16/17
 old name-stress references are recorded as inconsistent with the user-confirmed
 pronunciation and must not be treated as authoritative stress targets.
 

@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 
 import torch
-from transformers import AutoTokenizer, pipeline
+from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 from export_qwen_features import AGENT_SYSTEM
 
 
@@ -17,11 +17,15 @@ def main():
     prompts = [json.loads(line) for line in args.prompts.read_text().splitlines()]
     tokenizer = AutoTokenizer.from_pretrained(args.root / "models/agent-tokenizer", padding_side="left")
     tokenizer.pad_token = tokenizer.eos_token
-    generator = pipeline("text-generation", model=str(args.root / "models/qwen3-4b-instruct-2507"),
-                         tokenizer=tokenizer, device=0, dtype=torch.bfloat16,
-                         model_kwargs={"attn_implementation": "sdpa"})
-    generator.model.resize_token_embeddings(len(tokenizer), mean_resizing=False)
-    generator.model.requires_grad_(False)
+    model = AutoModelForCausalLM.from_pretrained(
+        args.root / "models/qwen3-4b-instruct-2507",
+        dtype=torch.bfloat16, attn_implementation="sdpa",
+    ).to("cuda")
+    model.resize_token_embeddings(len(tokenizer), mean_resizing=False)
+    model.requires_grad_(False)
+    generator = pipeline("text-generation", model=model, tokenizer=tokenizer)
+    if generator.device.type != "cuda" or any(p.dtype != torch.bfloat16 for p in model.parameters()):
+        raise RuntimeError("Context answer generation requires CUDA and BF16")
     eos = generator.model.generation_config.eos_token_id
     eos = eos if isinstance(eos, list) else [eos]
     histories = [[] for _ in prompts]

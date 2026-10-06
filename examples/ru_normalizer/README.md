@@ -147,6 +147,18 @@ exports. The original staging manifest stays unchanged in provenance.
 templates. It contains no handwritten declension tables. It is not part of v4.
 Its source data and stress labels require review before training.
 
+The optional `--context-from /path/to/clock-v1/source` (or its `staging` directory)
+adds genitive `до/после` and dative `к` contexts using only stock `num2words`
+case selection and `pymorphy3.inflect(...).make_agree_with_number(...)`.
+It verifies the base manifest hashes, IDs and groups, and preserves each clock
+value's train/validation split across both cases. `--holdout` remains required;
+protected values and full texts exclude training candidates, while existing
+clock validation values remain validation. Dative zero hours or minutes are
+quarantined because the stock libraries produce unsupported forms (83 possible
+HH:MM values before base exclusions). This mode writes new unstressed source
+data only; its sentences need fresh stress QA. The default nominative mode is
+unchanged.
+
 `prepare_currency.py` uses the same pinned library's `currency="RUB"` path with
 exact `Decimal` arguments and two fractional places. Integer arguments would
 mean kopecks in that API, and longer fractions would be rounded; neither is used.

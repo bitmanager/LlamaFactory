@@ -319,3 +319,45 @@ At V29 step 2400, new20 WER is 18.43%, matching baseline, and new11 is 28.72%:
 better than V28 final, but worse than step 1200. All 31 predictions were read
 against the unchanged source/reference panels. Long responses still repeat
 and lose content. The generation result remains insufficient for deployment.
+
+## V29 final and V30 continuation
+
+V29 completed 4,314 steps in 1,643.9 seconds. Train CE was 0.03464 and final
+validation CE 0.076173. All seven native generation panels completed successfully:
+
+| Panel | V28 WER | V29 WER |
+|---|---:|---:|
+| Contextual200 | 4.82% | 4.32% |
+| Protected user-demo5 | 42.55% | 40.43% |
+| Numeric32 | 30.48% | 31.62% |
+| Original64 | 4.18% | 4.39% |
+| Previous new10 | 14.98% | 9.66% |
+| Previous new11 | 34.46% | 26.69% |
+
+On new20, WER fell from the pre-training V28 baseline of 18.43% to 15.99%.
+All final user-demo5, new20, new11, numeric32 and ten callback outputs were read.
+Long pizza, guitar and encyclopaedia answers still lose words and repeat spans;
+numeric outputs still change amounts and omit digits. Improvements on some
+contextual panels coexist with numeric/original regressions. These are text
+normalization metrics, not audio ASR; this is not a reliable demo checkpoint.
+
+The immutable latest V29 final has SHA256
+`09bf65eb55219dc91586a416f00f27c9bb39d83c60bfbf7aac0c7b67d04f76da`.
+V30 continues from that final, adding the previously audited 248 train and 22
+validation rows: 87,013 unique training rows and 3,181 validation rows. Settings
+remain BF16, batch 32, one epoch, LR `1e-6`, fresh optimizer/schedule and
+439,416,570 trainable parameters. Existing factor-64 replay includes 662 actual
+contextual rows and 400 numeric rows: 153,919 positions and 4,810 steps.
+No model, loss, trainer or exporter changes were introduced.
+
+The launch runs held-out baselines on all 18 new followup validation rows and
+four new first-turn validation rows before fitting, followed by the seven old
+panels and those two new panels after training. Exact launch, immutable snapshot
+and split/cache integrity receipts are under `research/v30-context-followup`.
+Training stays on the same dev GPU0; the demo remains stopped.
+
+Additional preparation read first-turn source candidates 130--279 from the
+completed V30 generation. Of these 150, 38 were excluded for source defects;
+the remaining 112 completed stock GPU RUAccent on dev GPU1. These staging rows
+are not part of the launched V30 data and still require full target review,
+duplicate checks and the fixed whole-conversation held-out split.

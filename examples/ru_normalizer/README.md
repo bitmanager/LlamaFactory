@@ -238,6 +238,25 @@ content falls from 47 to 44 examples, and `69671,060` is incorrectly spoken as
 are retained. V6 final/end1781 SHA256:
 `d43f9f0ac522e3a0d095e401c632019a074a465d1ea9b8534e562908f3a69266`.
 
+`prepare_ruslan.py` is a format/consensus adapter for the pinned
+`stilletto/ruslan-stressed` CSV, not a new accent model. It converts combining
+acute accents to the existing `+` format, preserves the original target, and
+excludes existing train/held-out aliases, duplicates, raw abbreviations and
+explicitly audited source errors. It then checks stock `accent_pairs.py` output
+against the original accents. Agreement ignores optional monosyllabic accents
+but preserves the distinction between `е` and `ё`. Disagreements are quarantined;
+labels are never replaced with the second model's guesses.
+
+The source export contains 19,846 train and 1,283 validation candidates out of
+22,200 rows; 1,071 are quarantined before the second accent check. Splits group
+contiguous blocks of 100 source IDs, not independent books or speakers. All 18
+previously audited bad IDs are excluded. The first 512-row deterministic pilot
+retained 356 matching labels; agreement alone is not human verification. This
+candidate remains in staging until independent quality review bound to its exact
+file hashes. The original corpus's CC-BY-NC-SA-4.0 terms are preserved alongside
+the derivative card's conflicting CC-BY-4.0 claim. It adds literary stress/copy
+examples, not new number or abbreviation expansions.
+
 `eval_freeze_text.py` uses original greedy inference and JiWER on a fixed panel:
 16 Russian-abbreviation, 16 Latin, 16 long and 16 short held-out examples, chosen
 by source-ID hash before generation. `--numeric` selects the separate 32-example

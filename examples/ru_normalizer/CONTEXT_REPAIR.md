@@ -92,3 +92,41 @@ generalization to ordinary free-form Qwen answers. Bigger parameters were not
 tested, and this result is not evidence that increasing model size will fix it.
 The next data mixture needs broader real-answer coverage and retention of
 numeric/abbreviation examples; repeating this narrow pilot alone is unsupported.
+
+## V25 retention and V26 expansion
+
+V25 continued from the immutable V24 final on the previous 86,351 reviewed rows
+plus the 33 reviewed real Qwen answers. The existing assembler and trainer were
+unchanged. One epoch completed in 1,135 seconds, with 3,049 optimizer steps,
+training CE 0.03005 and validation CE 0.07372 on 3,118 rows. Generation WER:
+context200 4.61%, protected demo5 45.74%, numeric32 29.34%, original64 4.73%.
+Numeric retention improved over V24, but original64 regressed and the long demo
+answers remain corrupt. This does not qualify for demo promotion. The demo was
+stopped at the user's request; its exp GPU3 still has an unrelated ASR process.
+
+V26 uses the existing generator with the 64 two-turn conversations in
+fixtures/context_prompts_v26.jsonl. Of 128 candidates, 115 completed; full-answer
+review retained 73 for the existing GPU RUAccent adapter. Reviewing every
+accented answer excluded four more (including incorrect узнает -> узнаёт).
+The 69 retained rows split by whole conversation into 59 train and 10 validation.
+Only decorative music/smile emoji are omitted from spoken targets; original
+written input and actual generation history are preserved. Labels are reviewed
+automatic annotations, not independent human gold. Exact normalized overlaps
+with existing data and protected panels were checked before assembly.
+
+The resulting cache has 86,443 training rows and 3,128 validation rows. All 69
+new feature records were checked for IDs, source/reference text, target token
+IDs, finite BF16 features and dimensions. No model, trainer, exporter or loss
+changes are needed. Continuation uses the latest V25 final, SHA256
+7e90bf32c33fdadde39cd24d3b2075e91f78030dee8dd2be58bc5b68dfdadccf.
+Research manifests and logs are under research/v26-context-expansion.
+
+The launched V26 run uses one epoch, batch 32, BF16 and LR 1e-6. Existing stock
+repeat selection applies factor 32 to all 92 real contextual training rows and
+400 numeric rows selected by SHA256 of source ID from the previous reviewed
+numeric replay pool. All 86,443 unique base rows remain included; this yields
+101,695 sampled positions and 3,178 optimizer steps. The new held-out ten rows
+have V25 baseline WER 14.01%; their labels and split were fixed before fitting.
+Final generation checks for new10, context200, demo5, numeric32 and original64
+are queued after training. The required JiWER dependency is present in the dev
+evaluation environment. No V26 quality improvement is claimed before completion.

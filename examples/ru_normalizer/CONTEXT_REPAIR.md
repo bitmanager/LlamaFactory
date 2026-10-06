@@ -208,3 +208,58 @@ V28; compressed and decompressed source hashes are recorded separately. This
 next raw batch is marked ineligible for training until generation and target
 review finish. Its artifacts are under `research/v29-alpaca-context`; no new
 trainer or generation algorithm is introduced.
+
+## V28 final and V29 continuation
+
+V28 finished all 3,285 steps in 1,225.1 seconds. Train CE was 0.02632 and
+validation CE 0.074497. The immutable final SHA256 is
+`f063fde111b500a8650647ba34880a7a7f1cef4b72c907f35601136dedadb332`.
+All six final generation panels completed successfully:
+
+| Panel | V28 WER |
+|---|---:|
+| Contextual200 | 4.82% |
+| Protected user-demo5 | 42.55% |
+| Numeric32 | 30.48% |
+| Original64 | 4.18% |
+| Previous new10 | 14.98% |
+| New11 | 34.46% |
+
+New11 regressed from the V27 baseline of 31.42%; its step-1200 result was
+36.49%. Every final new11, new10 and protected demo5 generation and the ten
+final callback examples were read. Long outputs still corrupt beginnings,
+drop words and repeat spans. Small CE changes do not establish a quality gain;
+these are text-normalization diagnostics, not audio-ASR metrics. No checkpoint
+is promoted to the demo, which remains stopped.
+
+The next stock generation batch completed 1,005 of 1,024 candidate answers;
+19 truncated answers are excluded. All 432 plain-text first-turn candidates
+were read, admitting 291 source pairs to stock GPU RUAccent. All 291 accented
+targets were read, quarantining 56 for missing/wrong stress, incorrect yo or
+source defects. The remaining 235 checked automatic labels split by whole
+conversation into 215 train and 20 validation. They are not independent human
+gold. Source questions, actual Qwen answers/history and the system prompt are
+preserved; no new numeric/acronym labels are claimed for this batch.
+
+All 235 exported feature records passed source/reference/target-token checks,
+finite BF16 and dimension/length checks. Stock assembly produces 86,765 unique
+train rows, 3,159 validation rows and the unchanged 2,302-row frozen evaluation.
+Existing replay factor 64 covers 414 actual contextual rows and 400 numeric
+rows, giving 138,047 sampled positions and 4,314 optimizer steps. This increases
+the contextual contribution while retaining all old unique training rows.
+
+V29 is launched on the same dev GPU0 from the immutable latest V28 final,
+with BF16, batch 32, one epoch, LR `1e-6`, fresh optimizer/schedule and unchanged
+439,416,570 trainable parameters. The existing trainer, sampler, decoder,
+loss and exporters are unchanged. New20 was measured before training: WER
+18.43%, four content-exact answers out of twenty, three invalid-stress outputs.
+All six old panels plus new20 are queued after training. Exact launch and
+integrity receipts are under `research/v29-alpaca-context`.
+
+Parallel preparation read all 228 eligible second-turn answer bodies and
+quarantined 26 defective sources. Each previous assistant message was verified
+against its accepted completed first turn. The remaining 202 are in stock GPU
+RUAccent staging on dev GPU1, not yet eligible for training. Admission still
+requires full accented-target review, overlap checks and the inherited whole
+conversation split; held-out first-turn groups must never enter train through
+their followups.

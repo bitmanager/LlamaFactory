@@ -606,3 +606,55 @@ indices and normalized full questions are excluded. Forty-one whole groups
 are held out before generation. The source is the same hash-verified pinned
 dataset, and original dataset answers are not targets. Outputs remain ineligible
 until complete source/target review and history/leakage checks.
+
+## V31 final and V32 continuation
+
+V31 completed 5,622 optimizer steps in 2,165.9 seconds. Train CE is 0.03009
+and final validation CE 0.077879. All thirteen native generation panels
+completed successfully. The latest final SHA256 is
+`bc2303a720c15c9aa0c774b289d0197cf8d7b852060a7a699485ceb14c4d6dfc`.
+
+| Panel | V30 final / pre-fitting baseline WER | V31 final WER |
+|---|---:|---:|
+| Contextual200 | 4.82% | 4.15% |
+| Protected user-demo5 | 32.98% | 31.91% |
+| Numeric32 | 31.91% | 31.91% |
+| Original64 | 4.66% | 3.91% |
+| Previous new10 | 7.25% | 7.25% |
+| Previous new11 | 27.03% | 27.03% |
+| Previous new20 | 15.72% | 11.92% |
+| Followup18 | 11.92% | 10.38% |
+| First4 | 17.27% | 19.09% |
+| First10 | 18.04% | 11.86% |
+| First6 | 10.28% | 8.41% |
+| Followup3 | 0% | 0% |
+| Followup14 | 4.52% | 2.71% |
+
+All 133 source/prediction pairs outside Contextual200 and Original64 and all
+ten final callback outputs were read. The two larger panels' metrics were
+checked; this is not a claim that all their texts were manually reviewed.
+Short replies often preserve content, but longer answers still corrupt
+openings, lose words, stop early and repeat spans. Numeric amounts and digit
+counts remain unreliable; MFTI/time is still wrong. These are normalization
+metrics, not audio ASR. The demo remains stopped. Review receipts are under
+`research/v31-context-next`.
+
+Before V32 fitting, the immutable V31 final was evaluated on all 46 newly
+added validation rows. All source/prediction pairs were read. Baseline WER is
+10.74%; 22/46 preserve the full normalized content and 10/46 exactly match
+the stressed reference. Opening/title corruption, missing words, repetition
+and incorrect stress remain. Predictions were not used to rewrite targets.
+The baseline and manual-review receipts are under `research/v32-alpaca-next`.
+
+V32 is launched on the same dev GPU0 from the latest V31 final and the
+audited corrected `freeze-features-v32-combined-qa2` cache. Settings remain
+BF16, batch 32, one epoch, LR `1e-6`, a fresh optimizer/schedule and
+439,416,570 trainable parameters. It uses 87,973 unique train and 3,260
+validation rows, with 554 and 46 additions; replay gives 215,359 positions
+and 6,730 steps. Fourteen native panels are queued after training, including
+the new 46-row panel. No model, loss, trainer or exporter changes were made.
+The launch receipt is under `research/v32-context-followup`.
+
+The V33 generator also exited successfully: 998 completed and 26 truncated
+answers. Its 442 literal first-turn candidates remain outside training pending
+full source/target review. Followups to incomplete first turns must be excluded.

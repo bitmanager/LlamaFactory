@@ -257,6 +257,20 @@ file hashes. The original corpus's CC-BY-NC-SA-4.0 terms are preserved alongside
 the derivative card's conflicting CC-BY-4.0 claim. It adds literary stress/copy
 examples, not new number or abbreviation expansions.
 
+The reviewed RUSLAN addition contains **13,719 train / 884 validation** rows.
+Stock RUAccent checks its own output length; consensus additionally checks the
+retained original target against the same tokenizer and 192-token limit. Nine
+otherwise agreeing rows exceed this limit and are quarantined. One reviewed
+source-spelling ambiguity is also excluded by exact ID and original text, without
+rewriting labels. All 22,200 rows are accounted for across accepted data and the
+two quarantine stages. A 130-context manual sample found no confirmed ordinary-word
+stress errors among retained examples; proper-name pronunciation remains uncertain.
+The hash-bound review permits limited research training, not gold-label claims.
+Appending this addition retains old data and frozen evaluation, yielding
+**70,705 train / 3,079 validation**. `eval_freeze_text.py --uniform --data ...
+--features ...` selects 32 new held-out rows by SHA256 without changing native
+decoding or existing diagnostic panels.
+
 `eval_freeze_text.py` uses original greedy inference and JiWER on a fixed panel:
 16 Russian-abbreviation, 16 Latin, 16 long and 16 short held-out examples, chosen
 by source-ID hash before generation. `--numeric` selects the separate 32-example

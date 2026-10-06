@@ -685,6 +685,35 @@ GPU, with BF16, batch 32, LR `1e-6`, one epoch and 2,389 planned optimizer steps
 An independent CPU audit checked all 74,774 feature hardlinks, all 448 new
 payloads, the replay selection and unchanged heldout files before launch.
 
+V16 completed all 2,389 steps in 913.8 seconds, with training CE 0.04118 and
+validation CE 0.07336. The final immutable weights are the next initialization,
+SHA256 `e0e05ecebaea9b82acf67f26cce5a1678f84f2cf1e0eaa4377de3fd3d6081f90`.
+Step-600 diagnostics were mixed relative to V15: fullmix512 WER improved
+4.00%→3.82%, literary WER 8.09%→7.89%, and numeric32 WER 35.33%→33.62%,
+but DATE WER worsened 20.48%→24.20%. Full-context review found new stress and
+omission errors; lower numeric WER did not produce new completely correct
+numeric outputs. All seven final native panels have since completed: fullmix512
+WER is 3.49%, literary WER 7.60%, numeric32 WER 31.62%, and DATE WER 21.28%.
+Numeric32 still has zero exact outputs. Literary content exact falls from V15's
+138 to 137/256 and raw stressed exact from 70 to 68; average WER improvement
+therefore does not establish uniform improvement. Final errors are reviewed in
+full context before quality claims.
+
+The next 600 source-preserved Google numeric contexts (stable pool ranks
+901–1500) yielded 163 additions after normalization, stock RUAccent and
+independent full-context review: 46, 55 and 62 from the three source batches.
+These are reviewed pseudo labels, not gold. Eight independently confirmed old
+letter-acronym targets are excluded with the existing quarantine adapter.
+The separate V17 candidate contains 71,819 unique train rows; validation and
+frozen evaluation remain unchanged. The same factor-10 policy now covers 694
+Google contexts, giving 78,065 epoch positions (2,440 batch-32 steps).
+The feature export and independent admission audit completed: all 74,929 final
+hardlink mappings and all 163 new payloads passed, with unchanged heldouts and
+zero checked overlap with 181 protected panel files. V17 started from V16 final
+on the same reserved GPU with BF16, batch 32, LR `1e-6` and one epoch. No model,
+trainer or hidden-layer selection changed. V16 source data and rejected targets
+are not rewritten.
+
 Further primary-source research found
 [TVI/f5_tts_ru_accent](https://huggingface.co/datasets/TVI/f5_tts_ru_accent),
 172,520 stress-labeled rows. In 100 inspected pairs there are no digits or Latin

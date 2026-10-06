@@ -160,7 +160,11 @@ written text and target match the audit and cached feature exactly. Retained
 features are hardlinked in the new order; validation and frozen evaluation stay
 unchanged. Unknown, duplicate or held-out IDs fail before output creation. A new
 manifest and completion marker bind the filtered data and cache to their source
-hashes. This removed two confirmed faulty abbreviation labels from the next mix.
+hashes. Full inspection of all 869 abbreviation mappings and 8,023 target spans
+found 15 `SEM → сём` and 14 `ТЕР → тёр` errors from automatic ё restoration,
+plus one confirmed `смес+и` stress error. These 30 rows are excluded from the
+reviewed next mix: **55,341 train / 2,004 validation**, including clock/currency
+data above. Targets are never silently rewritten to make checks pass.
 
 `eval_freeze_text.py` uses original greedy inference and JiWER on a fixed panel:
 16 Russian-abbreviation, 16 Latin, 16 long and 16 short held-out examples, chosen

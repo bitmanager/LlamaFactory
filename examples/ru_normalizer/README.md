@@ -912,6 +912,26 @@ and technical checks. These are new candidates, not yet part of V22. Incorrect
 source cases, sports-score/time confusions and collapsed lists of denominations
 are not repaired by silently changing their targets.
 
+V22 completed 2,970 steps in 1,141.7 seconds, final validation CE 0.0725951.
+Its immutable final SHA256 is
+`6c5ac6d49000812f1d98f16b9209813cf45a4b28efbc388ae818a4fdaf126b8c`.
+All eight native evaluations exited successfully. Large-number content exact
+improves to 338/342; four genuine value errors remain. Ruslan256 WER improves to
+7.02%, but generation64 WER worsens to 4.46%, fullmix512 content exact falls from
+413 to 411, and contextual numeric32 remains at 1/32 exact. Company pronunciation
+is still correct in all six cases. One unrelated brand fragment and additional
+copy/stress errors persist. Lower CE does not imply uniformly better generation.
+
+Full stress review retained 174 of the 227 new numeric candidates, held 50 and
+rejected three confirmed defects. Together with the earlier 46, the next
+train-only addition contains **220 unique, unchanged records**. Independent
+source/overlap/token-length checks bind the exact accepted bytes; a separate
+admission manifest preserves earlier staging flags as provenance. Stock export
+and assembly prepare 86,351 train / 3,110 validation / 2,302 frozen eval rows.
+The prospective V23 recipe continues from V22 final and gives the 220 new
+contexts the same factor-10 replay as the existing 989 numeric contexts:
+97,232 epoch positions, 3,039 batch-32 steps. Brand examples get no extra replay.
+
 Further primary-source research found
 [TVI/f5_tts_ru_accent](https://huggingface.co/datasets/TVI/f5_tts_ru_accent),
 172,520 stress-labeled rows. In 100 inspected pairs there are no digits or Latin

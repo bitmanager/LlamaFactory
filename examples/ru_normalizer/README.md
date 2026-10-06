@@ -128,6 +128,25 @@ hashes, exact data concatenation and file indexes before hardlinking old/new
 features. It writes `COMPLETE.json` last; training verifies this completion hash.
 This avoids rerunning frozen Qwen on unchanged rows.
 
+`prepare_numeric.py` uses pinned `num2words==0.5.14` for a deliberately narrow
+domain: nonnegative nominative integers below one million and positive decimal
+strings with 1–3 fractional places. Decimal arithmetic preserves values and scale;
+numeric values are disjoint across splits. It does not implement a normalizer.
+Stock RUAccent adds stress, followed by an independent review. The reviewed
+12,000 train / 256 validation pairs extend v3 to **50,196 train / 1,749 validation**
+in v4. Dates, money, negative numbers and context-dependent inflection are outside
+this added data's scope; performance there must be measured separately.
+
+`assemble_features.py --merge-data` retains all original rows and requires a GO
+review bound to exact train/validation hashes before admitting explicitly staged
+data. Feature assembly then reuses existing caches and appends only the new
+exports. The original staging manifest stays unchanged in provenance.
+
+`prepare_clock.py` prepares a separate, still-staged HH:MM candidate using
+`num2words` and `pymorphy3.make_agree_with_number`, with neutral nominative
+templates. It contains no handwritten declension tables. It is not part of v4.
+Its source data and stress labels require review before training.
+
 `eval_freeze_text.py` uses original greedy inference and JiWER on a fixed panel:
 16 Russian-abbreviation, 16 Latin, 16 long and 16 short held-out examples, chosen
 by source-ID hash before generation. `--numeric` selects the separate 32-example

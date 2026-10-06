@@ -55,7 +55,7 @@ def main():
                 "ruaccent_version": importlib.metadata.version("ruaccent"), "model_revision": REVISION,
                 "custom_dict": CUSTOM_DICT, "custom_homographs": {w: [v] for w, v in CUSTOM_DICT.items()},
                 "providers": providers, "tokenizer": str(args.tokenizer),
-                "labels": "Google normalization + automatic RUAccent; not human gold",
+                "labels": "Existing spoken labels (see row provenance) + automatic RUAccent; not human gold",
                 "training_eligible": False, "pending_review": "Source normalization QA/quarantine",
                 "max_source_tokens": 768, "max_target_tokens": 192}
     stats, ids = Counter(), set()

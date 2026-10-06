@@ -795,6 +795,14 @@ low-WER predictions replace millions with thousands, changing the value.
 These five fixed nominal templates test
 large-number composition, not arbitrary-context normalization.
 
+An immutable V20 step-600 snapshot improves the same 342-row panel to 12.69%
+WER and 225/342 exact outputs without stress marks (217/342 raw exact).
+All eight stress-only mismatches are optional marks on monosyllabic words,
+not observed wrong stress positions. Review of the remaining 117 outputs still
+finds changed numbers, missing currency words and a preserved-value inflection
+error. The old 64-row panel WER is 3.98% versus V19's 4.11%, with exact counts
+unchanged. This is an early diagnostic checkpoint, not a final quality claim.
+
 The separate 32-row contextual numeric panel remains difficult: V19 WER is
 32.76%, with frequent place-value and inflection errors. Exact match also rejects
 valid alternative time readings, so full written/reference/prediction review

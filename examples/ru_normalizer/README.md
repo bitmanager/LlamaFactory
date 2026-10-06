@@ -625,7 +625,25 @@ has not been launched in response to this result.
 Further Pikabu review leaves 95 of 106 preliminary candidates eligible for
 accent processing only; 11 already exceed 192 target tokens without stress.
 No source/group/full-text overlaps were found in the checked training,
-validation and evaluation files. Stressed lengths and labels still need review.
+validation and evaluation files. Stock RUAccent processing subsequently retained
+71 within the target-length limit and rejected 24. Full-context review of the
+71 leaves 54 candidates, 12 unresolved cases and 5 defective labels. Those 54
+are staged as 48 training candidates and 6 reserved validation examples, split
+by whole source post before model evaluation. All 54 frozen-feature payloads
+were checked against the original reviewed texts and tokenizer; targets were
+not rewritten. This is staged data, not a completed training run.
+
+A targeted audit of existing labels also confirmed 20 faulty training targets:
+five examples change years/age `лет` to `лёт`, thirteen change `самое` to `самоё`,
+and two replace plural `все` with `всё`. These targets were already present in
+V12. The existing `quarantine_features.py` adapter prepared a separate dataset
+with exactly these IDs removed: **71,059 train / 3,104 validation / 2,302 frozen
+evaluation**. Every retained training line is byte-identical and its feature
+file is hardlinked to the corresponding original; heldout files are unchanged.
+One validation reference has the same years/age defect and remains explicitly
+flagged, not silently corrected. This bounded audit does not certify the rest
+of the labels, and cleaning future data does not repair existing checkpoints.
+
 The check also exposed a Transformers 5.3 API compatibility issue: chat-template
 tokenization defaults to a `BatchEncoding`, whose length counts fields, not
 tokens. `accent_pairs.py` now requests `return_dict=False`, matching the exporter.

@@ -1141,3 +1141,115 @@ or normalization implementation changed; only existing data tools and stock
 CLI parameters were used. All continuations retain LR1e-6, one epoch and
 latest-final model-only warmstart with a fresh optimizer/schedule. Demo stays
 stopped; the existing PR remains open for user review and is not merged.
+
+## V34 step 5,400 review and the next reviewed Saiga cohort
+
+V34 continues on GPU0. Callback triples at steps 4,200/4,800/5,400/6,000/6,600
+were checked against their previous full review. The changed archive triple
+at 4,200 and the changed archive triple at 6,600 were read in full; intervening
+callbacks match exactly. Telephone recovery
+persists, but archive repetition and the wrong stress in normalizovana remain.
+Live data, learning rate, batch32 and model implementation were not changed.
+
+The step5400 native rerun completed all 107 rows, exiting zero without OOM.
+Content WER is 12.06% on combined22, 10.04% on combined34, 7.59% on
+combined46 and 35.11% on protected user-demo5. The matched step 3,000 figures
+are 12.33% / 11.24% / 9.17% / 37.23%. All 27 changed triples and all five
+demo triples were read (30 distinct triples); the remaining 77 predictions
+match the previous full review with unchanged source, reference, history and
+system prompt. Some quoted outputs stop looping but still lose initial words.
+Long neuron, toothpaste, story and art replies continue to omit and repeat
+spans; pizza, MFTI and time examples remain unreliable. This is a small
+text-normalization check, not audio ASR or proof of general usability.
+No demo promotion. Receipts are under `research/v34-context-followup/step5400`.
+
+A fresh 512-question cohort uses the same pinned `IlyaGusev/ru_turbo_saiga`
+source. Previously selected normalized questions were excluded; 36 whole
+conversation groups were held out before generation. The unchanged CUDA/BF16
+generator produced 1,009 complete and 15 truncated answers. All 1,024 turn
+records were checked for unique identities, actual preceding answers, original
+questions, fixed system prompt and conversation groups. Original source-dataset
+bot answers remain unused. Raw outputs are not approved training data.
+
+All 128 first question/actual-Qwen-answer pairs in the scoped cohort were read.
+Source review retained 46; all 46 accent targets were read, and one missing
+lexical stress was quarantined without rewriting its label. All 45 eligible
+followups were also read against their already reviewed actual preceding
+answers. Source review retained 30, and every one of those 30 accent targets
+was read. The final combined cohort has 71 train and four validation rows,
+preserving the original conversation splits and histories. Remaining first
+turns and other followups are unreviewed and are not admitted.
+
+Several uncertain stress forms were checked independently against Gramota:
+[synergy](https://gramota.ru/poisk?dicts%5B0%5D=24&mode=slovari&query=%D1%81%D0%B8%D0%BD%D0%B5%D1%80%D0%B3%D0%B8%D1%8F&simple=0),
+[the imperative of ochistit](https://gramota.ru/meta/ochistit),
+[the adjective razvitoy](https://gramota.ru/poisk?dicts%5B0%5D=71&mode=slovari&query=%D1%80%D0%B0%D0%B7%D0%B2%D0%B8%D1%82%D0%BE%D0%B9&simple=0),
+and [the participle of perenosit](https://gramota.ru/meta/perenosit).
+The direct ochistit page returned 403; its cached search result exposed the
+conjugation table. This is bounded independent checking, not independent
+human gold for the entire dataset. No labels were derived from head predictions.
+
+Every one of the 75 combined feature artifacts passed the existing identity,
+token, paired-shape, length, finite-BF16 and source-hash audit. Metadata SHA256
+is `d605c346d27acbce57facac8fbaf1e55db84bfa4830ded2d064d2c832f750e4b`.
+The unchanged assembler appended this cohort to the separately prepared V36
+cache, giving 98,927 unique train / 3,550 validation and unchanged 2,302
+frozen-eval rows. Replay at factor 64 covers 2,576 contextual and 400 existing
+numeric rows: 286,415 positions / 5,967 steps at batch 48.
+`research/v37-saiga-next/next-plan-combined-first128.json` and its launch configuration for 19 native
+panels are prepared only, requiring latest V36 final weights
+and native review. V35/V36/V37 remain future continuations; V34 is active.
+No model, trainer, exporter or normalization implementation changed.
+
+The live batch 32 process later reached approximately 83 GiB of physical GPU
+usage. A separate stock 20-step batch 48 shape stress test therefore
+oversampled the union of 64 largest existing feature artifacts and 64 longest
+stressed targets by characters (80 distinct examples, factor 50,000).
+This disposable test exited zero without OOM. Stock HF metrics record
+35,528,516,608 bytes of peak allocated CUDA memory for that short probe;
+allocator reservation and CUDA runtime memory are excluded. File size and
+character length are shape proxies, and a short run does not prove all
+full-epoch peaks. No stress-test weights are promoted or used for continuation.
+
+Batch48 remains the next-run configuration, with stock full-run memory
+tracking enabled in each fresh `training-launch-prepared-memory.json` via
+`--skip_memory_metrics false`. Active V34 remains unchanged. Evidence is
+under `batch-benchmark/shape-stress48-launch.json` and
+`shape-stress48-result.json`; no allocator, model or trainer code was changed.
+
+## V34 final review and V35 continuation
+
+V34 completed at step 8,068, epoch one, exiting zero without OOM. Training
+took 3,131.45 seconds; final validation CE is 0.0780563. All 16 native panels
+completed, covering 499 rows. Final content WER is 11.80% / 9.90% / 7.45%
+on combined22 / combined34 / combined46, 4.57% on context200, 3.02% on
+original64, 29.91% on numeric32 and 36.17% on protected user-demo5.
+These checks measure generated text normalization, not audio recognition.
+
+All 50 selected triples (small-panel changes and all protected demo triples)
+were read in full against their source and reference. Exact matches reuse prior full
+reviews after source, reference, group and history guards. Context200 and
+original64 remain metrics-only reviews. Final callback changes at steps
+7,200 / 7,800 / 8,068 were read in full; the telephone number regresses again
+at the final step and archive repetition persists. Long outputs still omit
+and repeat spans; amounts, percentages, MFTI and pizza examples remain weak.
+Final review and limitations are recorded in
+`research/v34-context-followup/final-manual-review.json`. No demo promotion.
+
+V35 is launched from the latest V34 final, model-only, with a fresh optimizer
+and schedule. Snapshot SHA256 is
+`6b5b7a3a75781da840f281feb33910eed584ca023b7cb589ea7a42e337056967`.
+It uses 88,856 unique train / 3,332 validation rows, including 214 new train
+and 16 new held-out manually reviewed actual-Qwen answers. Existing replay
+gives 271,871 positions and 5,664 steps at batch 48; BF16 math, LR 1e-6,
+one epoch and stock full-run memory tracking remain enabled. Initial
+optimizer steps are running. A separate GPU1 baseline evaluates the new
+16-row panel using the exact V34 final snapshot. V36 numeric and V37
+contextual caches remain prepared future continuations. No new model or
+trainer implementation was introduced; the demo remains stopped.
+
+The new 16-row V35 panel baseline completed without OOM at V34 final:
+content WER 11.56%, five exact content outputs and one exact stressed output.
+All 16 source/reference/prediction triples were read in full. Long replies
+still omit and repeat spans; shorter replies often preserve content but
+misplace stress. The baseline is retained for a matched post-training check.

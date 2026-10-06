@@ -15,6 +15,7 @@ def main():
     parser.add_argument("--root", type=Path, required=True)
     parser.add_argument("--data", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--splits", nargs="+", choices=("validation", "train"), default=["validation", "train"])
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
     tokenizer = AutoTokenizer.from_pretrained(args.root / "models/agent-tokenizer", padding_side="right")
@@ -28,7 +29,7 @@ def main():
                     hidden_alignment="pre-token final norm, matching Freeze-Omni _generate_one_step",
                     source_sha256={})
     tokenizer.save_pretrained(args.output / "tokenizer")
-    for split in ("validation", "train"):
+    for split in args.splits:
         source_path = args.data / f"{split}.jsonl"
         metadata["source_sha256"][split] = hashlib.sha256(source_path.read_bytes()).hexdigest()
         rows = [json.loads(line) for line in source_path.read_text().splitlines()]

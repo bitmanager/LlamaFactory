@@ -1,5 +1,6 @@
 """Stock HF Trainer with original Freeze-Omni forward, CE, KV-prefix and infer."""
 import json
+import hashlib
 import re
 from dataclasses import dataclass
 from pathlib import Path
@@ -22,9 +23,9 @@ class Inputs:
 class Examples(TrainerCallback):
     def __init__(self, dataset, tokenizer):
         self.rows = [dataset[i] for i in range(min(4, len(dataset)))]
-        # Include held-out abbreviation/foreign-word cases, not only stress copying.
+        # Include held-out normalization cases, not only stress copying.
         selected = {r["source_id"] for r in self.rows}
-        for pattern in (r"[А-ЯЁ]{2,}", r"[A-Za-z]"):
+        for pattern in (r"[А-ЯЁ]{2,}", r"[A-Za-z]", r"\d"):
             count = 0
             for i in range(len(dataset)):
                 row = dataset[i]
@@ -60,6 +61,10 @@ def main():
         raise ValueError("Choose exact resume or model-only warm start, not both")
     root = Path(inputs.features)
     metadata = json.loads((root / "metadata.json").read_text())
+    if "assembled_from" in metadata:
+        complete = json.loads((root / "COMPLETE.json").read_text())
+        if complete["metadata_sha256"] != hashlib.sha256((root / "metadata.json").read_bytes()).hexdigest():
+            raise ValueError("Assembled feature cache completion hash mismatch")
     output = Path(args.output_dir)
     if output.exists() and any(output.iterdir()) and not inputs.resume:
         raise FileExistsError("Choose a fresh run directory or explicitly resume")

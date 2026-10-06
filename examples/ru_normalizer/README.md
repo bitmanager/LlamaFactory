@@ -122,6 +122,27 @@ to v3: inspection found numeric meaning/case errors and sports scores labeled as
 time. Its accented export is explicitly staging (`training_eligible=false`), not
 an approved train set. Stress annotation cannot repair incorrect normalization.
 
+Export only new training rows with `export_qwen_features.py --splits train`.
+`assemble_features.py` verifies revisions, dimensions, tokenizer hashes, source
+hashes, exact data concatenation and file indexes before hardlinking old/new
+features. It writes `COMPLETE.json` last; training verifies this completion hash.
+This avoids rerunning frozen Qwen on unchanged rows.
+
+`eval_freeze_text.py` uses original greedy inference and JiWER on a fixed panel:
+16 Russian-abbreviation, 16 Latin, 16 long and 16 short held-out examples, chosen
+by source-ID hash before generation. `--numeric` selects the separate 32-example
+protected numeric probe. `--weights` accepts immutable checkpoint snapshots.
+It saves every prediction, content WER/CER, exact output without stress markers,
+invalid stress and token-limit flags. These balanced panels are diagnostic, not
+population estimates; their automatic references are not human gold.
+
+Using the same corrected runtime, v1-final → v2-step1800 reduced panel WER from
+87.05% to 44.14% (CER 65.28% → 32.73%). Numeric-probe WER also fell, but manual
+review found **0/32 complete numeric fragments preserved**: improvement was in
+surrounding words. This checkpoint does not pass numeric normalization. Both
+RUNorm-big and the frozen Qwen teacher pilots also produced number changes, so
+their generated labels were not admitted into training.
+
 ```bash
 PYTHONPATH="$RUN_ROOT/freeze-omni-deps" python -m pytest -q \
   examples/ru_normalizer/test_freeze_text.py

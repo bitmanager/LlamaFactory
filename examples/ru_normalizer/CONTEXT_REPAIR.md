@@ -1253,3 +1253,77 @@ content WER 11.56%, five exact content outputs and one exact stressed output.
 All 16 source/reference/prediction triples were read in full. Long replies
 still omit and repeat spans; shorter replies often preserve content but
 misplace stress. The baseline is retained for a matched post-training check.
+
+## V35 early native review and expanded V37 cache
+
+V35 remains active. At step 600, validation CE is 0.0786688; at step 1,200
+it is 0.0787420. All ten callback triples at step 600 were read in full;
+only the archive prediction changes relative to V34 final. Step 1,200
+matches the already reviewed step 600 triples exactly. Telephone-number
+corruption, archive repetition and the incorrect stress in normalizovana
+persist. Active training data, model implementation and CLI settings are
+unchanged.
+
+The separate step 600 native check completed 123 rows without OOM. All
+42 selected triples (small-panel changes and all five protected demo rows)
+were read in full. The remaining 81 predictions exactly match earlier full
+reviews after source/reference/history/group guards. Compared with V34
+final, content WER changes as follows:
+
+| Panel | V34 final | V35 step 600 |
+|---|---:|---:|
+| combined22 | 11.80% | 12.33% |
+| combined34 | 9.90% | 13.04% |
+| combined46 | 7.45% | 8.17% |
+| new Saiga16 | 11.56% | 11.06% |
+| protected user-demo5 | 36.17% | 25.53% |
+
+The long pizza example retains more content, but time and MFTI errors
+persist. Long neuron, toothpaste and story examples still omit and repeat
+spans. A short noun changes to the wrong stress. These mixed small-panel
+results do not establish broad improvement or justify demo promotion.
+Receipts are under `research/v35-context-followup/step600`.
+
+All 126 complete first question/actual-answer pairs from V37 prompt indices
+128 through 255 were read; two truncated first answers were excluded.
+Source review retained 28. Every accent target was read, and two were
+quarantined unchanged: a missing lexical stress and inappropriate yo in a
+map-marker sense. The latter was checked against Gramota's
+[marker dictionary entry](https://gramota.ru/meta/marker) and
+[meaning distinction](https://gramota.ru/biblioteka/spravochniki/slovar-trudnostey/marker-i-marker).
+All 26 eligible followups were read against the actual preceding answers;
+15 were retained and all 15 stressed targets were read. No targets were
+derived from model predictions or manually rewritten.
+
+The new 26 first-turn and 15 followup records extend the already reviewed
+75-record cohort to 116 records: 110 train and six validation, with the
+original whole-conversation holdouts and histories preserved. Remaining
+prompt indices 256 through 511 are unreviewed and excluded. All 116 cached
+feature artifacts pass the existing identity, token, paired-shape, length,
+finite-BF16 and source-hash checks. Metadata SHA256 is
+`577bf3113b66adcca7533984788f6df5c726f46f2b9cb32ac98bfe282025e2f7`.
+These remain checked automatic accent labels, not independent human gold.
+
+The unchanged assembler appends the 116-record cohort to the prepared V36
+cache. Fresh V37 first256 data/features contain 98,966 unique train / 3,552
+validation and unchanged 2,302 frozen-eval rows. Replay covers 2,615
+contextual and 400 existing numeric rows at factor 64: 288,911 positions /
+6,019 steps at batch 48. A preflight caught an incomplete source-ID list in
+the newly prepared replay selection; it was updated to match all ordered
+indices before any launch. V35 active, V36 future and the expanded V37
+replay identities and metadata hashes now all pass. Active inputs were not
+modified.
+
+The expanded future launch is
+`research/v37-saiga-next/training-launch-prepared-combined-first256-memory.json`:
+19 native panels / 735 rows, latest V36 final model-only warmstart, fresh
+optimizer/schedule, stock memory tracking and unchanged LR 1e-6. It is
+prepared only. Earlier first128 plans remain historical; use the expanded
+first256 plan for the next V37 continuation.
+
+Disk cleanup removed only four completed disposable benchmark model files
+(7,030,710,816 bytes). Benchmark metrics, launch records, training data and
+all training/final checkpoint weights were retained. Terminal-container
+checks and deleted-file hashes are recorded in
+`batch-benchmark/disposable-model-cleanup.json`. No model, trainer, exporter
+or normalization implementation changed. Demo remains stopped.

@@ -101,6 +101,14 @@ def main():
         from transformers import AutoTokenizer
         tokenizer = AutoTokenizer.from_pretrained(args.tokenizer, local_files_only=True)
         inputs.update({str(p): sha(p) for p in sorted(args.tokenizer.rglob("*")) if p.is_file()})
+        exclusions = {}
+        for path in args.exclude or []:
+            inputs[str(path)] = sha(path)
+            for line in path.read_text(encoding="utf-8").splitlines():
+                item = json.loads(line)
+                if item["source_id"] in exclusions:
+                    raise ValueError("Duplicate audited exclusion")
+                exclusions[item["source_id"]] = item
         manifest_path = args.source / "manifest.json"; source_meta = json.loads(manifest_path.read_text(encoding="utf-8"))
         if source_meta["source_csv_sha256"] != CSV_SHA or source_meta["source_revision"] != REVISION:
             raise ValueError("Unpinned source provenance")
@@ -134,7 +142,11 @@ def main():
                         or any(item[k] != v for k, v in row.items() if k != "spoken_stressed")):
                     raise ValueError("Source identity/content/split mismatch")
                 ids.add(sid)
+                if sid in exclusions and exclusions[sid]["original_accented"] != row["original_accented"]:
+                    raise ValueError("Audited exclusion text mismatch")
                 try:
+                    if sid in exclusions:
+                        raise ValueError("reviewed_source_quarantine")
                     if was_rejected:
                         raise ValueError("accent_rejected:" + item["rejection_reason"])
                     if signature(row["reference_stressed"]) != signature(item["spoken_stressed"]):
@@ -144,6 +156,8 @@ def main():
                     splits[split].append(row)  # Original target, never RUAccent replacement.
                 except ValueError as exc:
                     rejected.append(dict(row, reason=str(exc), ruaccent_stressed=item["spoken_stressed"]))
+        if set(exclusions) - ids:
+            raise ValueError("Unknown audited exclusion IDs")
     if {r["source_group"] for r in splits["train"]} & {r["source_group"] for r in splits["validation"]}:
         raise ValueError("Group split overlap")
     if sum(map(len, splits.values())) + len(rejected) != len(ids):

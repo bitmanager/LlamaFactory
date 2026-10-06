@@ -549,6 +549,43 @@ inflections. The hard numeric panel also contains valid output alternatives:
 тридцати», despite failing exact match. This does not excuse observed wrong
 numeric values, cases or missing words.
 
+V14 completed its one-epoch run in 886 seconds with validation CE 0.07150.
+All nine native-generation panels completed. Keep **V12 selected**: V14 final
+fullmix WER is 3.98% versus 3.87%, literary WER 8.09% versus 7.83%, and whole
+DATE content matches fall from 7 to 4/25. Correct date fragments improve from
+16 to 17, but surrounding words can still disappear. Template panels remain
+160/160 exact; they do not demonstrate general contextual normalization.
+V14 final SHA256:
+`f6022a1212172abed9648fdab1ad6d125b3a8545146085e0f2f4f8e12aea6237`.
+The final checkpoint and intermediate snapshots are retained for comparison;
+no production model was replaced.
+
+For the next data review, 300 deterministically selected non-DATE-tagged Google
+contexts yielded 84 normalization candidates. Stock RUAccent then ran on all 84;
+independent and full-context parent review retained 63 candidates for preparation,
+holding rare names, missing stress and incorrect stress separately. These are
+reviewed pseudo labels, not human gold, and are not yet in the active training
+corpus. A further 46 original SOVA contexts are prepared separately with exact
+original targets and source-group/heldout checks. Neither source is admitted by
+majority vote or by silently overriding old quarantine.
+
+The additional quality research now separates ready models from label sources:
+
+- [Silero Stress](https://github.com/snakers4/silero-stress) is a separate ready
+  contextual accentuation API. A pinned v1.5 GPU pilot on the 27 original spoken
+  strings completed successfully. Four contexts contain substantive differences
+  from RUAccent, including `кар+ате` versus `карат+е`; an additional difference is
+  optional stress on the function word `через`. This is a disagreement queue,
+  not proof that either model is a universal teacher. Original labels stay intact.
+- [RussianHomographDataset](https://github.com/iv-stoliar/RussianHomographDataset)
+  supplies manually labeled homographs in real contexts. Its annotation applies
+  to the target word, not every word in the sentence; it cannot be treated as
+  fully human-accented training text without additional work and split checks.
+- [saarus72's normalization code](https://github.com/saarus72/text_normalization)
+  and published corpora supply contextual number verbalizations using inverse
+  normalization of original prose. The resulting pairs remain automatically
+  constructed and need review; they are not a replacement for heldout gold.
+
 `eval_freeze_text.py` uses original greedy inference and JiWER on a fixed panel:
 16 Russian-abbreviation, 16 Latin, 16 long and 16 short held-out examples, chosen
 by source-ID hash before generation. `--numeric` selects the separate 32-example

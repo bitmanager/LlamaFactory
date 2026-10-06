@@ -200,6 +200,16 @@ an МФК-specific normative source. This remains an explicit pronunciation-poli
 limitation; these source-consistent targets have not been silently rewritten or
 declared universally incorrect.
 
+The Gemini source has another pronunciation-policy risk: all 785 current training
+rows containing `Power` use `Павр` (also 40 validation and 72 separate-evaluation
+rows). [Cambridge's pronunciation](https://dictionary.cambridge.org/pronunciation/english/power)
+contains /aʊ/, and [Microsoft's Russian localization](https://learn.microsoft.com/ru-ru/security-exposure-management/whats-new)
+uses `Пауэр` for Power Automate. These support investigating the current target;
+they do not measure our TTS audio or establish every product-name convention.
+The earlier 869-mapping acronym audit did not include this Gemini family.
+Matching `Павр` references is therefore not certified pronunciation quality.
+Source provenance and audio need checking before any mass relabeling.
+
 V5 completed three epochs (5,190 steps, 39.4 minutes). Its end checkpoint gave
 6.58% content WER on the original 64-example panel, 64/64 exact canonical-number
 outputs, 32/32 clock outputs and 32/32 currency outputs ignoring stress marks.

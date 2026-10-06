@@ -568,3 +568,41 @@ was changed.
 Another 313 literal followup sources have histories verified against the
 retained complete first turns. They remain outside training pending full
 source and accented-target review.
+
+## V32 combined preparation and contextual label amendment
+
+Reviewing followup context exposed a missed first-turn annotation error:
+`начала лета` had become `начала л+ёта`, although the original question
+explicitly refers to summer. This row had only reached the unlaunched prepared
+cache; active V31 never used it. The immutable `first-qa2` dataset excludes it,
+leaving 305 first-turn train and 25 validation rows. Its review amendment is
+recorded under `research/v32-alpaca-next`. The earlier first-turn-only prepared
+cache is superseded and must not be used for continuation.
+
+All 313 followup source bodies were read. Thirty-one were quarantined for
+malformed wording or unreliable content, including the group of the additionally
+excluded first turn. Stock GPU RUAccent processed 282 sources; every target
+was read. Eight wrong or missing stress/yo labels and four normalized full-text
+duplicates were quarantined without rewriting targets. The retained 249 train
+and 21 validation followups preserve actual Qwen history and inherit the fixed
+whole-group split. No cross-split group or normalized full-text collisions were
+introduced.
+
+The unchanged stock exporter regenerated features for the combined corrected
+first turns and followups. All 600 records passed source/reference/ID,
+target-token, finite BF16, paired-shape, dimension, token-length and hash checks.
+The stock assembler produced `freeze-features-v32-combined-qa2`, containing
+87,973 unique train and 3,260 validation rows: 554 and 46 additions relative to
+active V31. The frozen 2,302-row eval is unchanged. Factor-64 replay covers
+1,622 contextual training rows plus 400 numeric rows, yielding 215,359 sampled
+positions and 6,730 steps at batch 32. `research/v32-alpaca-next/next-plan.json`
+now points to this completed cache. It remains unlaunched and requires the latest
+V31 final after native generation review; earlier caches are retained. No model,
+loss, trainer or exporter code changed.
+
+Meanwhile, the unchanged generator has started 512 further two-turn prompts on
+dev GPU1 under `research/v33-alpaca-next`. All 1,792 previously selected source
+indices and normalized full questions are excluded. Forty-one whole groups
+are held out before generation. The source is the same hash-verified pinned
+dataset, and original dataset answers are not targets. Outputs remain ineligible
+until complete source/target review and history/leakage checks.

@@ -319,6 +319,10 @@ protected numeric probe. `--weights` accepts immutable checkpoint snapshots.
 It saves every prediction, content WER/CER, exact output without stress markers,
 invalid stress and token-limit flags. These balanced panels are diagnostic, not
 population estimates; their automatic references are not human gold.
+For a larger heldout check, `--uniform --uniform-size 256` retains the same
+source-ID hash ordering and original inference/metrics. The default remains 32;
+existing diagnostic panels are unchanged. Use identical selected rows for each
+checkpoint comparison, and keep these rows out of training.
 
 Using the same corrected runtime, v1-final → v2-step1800 reduced panel WER from
 87.05% to 44.14% (CER 65.28% → 32.73%). Numeric-probe WER also fell, but manual

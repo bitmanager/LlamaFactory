@@ -25,12 +25,15 @@ def main():
     mode.add_argument("--canonical", action="store_true", help="Fixed 32 integer +32 decimal protected canonical rows")
     mode.add_argument("--clock", action="store_true", help="Fixed SHA256 32 clock heldout rows")
     mode.add_argument("--currency", action="store_true", help="Fixed SHA256 32 currency heldout rows")
-    mode.add_argument("--uniform", action="store_true", help="Fixed SHA256 32 heldout rows from supplied data/features")
+    mode.add_argument("--uniform", action="store_true", help="Fixed SHA256 heldout sample from supplied data/features (default 32)")
+    p.add_argument("--uniform-size", type=int, default=32, help="Heldout sample size for --uniform only")
     p.add_argument("--data", type=Path)
     p.add_argument("--features", type=Path)
     p.add_argument("--training-data", type=Path, help="Training JSONL checked for heldout leakage")
     p.add_argument("--weights", type=Path, nargs="+", help="Explicit immutable snapshots; result names use file stems")
     args = p.parse_args()
+    if args.uniform_size <= 0 or (not args.uniform and args.uniform_size != 32):
+        p.error("--uniform-size must be positive and requires --uniform")
     features = args.root / "data/freeze-features-v2"
     data = args.root / "data/hidden-plan-v2"
     if args.numeric:
@@ -68,6 +71,8 @@ def main():
     order = sorted(enumerate(rows), key=lambda item: hashlib.sha256(item[1]["source_id"].encode()).hexdigest())
     for stratum, predicate in predicates.items():
         size = 32 if args.numeric or args.canonical or args.clock or args.currency or args.uniform else 16
+        if args.uniform:
+            size = args.uniform_size
         choices = [(i, r) for i, r in order if i not in used and predicate(r["written"])][:size]
         assert len(choices) == size, f"Insufficient heldout rows for {stratum}"
         for i, row in choices:
@@ -80,7 +85,7 @@ def main():
         weights = {path.stem: path for path in args.weights}
         if len(weights) != len(args.weights):
             raise ValueError("Snapshot file stems must be unique")
-    manifest = dict(panel=selected, selection="SHA256 ID; 32 heldout rows" if args.uniform else "SHA256 ID; 32 clock or currency rows" if args.clock or args.currency else "SHA256 ID; 32 integers +32 decimals" if args.canonical else "SHA256 ID; 32 protected numeric rows" if args.numeric else "Priority RU-abbr, Latin, long>=180 chars, short<=110; SHA256 ID;16 each",
+    manifest = dict(panel=selected, selection=f"SHA256 ID; {args.uniform_size} heldout rows" if args.uniform else "SHA256 ID; 32 clock or currency rows" if args.clock or args.currency else "SHA256 ID; 32 integers +32 decimals" if args.canonical else "SHA256 ID; 32 protected numeric rows" if args.numeric else "Priority RU-abbr, Latin, long>=180 chars, short<=110; SHA256 ID;16 each",
                     labels="Automatic stress references, not human gold", validation_sha256=sha(data / "validation.jsonl"),
                     training_file=str(training_data), training_sha256=sha(training_data),
                     feature_metadata=meta, weights={k:sha(v) for k, v in weights.items()}, max_tokens=192)

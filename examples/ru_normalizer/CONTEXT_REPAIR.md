@@ -409,3 +409,20 @@ Matching completed second turns were verified against each group's unchanged
 first prompt/answer and next user message; 282 literal Cyrillic followups are
 eligible for manual review. Raw candidates stay outside training until source
 and accented-target QA are complete. Their fixed whole-group split is retained.
+
+The first 75 of these second-turn bodies were read. Eight sources were excluded
+and 67 sent through the unchanged GPU accent adapter. Every accented target
+was read: uncertain pose-name stress, missing lexical stress and a full-text
+duplicate quarantined three rows. The remaining 61 train/three validation rows
+inherit the pre-fixed whole-conversation split; every history was verified
+against its retained completed first turn. All 64 feature records passed the
+same source/target-token, finite BF16 and dimension/length checks.
+
+The next immutable cache is now
+`freeze-features-v31-context-next-plus-followup75`: 87,269 train and 3,200
+validation rows, adding 256 and 19 respectively to active V30. Replay contains
+918 actual contextual rows plus 400 numeric rows; factor 64 gives 170,303
+positions and 5,322 optimizer steps. Earlier caches remain intact, and this
+plan is still prepared rather than launched. Another 207 followup source
+bodies remain unreviewed and outside training. V30's step-2400 callback was
+also read in full; the long TBC/PayMe repetition persists.

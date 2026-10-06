@@ -809,6 +809,23 @@ valid alternative time readings, so full written/reference/prediction review
 distinguishes changed numbers from acceptable wording. The protected references
 remain unchanged; their own ambiguities are recorded separately.
 
+The user confirmed the project-name pronunciation **битмЕнеджер** on
+2026-10-06. The existing RUAccent dictionary now specifies `битм+енеджер`
+and the observed inflected form `битм+енеджера`. The original data is retained.
+The existing stress-only correction adapter produced a separate copy with
+319 training labels corrected; only target tokens/reference text changed,
+not frozen Qwen features. Its cache is subject to an independent review before
+training. Protected validation/evaluation bytes remain unchanged; their 16/17
+old name-stress references are recorded as inconsistent with the user-confirmed
+pronunciation and must not be treated as authoritative stress targets.
+
+An unused source partition supplied 1,248 further abbreviation/context
+candidates after prior holdout and pronunciation-policy exclusions. They are
+not automatically admitted: stock RUAccent produced double stresses in Uzum,
+context-dependent stress errors and some meaning-changing е→ё substitutions.
+The new dictionary fixes only the confirmed project name; other defects remain
+quarantined or pending review rather than being silently rewritten.
+
 Further primary-source research found
 [TVI/f5_tts_ru_accent](https://huggingface.co/datasets/TVI/f5_tts_ru_accent),
 172,520 stress-labeled rows. In 100 inspected pairs there are no digits or Latin

@@ -1327,3 +1327,77 @@ all training/final checkpoint weights were retained. Terminal-container
 checks and deleted-file hashes are recorded in
 `batch-benchmark/disposable-model-cleanup.json`. No model, trainer, exporter
 or normalization implementation changed. Demo remains stopped.
+
+## V35 step 3000 review and V37 first320 preparation
+
+V35 continues on GPU0. Callback validation CE at steps 1,800 / 2,400 /
+3,000 / 3,600 is 0.0790287 / 0.0789127 / 0.0790268 / 0.0789859.
+Every changed callback triple was read in full; unchanged triples reuse
+the preceding review after source/reference guards. Only the archive
+prediction changes, while telephone corruption and incorrect stress in
+normalizovana persist. Archive repetitions still occur.
+
+The separate step 3,000 native check completed all 123 rows without OOM.
+All 36 changed triples and all five protected demo triples were read in
+full (39 selected triples total). The remaining predictions exactly match
+the fully reviewed step 600 outputs after source/reference/history/group
+guards. Content WER is:
+
+| Panel | V35 step 600 | V35 step 3000 |
+|---|---:|---:|
+| combined22 | 12.33% | 14.21% |
+| combined34 | 13.04% | 11.99% |
+| combined46 | 8.17% | 6.73% |
+| new Saiga16 | 11.06% | 13.07% |
+| protected user-demo5 | 25.53% | 27.66% |
+
+These are mixed small-panel results. Long generated replies still omit,
+repeat and corrupt words; MFTI and time demo outputs remain incorrect.
+No broad improvement or demo promotion is claimed. The intermediate
+snapshot is evaluation-only and will never be used for continuation.
+An initial evaluation attempt failed before generating predictions because
+per-panel output directories were missing. Creating those directories and
+restarting the same command/snapshot completed successfully; source code
+was unchanged. Receipts are under `research/v35-context-followup/step3000`.
+
+All 62 complete first question/actual-Qwen-answer pairs from prompt indices
+256 through 319 were read; two incomplete first answers were excluded.
+Twenty source answers were retained, and all twenty automatic accent
+targets were read. All twenty eligible followups were also read against
+their actual histories; fourteen were retained and their full accent
+targets read. Six followups with misleading simplifications or awkward
+language were quarantined unchanged. No model predictions were used to
+rewrite targets.
+
+The fresh first320 cohort extends the previously reviewed 116 rows to
+150: 142 train and eight validation. Original whole-conversation holdouts
+and actual generated histories remain unchanged. All 150 frozen feature
+artifacts pass identity, target-token, shape, length, finite-BF16 and
+source-hash checks. Metadata SHA256 is
+`e15ae89ef20444ba786a94a15cd3cce60f1ef6ef7a69887b72f05aaf8aeb2b98`.
+These are checked automatic accent labels, not independent human gold.
+Prompt indices 320 through 511 remain unreviewed and excluded.
+
+The unchanged assembler prepares fresh V37 data/features with 98,998
+unique train / 3,554 validation and unchanged 2,302 frozen-eval rows.
+Replay covers 2,647 contextual and 400 existing numeric train rows at
+factor 64: 290,959 positions / 6,062 steps at batch 48. Ordered replay
+source IDs and metadata hashes pass for active V35, prepared V36 and
+this new V37 cache. Active inputs and older prepared caches were not
+modified.
+
+The newest future V37 launch is
+`research/v37-saiga-next/training-launch-prepared-combined-first320-memory.json`:
+19 native panels / 737 rows, latest V36 final model-only warmstart and
+fresh optimizer/schedule. V36's 10,000 new reviewed-format numeric train
+rows remain the immediate next continuation after V35 final review.
+Neither future launch has started yet. No model, trainer, exporter or
+normalization implementation changed; demo remains stopped.
+
+Disk cleanup removed six older intermediate `optimizer.pt` files from
+completed V33/V34 runs, freeing 20,387,778,498 bytes. Terminal states and
+reviewed final-weight hashes were checked before removal. All model
+weights, native results and each run's complete final optimizer checkpoint
+remain. Exact optimizer resume from those six older intermediate checkpoints
+is no longer available; latest-final model-only continuation is unaffected.
+Evidence is `research/v35-context-followup/retired-optimizer-cleanup.json`.

@@ -147,6 +147,14 @@ exports. The original staging manifest stays unchanged in provenance.
 templates. It contains no handwritten declension tables. It is not part of v4.
 Its source data and stress labels require review before training.
 
+`prepare_currency.py` uses the same pinned library's `currency="RUB"` path with
+exact `Decimal` arguments and two fractional places. Integer arguments would
+mean kopecks in that API, and longer fractions would be rounded; neither is used.
+Neutral nominative templates keep case selection explicit. Source values and
+texts are excluded against supplied train/holdout files. Its candidate starts as
+staging too; after RUAccent, 39 rows with missing polysyllabic stress marks were
+quarantined without relabeling (3,962 train / 127 validation retained).
+
 `eval_freeze_text.py` uses original greedy inference and JiWER on a fixed panel:
 16 Russian-abbreviation, 16 Latin, 16 long and 16 short held-out examples, chosen
 by source-ID hash before generation. `--numeric` selects the separate 32-example

@@ -210,6 +210,15 @@ The earlier 869-mapping acronym audit did not include this Gemini family.
 Matching `Павр` references is therefore not certified pronunciation quality.
 Source provenance and audio need checking before any mass relabeling.
 
+The follow-up source join found `Павр` in the original pre-TTS replacement
+dictionary, not an ASR transcript. Three complete joins reproduce the submitted
+TTS text from written input and the dictionary, then match the parquet stress
+labels and current targets. Their FLAC records exist, but have not been audited
+by listening here. In this source, `voiced` means **submitted TTS text**, not an
+independently verified waveform transcript. Earlier manifests calling it “actual
+voiced text” remain historical artifacts; the exporter now states the narrower
+provenance. No training targets or frozen panels were changed by this audit.
+
 V5 completed three epochs (5,190 steps, 39.4 minutes). Its end checkpoint gave
 6.58% content WER on the original 64-example panel, 64/64 exact canonical-number
 outputs, 32/32 clock outputs and 32/32 currency outputs ignoring stress marks.

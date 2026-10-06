@@ -107,7 +107,7 @@ def main():
         group = ("gemini:" + digest(meta[row["row"]]["situation"]) if row["part"] == "pairs"
                  else "gemini:offer:" + row["form"])
         item = record(row["text"], row["tts_ruaccent"], "gemini:" + cid, group,
-                      "Gemini actual voiced text + automatic RUAccent; no human stress gold")
+                      "Gemini submitted TTS text + automatic RUAccent; pronunciation not independently verified")
         if cid in excluded_clips:
             evaluation.append(item)
         elif row["part"] == "pairs" and meta[row["row"]]["situation"] not in excluded_scenarios:

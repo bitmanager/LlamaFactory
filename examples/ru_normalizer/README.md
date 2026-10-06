@@ -644,6 +644,30 @@ One validation reference has the same years/age defect and remains explicitly
 flagged, not silently corrected. This bounded audit does not certify the rest
 of the labels, and cleaning future data does not repair existing checkpoints.
 
+The next bounded run, V15, uses that cleaned base plus 109 reviewed Google/SOVA
+and 48 Pikabu training rows: **71,216 train / 3,110 validation / 2,302 frozen
+evaluation**. The original 3,104 validation rows remain byte-identical; six
+reserved Pikabu posts are appended to the new validation only. An independent
+CPU audit checked all 74,326 feature hardlinks and all 163 new payloads. V15
+starts from V12 with the V14 learning rate (`1e-6`), batch size (32), one epoch
+and the same 322 DATE replay IDs/factor (10). Only the data composition changes;
+cleanup and additions are not isolated ablations. New validation CE cannot be
+compared directly with the previous aggregate; native fixed panels are retained.
+Before V15, V12 scored WER **31.03%** on the six new Pikabu contexts, with
+substantive content errors in all six. This is a small diagnostic, not an
+estimate of general accuracy. Training has started; improvement is unproven.
+
+Further primary-source research found
+[TVI/f5_tts_ru_accent](https://huggingface.co/datasets/TVI/f5_tts_ru_accent),
+172,520 stress-labeled rows. In 100 inspected pairs there are no digits or Latin
+letters in the inputs; targets mostly copy words with stress marks. Annotation
+provenance is unspecified and missing stresses/ambiguous ё changes occur, so this
+is a stress-only candidate under review, not an approved normalization corpus.
+[StressRNN](https://github.com/dbklim/StressRNN) and
+[RussianTextStresser](https://github.com/Vuizur/add-stress-to-epub) offer additional
+ready disagreement checks, but neither is a verified number/acronym teacher.
+They have not been inserted into training or used to rewrite labels.
+
 The check also exposed a Transformers 5.3 API compatibility issue: chat-template
 tokenization defaults to a `BatchEncoding`, whose length counts fields, not
 tokens. `accent_pairs.py` now requests `return_dict=False`, matching the exporter.

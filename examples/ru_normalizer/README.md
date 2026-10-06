@@ -895,6 +895,23 @@ for 95,032 epoch positions and 2,970 batch-32 steps. BF16, LR `1e-6`, one epoch,
 original decoder architecture and the frozen Qwen source are unchanged. This
 uses a model-only warm start and a fresh optimizer/schedule, not a rollback.
 
+V22 step 600 was independently checked with identical frozen panels and native
+greedy generation. All six company-name examples retain `Битм+енеджер`; the
+three unrelated brand-fragment errors shrink to one, although another affected
+sentence still repeats/corrupts words. Ruslan256 content WER improves from
+7.57% to 7.31% and content exact from 144 to 148/256. This is not uniform:
+large-number templates regress from 336 to 334/342, and contextual numeric32
+remains at 1/32 exact. One new literary error drops a negation. None of these
+early results establishes final-checkpoint or production quality.
+
+The next source-only numeric review read 596 complete written/spoken pairs:
+227 candidates, 178 ambiguous cases held and 191 clear source defects rejected.
+Stock RUAccent processed the 227 candidates; full-context stress review is still
+required before admission. A separate 46-example batch has passed linguistic
+and technical checks. These are new candidates, not yet part of V22. Incorrect
+source cases, sports-score/time confusions and collapsed lists of denominations
+are not repaired by silently changing their targets.
+
 Further primary-source research found
 [TVI/f5_tts_ru_accent](https://huggingface.co/datasets/TVI/f5_tts_ru_accent),
 172,520 stress-labeled rows. In 100 inspected pairs there are no digits or Latin

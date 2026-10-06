@@ -383,3 +383,29 @@ first4 22.73% -> 29.09%, and prior new20 15.99% -> 15.45%. All 42 sources and
 predictions and all ten callback examples were read. The tiny first-turn panel
 regresses, while the other panels show modest gains; corruption and repetition
 remain. This is an intermediate mixed result, not a quality fix or deployment.
+
+At V30 step 1200, all 42 generated control outputs were read again. Prior new20
+WER is 11.92% (V29 final 15.99%), followup18 is 12.31% (baseline 13.85%), and
+first4 is 25.45% (baseline 22.73%). Long responses still corrupt openings,
+names and words or repeat spans. This remains a mixed intermediate result.
+
+The final 153 V30 plain first-turn sources were read. Forty-two defective
+sources were quarantined and 111 admitted to stock GPU RUAccent. Every accented
+target was read; a missing lexical stress and another sky -> palate yo error
+were excluded. The retained 103 train/six validation rows preserve actual
+Qwen answers, questions/history and system prompt. All 109 feature records
+passed the same complete source/target-token, finite BF16 and length/dimension
+checks. No exporter, trainer, model or loss changes are needed.
+
+V31's prepared cache now contains 87,208 train and 3,197 validation rows:
+195 train and 16 validation additions relative to active V30. Factor-64 replay
+includes 857 actual contextual rows and 400 numeric rows, giving 166,399
+positions and 5,200 steps. The original prepared cache is retained; this plan
+is still unlaunched and must use the latest V30 final after generation review.
+
+All 433 plain first-turn source bodies from the completed V30 batch have now
+been reviewed. Their retained checked targets cover 294 conversation groups.
+Matching completed second turns were verified against each group's unchanged
+first prompt/answer and next user message; 282 literal Cyrillic followups are
+eligible for manual review. Raw candidates stay outside training until source
+and accented-target QA are complete. Their fixed whole-group split is retained.

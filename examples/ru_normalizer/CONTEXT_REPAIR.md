@@ -511,3 +511,60 @@ stock HF generation and greedy 96-token bound. Original dataset answers are
 not training targets. Artifacts are under `research/v32-alpaca-next`; all raw
 output remains ineligible until full source/target review, incomplete-history
 exclusion and overlap checks. Active V31 data and training settings are unchanged.
+
+## V31 step 3000 and the next prepared batch
+
+The separate stock native evaluation of immutable V31 step 3000 completed all
+eight panels on dev GPU1. All 80 source/prediction pairs and ten callback
+outputs were read. Validation CE is 0.077681.
+
+| Panel | V30 final / pre-fitting baseline WER | V31 step 3000 WER |
+|---|---:|---:|
+| Previous new20 | 15.72% | 11.92% |
+| Previous followup18 | 11.92% | 9.23% |
+| Protected user-demo5 | 32.98% | 34.04% |
+| First4 | 17.27% | 24.55% |
+| First10 | 18.04% | 16.49% |
+| First6 | 10.28% | 7.48% |
+| Followup3 | 0% | 1.89% |
+| Followup14 | 4.52% | 2.71% |
+
+Several contextual panels improve, but this remains a mixed intermediate
+result. Long pizza, encyclopaedia, resume and book outputs still corrupt
+openings, omit words and repeat spans. The protected MFTI/time reading remains
+wrong; the callback repeats an archive fragment. These are text-normalization
+metrics, not audio ASR. The demo remains stopped. The step-3000 snapshot is
+evaluation-only, with weight SHA256
+`5bf12933a980f03f15e6c01c776b9c7c04407834a4f72841317b88d504e9b1b1`.
+Receipts are under `research/v31-context-next`.
+
+The V32 source generator exited successfully: 1,002 completed answers and
+22 truncated first turns. Followups to those truncated histories are excluded.
+The final output agrees with the immutable first-turn review snapshot.
+Of 490 completed first turns, 440 are in the literal-Cyrillic annotation scope.
+All 440 source bodies were read; 91 malformed or uncertain-quality examples
+were quarantined without rewriting their Qwen answers.
+
+Stock GPU RUAccent processed the remaining 349 sources. All 349 targets were
+read. Seventeen rows with missing or wrong lexical stress or inappropriate
+yo replacement and one normalized full-text duplicate were quarantined.
+The retained 306 train and 25 validation rows preserve the actual Qwen history
+and system prompt and inherit the whole-group split fixed before generation.
+There is no normalized full-text overlap with active train, validation or
+frozen eval. These are checked automatic labels, not independent human gold.
+
+All 331 exported feature records passed source/reference/ID, target-token,
+finite BF16, paired-shape, hidden-dimension, token-length and source-hash checks.
+The unchanged stock assembler produced the separate immutable cache
+`freeze-features-v32-first`: 87,725 unique train and 3,239 validation rows,
+retaining the 2,302-row frozen eval. Existing factor-64 replay includes 1,374
+contextual training rows and 400 numeric rows, giving 199,487 sampled positions
+and 6,234 optimizer steps at batch 32. Its plan in `research/v32-alpaca-next`
+is prepared, not launched: continuation must use the latest V31 final after
+native generation and manual review, with a fresh optimizer/schedule.
+Active V31 inputs remain unchanged; no model, loss, trainer or exporter code
+was changed.
+
+Another 313 literal followup sources have histories verified against the
+retained complete first turns. They remain outside training pending full
+source and accented-target review.

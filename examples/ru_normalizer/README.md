@@ -426,6 +426,41 @@ view, finite loss/gradients and unchanged 3,104-row evaluation. A cross-run exac
 resume was explicitly rejected before creating its output directory. These are
 integration checks, not evidence of pronunciation improvement.
 
+V11 completed the full-replay epoch: 2,313 steps in 887 seconds, validation CE
+0.07547. Against V8, original-panel content WER improves 5.07%→4.25%, literary
+WER 9.93%→8.31%, DATE WER 48.40%→26.33%, and mixed numeric WER
+38.46%→33.90%. All 160 bounded numeric outputs match including stress.
+DATE still has only 2/25 complete exact outputs and 12/25 correct date fragments;
+correct dates frequently coexist with surrounding-text corruption. Literary
+raw stressed exact falls 69→65/256, with both real stress regressions and
+optional monosyllabic-mark differences. Full-context independent review retains
+these failures; lower WER does not establish uniformly better pronunciation.
+
+A broader SHA-selected 512-row panel from the same 3,104-row validation,
+evaluated with identical IDs and references for both models, gives V8→V11
+WER 4.63%→4.07%, content exact 400→402, raw stressed exact 307→309 and invalid
+stress 22→17. This is additional development evidence, not an untouched test.
+V11 final is selected only as the next research warm-start; V8 and V11 step1200
+remain comparison snapshots. V11 final SHA256:
+`57529eef3590d2cf62be7c357c6eb4ffce7d86ab69f6a95c2240e35ee08dc580`.
+
+V12 adds 158 DATE contexts after full source/stress review of 184 candidates;
+26 are quarantined for source normalization, stress, coverage or uncertain
+names. It retains all old rows: **71,027 unique train / 3,104 validation**.
+The 322 DATE positions repeat 10 times, yielding 73,925 epoch positions and
+2,311 batch-32 steps. This approximately preserves V11's 4.4% DATE exposure
+while increasing diversity. One epoch uses a fresh optimizer at LR 5e-6 from
+V11 final; architecture, loss and Trainer are unchanged. Data and LR both change,
+so this is continued training, not a single-variable ablation. Independent
+integrity review checks all 74,131 feature hardlinks, every new tensor, target
+identity, tokenizer hashes, repeat positions and heldout exclusions.
+
+The newly located original SOVA RUSLAN stress annotations were verified against
+their public archive, but do not justify replacing current targets wholesale.
+Most texts overlap existing data or previous quarantine, and full-context
+inspection found annotation errors. These sources remain separate candidates;
+neither old quarantine nor frozen evaluation is overwritten.
+
 `eval_freeze_text.py` uses original greedy inference and JiWER on a fixed panel:
 16 Russian-abbreviation, 16 Latin, 16 long and 16 short held-out examples, chosen
 by source-ID hash before generation. `--numeric` selects the separate 32-example

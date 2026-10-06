@@ -290,6 +290,28 @@ Appending this addition retains old data and frozen evaluation, yielding
 --features ...` selects 32 new held-out rows by SHA256 without changing native
 decoding or existing diagnostic panels.
 
+V7 completed one epoch of this mixture (2,210 steps, batch 32, LR 1e-5) in
+917.7 seconds. Validation CE fell from 0.15907 at step 400 to 0.10852 at the end.
+All seven native-generation panels retain their original rows and references:
+
+| Panel | V6 | V7 |
+|---|---:|---:|
+| Original 64, content WER | 5.83% | 4.32% |
+| RU-abbreviation / Latin strata, WER | 8.86% / 9.90% | 3.80% / 9.65% |
+| New literary 32, content WER | 25.43% | 16.76% |
+| New literary 32, exact content / raw stressed text | 7/32 / 2/32 | 11/32 / 8/32 |
+| Canonical numbers, exact | 63/64 | 64/64 |
+| Nominative clock / currency / oblique clock, content exact | 32/32 each | 32/32 each |
+| Mixed-context numeric, WER / exact | 35.04% / 1/32 | 38.18% / 0/32 |
+
+Stratum WER measures whole sentences, not isolated acronym pronunciation.
+Raw-reference matches such as unexpanded `НДС`, and the `Павр` convention above,
+cannot certify spoken-form correctness. Optional monosyllabic stress marks also
+affect raw exact match; inspect word/stress errors separately. V7 improves general
+copying but still corrupts unfamiliar words and fails broad numeric normalization.
+Its final/end2210 weights SHA256 is
+`fc1f3c916e3a6938e2a107ba5ae3291c54ea29015cbbd7a532dfdfd82bbbd4a2`.
+
 `eval_freeze_text.py` uses original greedy inference and JiWER on a fixed panel:
 16 Russian-abbreviation, 16 Latin, 16 long and 16 short held-out examples, chosen
 by source-ID hash before generation. `--numeric` selects the separate 32-example

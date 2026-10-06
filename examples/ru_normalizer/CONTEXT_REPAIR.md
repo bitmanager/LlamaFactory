@@ -794,6 +794,86 @@ V33 or frozen evaluation. These are checked automatic labels, not independent
 human gold. The unchanged GPU feature exporter completed; all 131 records
 passed identity, token, shape, length, finite-BF16 and metadata checks. Metadata
 SHA256 is `ad7cc5ec1cbb5f12e338abeec258d4da7699b1821781ba826d7cf25a3b483d21`.
-The V34 followup review is still pending. Neither V33 nor V34 has
-started fitting; active V32 continues. No model, loss, trainer, generation or
-exporter code changed.
+Neither V33 nor V34 has started fitting; active V32 continues. No model, loss,
+trainer, generation or exporter code changed.
+
+## V34 followup audit and prepared continuation
+
+All 123 eligible V34 followups were read with their actual previous questions
+and answers. Thirty malformed, irrelevant or uncertain sources were quarantined
+without rewriting. The existing CUDA accent adapter processed 93 sources; every
+target was read. Four additional exclusions catch missing stress, missing
+contextual yo and incorrect `весны -> вёсны` / `все -> всё` replacements.
+The retained 78 train and 11 validation rows inherit the groups held out before
+generation. Actual histories and original written answers remain unchanged;
+there are no normalized full-text overlaps with prepared V33, V34 first turns
+or frozen evaluation. Labels are checked automatic annotations, not human gold.
+
+The unchanged exporter completed successfully. All 89 records passed source,
+reference, target-token, length, finite-BF16, paired-shape and metadata checks.
+Followup metadata SHA256 is
+`f8f97d88cf81fa37ac2c82228f9aee9ee02b4907e332434ce7e8a3eef2aa0e35`.
+The existing assembler combined first turns and followups into 198 train and
+22 validation rows, then appended them to the separate prepared V33 cache.
+The resulting V34 cache has 88,642 train, 3,316 validation and the unchanged
+2,302-row frozen eval. Active V32 inputs remain immutable.
+
+Existing factor-64 replay covers 2,291 contextual and 400 numeric train rows,
+giving 258,175 positions and 8,068 steps at batch 32. The plan under
+`research/v34-alpaca-next/next-plan.json` is prepared only: it requires the
+latest completed V33 final and native review. V33 is the next planned run;
+V34 has not started fitting. No model, loss, trainer or exporter code changed.
+
+All ten callback triples at each of V32 steps 4,800, 5,400 and 6,000 were read.
+Archive corruption remains, including two repeated fragments at 5,400/6,000,
+and stress in `нормализов+ана` remains wrong. Other eight examples preserve
+normalized content. These callback cases do not establish broader improvement
+or qualify the checkpoint for demo promotion. The demo remains stopped.
+
+## V32 final and launched V33
+
+V32 completed 6,730 optimizer steps in 2,603.1 seconds. Train CE is 0.028481
+and final validation CE 0.078322, versus V31 final 0.077879. All fourteen native
+generation panels completed without runtime errors; the container exited zero.
+Latest-final SHA256 is
+`407f746b3bca46c77ffe59778a4f640303d67ea9459824ba271b15d8bd672c63`.
+
+| Panel | V31 final / pre-fitting baseline WER | V32 final WER |
+|---|---:|---:|
+| Contextual200 | 4.15% | 4.15% |
+| Protected user-demo5 | 31.91% | 28.72% |
+| Numeric32 | 31.91% | 30.20% |
+| Original64 | 3.91% | 3.56% |
+| Previous new10 | 7.25% | 5.31% |
+| Previous new11 | 27.03% | 23.99% |
+| Previous new20 | 11.92% | 7.32% |
+| Followup18 | 10.38% | 5.38% |
+| First4 | 19.09% | 19.09% |
+| First10 | 11.86% | 13.40% |
+| First6 | 8.41% | 10.28% |
+| Followup3 | 0% | 0% |
+| Followup14 | 2.71% | 2.26% |
+| Newly added46 | 10.74% | 8.60% |
+
+For the 179 rows outside Contextual200 and Original64, all 61 changed
+source/reference/prediction triples were reread in full. The remaining 118
+predictions exactly match previously fully read outputs, with unchanged written
+text, references and optional history/system. The 46-row comparison uses the
+previous step-3,600 review; other panels use V31 final. All ten final callback
+triples were read. The two larger panels have metrics checked, without claiming
+full manual review of their text. Exact comparison IDs and hashes are in
+`research/v32-context-followup/final-manual-review.json`.
+
+The result is mixed: several panels improve, but First10 and First6 regress.
+Long replies still corrupt openings, omit words and repeat spans; number scale,
+digit-count and MFTI/time errors remain. These are normalization metrics, not
+audio ASR, and the checkpoint is not promoted to the stopped demo.
+
+V33 is launched on the same dev GPU0 from the immutable latest V32 final.
+Its already audited cache contains 88,444 train and 3,294 validation rows,
+including 471 new train and 34 new held-out rows. Existing factor-64 replay
+gives 245,503 positions and 7,672 steps. Settings remain BF16, batch 32, one
+epoch, LR `1e-6`, 439,416,570 trainable parameters and a fresh optimizer/schedule.
+Fifteen native generation panels are queued, including the new 34-row panel.
+No model, loss, trainer or exporter changes were introduced. The launch receipt
+is under `research/v33-context-followup`; V34 remains prepared for later.

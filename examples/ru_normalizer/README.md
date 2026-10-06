@@ -783,11 +783,23 @@ sentence loses a negation. Training CE alone does not detect these failures.
 The actual millions source batch contains 10,000 integer and 4,000 RUB training
 candidates plus 342 separately reserved rows. Stock RUAccent completed all rows.
 Review of its complete 57-wordform inventory found four missing polysyllabic
-stresses in three currency training rows; those rows are proposed for exclusion,
-not relabeling. Existing 3,110 validation / 2,302 evaluation rows stay unchanged.
-Before/after evaluation on all 342 new reserved examples is planned using the
-same stock decoder and frozen features. These five fixed nominal templates test
+stresses in three currency training rows; those rows were excluded without
+relabeling. V20 continues from the completed V19 weights with 86,111 unique
+training examples, including 13,997 new examples. Existing 3,110 validation /
+2,302 evaluation rows stay unchanged. V19 completed 2,532 steps with validation
+CE 0.0725687; V20 uses the same model/trainer and a fresh optimizer/schedule.
+Before/after evaluation on all 342 new reserved examples uses the
+same stock decoder and frozen features. The V19 baseline has 49.50% content WER
+and 0/342 exact outputs: no prediction contains a form of “миллион”. Even some
+low-WER predictions replace millions with thousands, changing the value.
+These five fixed nominal templates test
 large-number composition, not arbitrary-context normalization.
+
+The separate 32-row contextual numeric panel remains difficult: V19 WER is
+32.76%, with frequent place-value and inflection errors. Exact match also rejects
+valid alternative time readings, so full written/reference/prediction review
+distinguishes changed numbers from acceptable wording. The protected references
+remain unchanged; their own ambiguities are recorded separately.
 
 Further primary-source research found
 [TVI/f5_tts_ru_accent](https://huggingface.co/datasets/TVI/f5_tts_ru_accent),

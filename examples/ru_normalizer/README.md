@@ -714,6 +714,27 @@ on the same reserved GPU with BF16, batch 32, LR `1e-6` and one epoch. No model,
 trainer or hidden-layer selection changed. V16 source data and rejected targets
 are not rewritten.
 
+V17 completed 2,440 steps in 965.1 seconds, with training CE 0.04483 and
+validation CE 0.07304. Its final immutable weights are SHA256
+`d3749f7d6fffbd1e9c56f287a751395994b71fd5287faefa165af5a04b01d477`.
+Seven fixed native-generation panels are evaluating those weights; the small
+aggregate CE improvement alone does not establish better number pronunciation.
+
+The next fixed 600 Google candidates (pool ranks 1501–2100) yielded 149 new
+contexts after full normalization and stress review: 51, 55 and 43 across the
+three batches. Original targets remain unchanged, with uncertain proper-name
+stress and faulty number/case labels held out of training. These are reviewed
+automatic labels, not human gold. The V18 corpus contains 71,968 unique training
+examples; the 3,110 validation and 2,302 separate evaluation rows are unchanged.
+An independent audit checked all 75,078 feature hardlinks, all 149 new payloads
+and the replay manifest. The existing factor-10 selection covers 843 Google
+contexts, producing 79,555 epoch positions and 2,487 batch-32 optimizer steps.
+Next-run checkpoints/logs use dev drive2 to preserve space on the shared data
+volume; data, cached features, environment and reserved GPU stay in place.
+V18 launched from V17 final after the independent data and warm-start/code
+checks, with the same BF16, batch 32, LR `1e-6` and one-epoch configuration.
+It uses a model-only warm start with a fresh optimizer/scheduler, as before.
+
 Further primary-source research found
 [TVI/f5_tts_ru_accent](https://huggingface.co/datasets/TVI/f5_tts_ru_accent),
 172,520 stress-labeled rows. In 100 inspected pairs there are no digits or Latin

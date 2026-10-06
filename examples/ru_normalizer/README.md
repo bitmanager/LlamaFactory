@@ -655,7 +655,12 @@ cleanup and additions are not isolated ablations. New validation CE cannot be
 compared directly with the previous aggregate; native fixed panels are retained.
 Before V15, V12 scored WER **31.03%** on the six new Pikabu contexts, with
 substantive content errors in all six. This is a small diagnostic, not an
-estimate of general accuracy. Training has started; improvement is unproven.
+estimate of general accuracy. V15 completed 2,317 steps in 888.6 seconds,
+with training CE 0.02591 and validation CE 0.07380. All seven final native
+evaluation panels completed successfully. Fullmix512 WER is 4.00%, Ruslan256
+8.09%, and numeric32 35.33%; these are mixed results relative to V12, and numeric32
+still has no complete exact outputs. Lower aggregate WER does not establish
+correct number normalization.
 
 Continuation policy was subsequently changed by the user: **start each next
 training run from the latest completed checkpoint**, including when its measured
@@ -664,6 +669,21 @@ than automatically rolling training back. Accordingly, the next data addition
 will continue from V15's final weights. New data uses a fresh run with an explicit
 model-only warm start; it is not an exact optimizer/scheduler resume. Continue
 reporting regressions and preserve heldout isolation and label-quality checks.
+
+The next data priority is contextual numbers. V15 already contains 18,981
+bounded numeric/clock/currency templates but only 385 reviewed Google numeric
+contexts. Full review of the next 600 previously unreviewed Google contexts,
+followed by stock RUAccent and independent stress/content review, retained
+146 new numeric contexts. Another 302 original SOVA stress contexts passed review.
+Incorrect grammatical cases, decimal-unit agreement and corrupted unit expansion
+are excluded without rewriting the source targets. V16's assembled corpus is
+71,664 unique training examples, with the same 3,110 validation rows. Replay
+extends the existing factor-10 source-ID selection to all 531 admitted Google
+numeric contexts, giving 76,443 epoch positions. Repeated examples are not counted
+as new unique data. V16 started from the completed V15 weights on the same reserved
+GPU, with BF16, batch 32, LR `1e-6`, one epoch and 2,389 planned optimizer steps.
+An independent CPU audit checked all 74,774 feature hardlinks, all 448 new
+payloads, the replay selection and unchanged heldout files before launch.
 
 Further primary-source research found
 [TVI/f5_tts_ru_accent](https://huggingface.co/datasets/TVI/f5_tts_ru_accent),

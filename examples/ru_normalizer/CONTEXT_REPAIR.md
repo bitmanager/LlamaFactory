@@ -434,3 +434,57 @@ now stops early; other long answers corrupt beginnings and repeat words.
 These fluctuations do not establish reliable normalization. The bounded V30
 epoch continues; the latest final and all queued panels must still be reviewed
 before any subsequent continuation. No demo promotion is made.
+
+## V30 final and V31 continuation
+
+V30 completed 4,810 optimizer steps in 1,845.0 seconds. Train CE is 0.02956
+and final validation CE is 0.077396. All nine native generation panels completed
+successfully. The latest final SHA256 is
+`81f99feef6ff479b3ff97e6082f5f2f42f1c1d1181d571090f6e3382242c6bc8`.
+
+| Panel | V29 final / pre-training baseline WER | V30 final WER |
+|---|---:|---:|
+| Contextual200 | 4.32% | 4.82% |
+| Protected user-demo5 | 40.43% | 32.98% |
+| Numeric32 | 31.62% | 31.91% |
+| Original64 | 4.39% | 4.66% |
+| Previous new10 | 9.66% | 7.25% |
+| Previous new11 | 26.69% | 27.03% |
+| Previous new20 | 15.99% | 15.72% |
+| New followup18 | 13.85% | 11.92% |
+| New first4 | 22.73% | 17.27% |
+
+All 100 source/prediction pairs in demo5, new10, new11, new20, followup18,
+first4 and numeric32 were read, along with ten final callback outputs.
+Short phrases often preserve content, but long answers still corrupt openings,
+omit words and repeat spans. Numeric amounts change or lose digits, and the
+protected MFTI/time reading remains wrong. The demo stays stopped; this is a
+mixed normalization result, not an audio-ASR metric or a deployment fix.
+
+All remaining 207 V30 literal followup source bodies were read. Thirty-two
+defective or out-of-scope sources were quarantined. Stock GPU RUAccent processed
+175 sources; every target was read. Eleven rows were excluded for missing,
+wrong or uncertain stress, incorrect sky -> palate yo, or normalized full-text
+overlap. The retained 150 train and fourteen validation rows preserve actual
+Qwen answers, history and system prompt and inherit the fixed whole-group split.
+All 164 exported records passed source/reference/target-token, finite BF16 and
+dimension/length checks. These remain checked automatic labels, not human gold.
+
+The completed V31 cache, `freeze-features-v31-context-next-all-followup`, contains
+87,419 train and 3,214 validation rows: 406 and 33 additions relative to V30.
+The unchanged 2,302-row frozen eval is retained. Factor-64 replay covers 1,068
+actual contextual training rows and 400 existing numeric rows, giving 179,903
+sampled positions and 5,622 optimizer steps. All earlier caches remain intact.
+
+Before fitting, the immutable V30 final was evaluated on all 33 added validation
+rows. All sources and predictions were read. The four separate panels have WER
+18.04% (first10), 10.28% (first6), 0% (followup3), and 4.52% (followup14).
+The three-case result is only a tiny diagnostic; long first turns still corrupt
+and repeat despite many content-exact shorter followups.
+
+V31 is launched on the same dev GPU0 from the latest V30 final, with BF16,
+batch 32, one epoch, LR `1e-6`, a fresh optimizer/schedule and unchanged
+439,416,570 trainable parameters. No model, loss, trainer or exporter changes
+were introduced. Thirteen native generation panels are queued after training.
+Exact launch, baseline/manual reviews and cache hashes are under
+`research/v31-context-next`; V30 final review is under `research/v30-context-followup`.

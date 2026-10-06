@@ -263,3 +263,59 @@ RUAccent staging on dev GPU1, not yet eligible for training. Admission still
 requires full accented-target review, overlap checks and the inherited whole
 conversation split; held-out first-turn groups must never enter train through
 their followups.
+
+Every one of those 202 accented followups was subsequently read. Sixteen were
+quarantined for wrong/missing stress, incorrect yo or normalized full-text
+overlap. The remaining 168 train and 18 validation rows inherit the existing
+whole-conversation split. Their stock feature export passed all 186 record
+checks for IDs/text, target token IDs, finite BF16 features and dimensions.
+Stock assembly completed the next cache with 86,933 train and 3,177 validation
+rows; the frozen eval remains unchanged. This next continuation is prepared,
+not launched, and must warm-start the latest V29 final after its final review.
+
+At V29 step 1200, new20 WER is 18.16% versus 18.43% before training, with six
+versus four content-exact answers. On the previous new11 panel it is 26.69%
+versus V28 final 34.46%. All 31 generated outputs were read. Some openings and
+repeated spans improve, but long responses remain corrupt and repetitive;
+this is not evidence of reliable live normalization. Callback examples at
+steps 600 and 2400 also retain the long TBC/PayMe repetition failure.
+
+A read-only diagnostic loaded the real step-1200 weights and contextual
+features, comparing upstream greedy incremental logits against parallel
+teacher-forced logits on the identical generated continuation in BF16. Across
+three examples and 149 positions, argmax mismatches were zero. Absolute logits
+show small numerical differences (maximum 0.125--0.1875). This narrowly checks
+these inference paths; it does not prove all padding/cache cases correct or
+exclude other model/data bugs. No decoder/trainer changes were introduced.
+
+The unchanged generator has also completed the next disjoint 512 source
+prompts on exp GPU3: 1,006 answers completed, 18 truncated answers excluded.
+All 768 preceding source indices were excluded. Raw output stays ineligible
+until review. The first 130 of 433 plain-text first-turn candidates were read;
+94 fluent sources were admitted to stock GPU accent staging. Every reviewed
+source and the 494-row first-turn snapshot were verified unchanged against
+the completed generation. Forty-one whole conversation groups were fixed by
+SHA256 as held out before fitting; this applies to both turns and any later
+admissions. The other 303 plain first-turn sources and the second-turn answers
+still require review. Artifacts live under `research/v30-alpaca-next`.
+
+All 94 accented first-turn targets were read; eleven were quarantined for
+missing stress, source agreement or full-text overlap. The 83 remaining rows
+split into 79 train and four validation using the pre-fixed group split.
+Dictionary verification also corrected a manual-review error: `прост+ого` was
+valid but had been incorrectly quarantined in the previous followup batch.
+The unchanged row is recovered into the next training data; the old quarantine
+and immutable cache are retained with a separate correction receipt, citing
+[Gramota's adjective inflections](https://gramota.ru/meta/prostoy_4295.h2).
+
+The resulting additional export has 80 train and four validation rows, all
+84 feature records checked. The next assembled cache now contains 87,013 train
+and 3,181 validation rows: 248 and 22 additions relative to V29. Existing
+factor-64 replay covers 662 actual contextual rows plus 400 numeric rows,
+yielding 153,919 positions and 4,810 steps. Its prepared plan remains unlaunched;
+V29 final/manual review and latest-checkpoint warm start are still required.
+
+At V29 step 2400, new20 WER is 18.43%, matching baseline, and new11 is 28.72%:
+better than V28 final, but worse than step 1200. All 31 predictions were read
+against the unchanged source/reference panels. Long responses still repeat
+and lose content. The generation result remains insufficient for deployment.

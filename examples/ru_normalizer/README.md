@@ -717,8 +717,12 @@ are not rewritten.
 V17 completed 2,440 steps in 965.1 seconds, with training CE 0.04483 and
 validation CE 0.07304. Its final immutable weights are SHA256
 `d3749f7d6fffbd1e9c56f287a751395994b71fd5287faefa165af5a04b01d477`.
-Seven fixed native-generation panels are evaluating those weights; the small
-aggregate CE improvement alone does not establish better number pronunciation.
+All seven fixed native-generation panels completed. Numeric32 WER changes
+31.62% to 31.34%, still with no exact full outputs; `51000` still becomes `5100`.
+Fullmix512 WER changes 3.49% to 3.52%, while content-exact rows improve 410 to
+412. Literary content-exact rows improve 137 to 139/256, but DATE25 falls from
+five to three exact-content rows despite lower WER. Known-gaps15 WER worsens
+61.32% to 65.57%. These mixed results do not establish reliable normalization.
 
 The next fixed 600 Google candidates (pool ranks 1501–2100) yielded 149 new
 contexts after full normalization and stress review: 51, 55 and 43 across the

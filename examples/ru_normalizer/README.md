@@ -185,11 +185,29 @@ are not spelling errors, but do not specify the spoken expansion required here.
 The same quarantine adapter prepared a separate v6 candidate with **55,180 train /
 2,004 validation**, excluding exactly those 161 audited IDs without relabeling.
 It preserves the earlier 30 exclusions in provenance and all held-out data.
-The running v5 dataset is unchanged. Ambiguous brand/time shorthand and
+The completed v5 dataset is unchanged. Ambiguous brand/time shorthand and
 word-pronounced acronyms are not automatically excluded. Three old diagnostic
 references also retain raw `СМС/НДС`: exact match there is a content-copy check,
 not evidence of correct spoken expansion. Keep this limitation when comparing
 checkpoints; do not silently rewrite the panel to improve metrics.
+
+V5 completed three epochs (5,190 steps, 39.4 minutes). Its end checkpoint gave
+6.58% content WER on the original 64-example panel, 64/64 exact canonical-number
+outputs, 32/32 clock outputs and 32/32 currency outputs ignoring stress marks.
+However, the separate mixed-context numeric panel remained **0/32 exact**, with
+37.04% WER. Neutral-template success does not establish arbitrary-text number
+normalization. The end checkpoint differs from the CE-best checkpoint on only
+one of 224 outputs; selecting it is not a statistically significant comparison.
+
+The next reviewed mixture adds 1,806 training and 191 validation oblique-clock
+pairs to the v6 data, for **56,986 / 2,195** rows. After library-based inflection,
+RUAccent produced `Прих+одите` in 616 invitation-template rows where the intended
+imperative requires `Приход+ите`. These ambiguous rows are quarantined unchanged,
+not globally relabeled. The earlier 69 dative-zero exclusions also remain in
+provenance. Existing clock values retain their original split; the new held-out
+32-example diagnostic panel is selected by the existing SHA256 rule (23 genitive,
+9 dative). This addition covers bounded clock constructions, not money, dates,
+phone numbers or arbitrary grammatical contexts.
 
 `eval_freeze_text.py` uses original greedy inference and JiWER on a fixed panel:
 16 Russian-abbreviation, 16 Latin, 16 long and 16 short held-out examples, chosen

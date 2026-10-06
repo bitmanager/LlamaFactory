@@ -143,3 +143,54 @@ It is one bounded additional epoch on the unchanged V26 data/replay mixture,
 with LR reduced to 5e-7 and a fresh optimizer/schedule. There are no new rows,
 architecture or trainer changes. The same five generation panels are queued
 after training; research manifests are under research/v27-context-continued.
+
+## V27 result and V28 contextual expansion
+
+V27 completed 3,178 steps in 1,189.9 seconds. Train CE was 0.02448 and validation
+CE 0.07452. Generation WER was new10 13.04%, context200 4.57%, protected demo5
+43.62%, numeric32 29.34%, and original64 4.87%. The first panel regressed versus
+V26 despite small gains elsewhere. Full inspection of the five demo generations
+still found corrupt pizza answers, repetition and incorrect MFTI/time readings.
+The demo remains stopped; this checkpoint is not promoted as a quality fix.
+
+V28 adds contextual source prompts from `IlyaGusev/ru_turbo_alpaca`, pinned at
+revision `460b1f3312aa21ef774e916e532a9576f7938a0d`. Only source rows labeled
+`ok` were considered. A deterministic selection of 256 prompts was expanded to
+two turns using the existing generator and the same frozen Qwen/system prompt.
+Of 512 candidate answers, 394 completed and 118 truncated answers were rejected.
+Followups to incomplete first turns are excluded. Unreviewed raw generations
+remain outside training.
+
+Full-answer inspection admitted 140 source pairs to stock GPU RUAccent. Every
+accented target was read. Missing stress, incorrect yo/stress and normalized
+full-text overlaps quarantined 22 rows, leaving 118 checked automatic labels.
+Eight whole conversation groups selected by SHA256 were fixed as held out before
+baseline evaluation: 107 new train rows and 11 new validation rows. This batch
+covers ordinary Russian prose; it does not claim new numeric/acronym labels.
+The source answers, actual histories and system prompt are preserved.
+
+The existing exporter produced 118 cached records. All were checked for source
+IDs/text, reference/target token IDs, finite BF16 features, dimensions and paired
+sequence lengths. The unchanged assembler retained the prior data and produced
+86,550 train rows, 3,139 validation rows and the unchanged 2,302-row frozen eval.
+Existing factor-32 replay now covers 199 actual contextual train rows plus the
+previous 400 numeric rows, giving 105,119 positions and 3,285 optimizer steps.
+
+V28 uses the latest immutable V27 final, SHA256
+`441c38bd5939c0f7f81d2bcb6f40e35fcd71d5306c555f369302d1e4656a830f`.
+Settings remain BF16, batch 32, one epoch, LR `1e-6`, model-only warm start with a
+fresh optimizer/schedule and 439,416,570 trainable parameters. No architecture,
+loss, trainer or exporter changes are introduced for this run.
+
+Native host CUDA initialization hung inside `cuInit` before accent processing.
+The existing CUDA container successfully initialized the same reserved dev GPU0;
+training runs there with the existing venv and pinned Transformers 4.45.2. There
+is no CPU fallback, GPU reset or interference with other jobs. Data generation
+used the same existing container on exp GPU3; those preparation jobs finished.
+Research artifacts, the feature audit, split hashes and exact container launch
+are under `research/v28-alpaca-context`. A pre-training V27 baseline on new11 is
+recorded: WER 31.42%, one content-exact answer out of eleven, and one invalid
+stress output. Manual inspection found repetition, corrupt openings and dropped
+words in the longer answers. This is a different panel from new10 and its WER
+must not be compared directly with new10. All five prior generation panels plus
+new11 are queued after V28.

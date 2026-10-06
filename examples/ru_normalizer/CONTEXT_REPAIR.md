@@ -194,3 +194,17 @@ stress output. Manual inspection found repetition, corrupt openings and dropped
 words in the longer answers. This is a different panel from new10 and its WER
 must not be compared directly with new10. All five prior generation panels plus
 new11 are queued after V28.
+
+At step 600, validation CE is 0.07483. A separate native generation run on the
+free dev GPU1 completed new11: WER 31.08% versus baseline 31.42%, with one
+content-exact answer in both. All eleven outputs were inspected; long answers
+still contain corrupt openings, repetitions and dropped words. This early
+checkpoint does not establish a useful quality gain. The evaluation container
+exited successfully and released that GPU.
+
+While V28 trains, the unchanged stock generator prepares the next 512 source
+prompts/two-turn conversations on exp GPU3. Source indices are disjoint from
+V28; compressed and decompressed source hashes are recorded separately. This
+next raw batch is marked ineligible for training until generation and target
+review finish. Its artifacts are under `research/v29-alpaca-context`; no new
+trainer or generation algorithm is introduced.

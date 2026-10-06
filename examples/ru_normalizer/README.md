@@ -518,6 +518,37 @@ Most texts overlap existing data or previous quarantine, and full-context
 inspection found annotation errors. These sources remain separate candidates;
 neither old quarantine nor frozen evaluation is overwritten.
 
+A bounded review of 150 deterministically ordered original SOVA contexts produced
+72 separate source-preserving training additions. Every admitted context was read
+in full, with independent review, original-target byte checks, source/heldout
+exclusions and tokenizer bounds. Uncertain names and homographs remain excluded;
+the original rejected derivative targets are never overwritten. Primary dictionary
+evidence resolves `инжен+ерии` as acceptable rather than relabeling it from reviewer
+intuition. These additions retain RUSLAN's CC-BY-NC-SA-4.0 provenance and are not
+audio-verified gold.
+
+The prepared V14 corpus is V13 plus those 72 rows: **71,079 train / 3,104 validation**,
+with the same frozen evaluation. The same 322 DATE IDs repeated ten times yield
+73,977 positions and 2,312 batch-32 steps. Independent integrity review checked
+all 74,183 feature hardlinks and all 72 new payloads, including exact original
+targets, token IDs and finite BF16 tensors. V14 started on the same reserved GPU
+from V12 at LR 1e-6 for one epoch, with no model, loss or trainer changes. Its goal
+is to test retention with a smaller update, not to assume that another epoch is an
+improvement. New data and LR both change, so this is not a controlled LR ablation.
+
+A separate coverage audit explains an important limitation of the numerical
+checks: only 19,303 training inputs contain digits, and 18,981 of those (98.33%)
+are narrow synthetic templates. The 17,769 older `corpus:num` examples already
+spell numbers as words; they supervise copying/stress, not digit verbalization.
+Only 322 existing digit inputs are full contexts, selected through DATE coverage.
+The prepared Google export contains 6,996 non-DATE-tagged candidates that can be
+reviewed with the existing adapters, without expanding the trainer. These have
+not yet been admitted; Kestrel sometimes misreads titles as times or uses wrong
+inflections. The hard numeric panel also contains valid output alternatives:
+«до пятнадцати часов тридцати минут» preserves the reference «до пятнадцати
+тридцати», despite failing exact match. This does not excuse observed wrong
+numeric values, cases or missing words.
+
 `eval_freeze_text.py` uses original greedy inference and JiWER on a fixed panel:
 16 Russian-abbreviation, 16 Latin, 16 long and 16 short held-out examples, chosen
 by source-ID hash before generation. `--numeric` selects the separate 32-example

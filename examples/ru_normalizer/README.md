@@ -928,9 +928,12 @@ train-only addition contains **220 unique, unchanged records**. Independent
 source/overlap/token-length checks bind the exact accepted bytes; a separate
 admission manifest preserves earlier staging flags as provenance. Stock export
 and assembly prepare 86,351 train / 3,110 validation / 2,302 frozen eval rows.
-The prospective V23 recipe continues from V22 final and gives the 220 new
+V23 continues from V22 final and gives the 220 new
 contexts the same factor-10 replay as the existing 989 numeric contexts:
 97,232 epoch positions, 3,039 batch-32 steps. Brand examples get no extra replay.
+After SSH access recovered, all code/data/warm-weight hashes were rechecked and
+V23 launched on the same reserved dev GPU 0. The first 50 optimizer steps have
+finite loss and gradients; final quality still requires native heldout evaluation.
 
 Further primary-source research found
 [TVI/f5_tts_ru_accent](https://huggingface.co/datasets/TVI/f5_tts_ru_accent),

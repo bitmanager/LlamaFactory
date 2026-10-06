@@ -23,6 +23,8 @@ def main():
     mode = p.add_mutually_exclusive_group()
     mode.add_argument("--numeric", action="store_true", help="Evaluate the separate 32-row protected numeric probe")
     mode.add_argument("--canonical", action="store_true", help="Fixed 32 integer +32 decimal protected canonical rows")
+    mode.add_argument("--clock", action="store_true", help="Fixed SHA256 32 clock heldout rows")
+    mode.add_argument("--currency", action="store_true", help="Fixed SHA256 32 currency heldout rows")
     p.add_argument("--data", type=Path)
     p.add_argument("--features", type=Path)
     p.add_argument("--training-data", type=Path, help="Training JSONL checked for heldout leakage")
@@ -34,6 +36,10 @@ def main():
         features, data = args.root / "data/numeric-probe-features-v1", args.root / "data/numeric-probe-v1"
     if args.canonical:
         features, data = args.root / "data/freeze-canonical-features-v1", args.root / "data/numeric-canonical-v1/staging"
+    if args.clock:
+        features, data = args.root / "data/freeze-clock-features-v1", args.root / "data/clock-v1/staging"
+    if args.currency:
+        features, data = args.root / "data/freeze-currency-features-v1", args.root / "data/currency-v1/staging-clean"
     features, data = args.features or features, args.data or data
     rows = [json.loads(x) for x in (data / "validation.jsonl").read_text().splitlines()]
     training_data = args.training_data or args.root / "data/hidden-plan-v2/train.jsonl"
@@ -53,10 +59,12 @@ def main():
     if args.canonical:
         predicates = {"integer": lambda s: re.search(r"\d", s) and "," not in s,
                       "decimal": lambda s: "," in s}
+    if args.clock or args.currency:
+        predicates = {"clock" if args.clock else "currency": lambda s: True}
     selected, used = [], set()
     order = sorted(enumerate(rows), key=lambda item: hashlib.sha256(item[1]["source_id"].encode()).hexdigest())
     for stratum, predicate in predicates.items():
-        size = 32 if args.numeric or args.canonical else 16
+        size = 32 if args.numeric or args.canonical or args.clock or args.currency else 16
         choices = [(i, r) for i, r in order if i not in used and predicate(r["written"])][:size]
         assert len(choices) == size, f"Insufficient heldout rows for {stratum}"
         for i, row in choices:
@@ -69,7 +77,7 @@ def main():
         weights = {path.stem: path for path in args.weights}
         if len(weights) != len(args.weights):
             raise ValueError("Snapshot file stems must be unique")
-    manifest = dict(panel=selected, selection="SHA256 ID; 32 integers +32 decimals" if args.canonical else "SHA256 ID; 32 protected numeric rows" if args.numeric else "Priority RU-abbr, Latin, long>=180 chars, short<=110; SHA256 ID;16 each",
+    manifest = dict(panel=selected, selection="SHA256 ID; 32 clock or currency rows" if args.clock or args.currency else "SHA256 ID; 32 integers +32 decimals" if args.canonical else "SHA256 ID; 32 protected numeric rows" if args.numeric else "Priority RU-abbr, Latin, long>=180 chars, short<=110; SHA256 ID;16 each",
                     labels="Automatic stress references, not human gold", validation_sha256=sha(data / "validation.jsonl"),
                     training_file=str(training_data), training_sha256=sha(training_data),
                     feature_metadata=meta, weights={k:sha(v) for k, v in weights.items()}, max_tokens=192)

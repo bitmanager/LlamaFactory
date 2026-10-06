@@ -658,3 +658,53 @@ The launch receipt is under `research/v32-context-followup`.
 The V33 generator also exited successfully: 998 completed and 26 truncated
 answers. Its 442 literal first-turn candidates remain outside training pending
 full source/target review. Followups to incomplete first turns must be excluded.
+
+## V32 step 600 and V33 first-turn preparation
+
+The immutable V32 step-600 snapshot has SHA256
+`445b00c01884d41b328e27792090370c251e5c6f08324233247b2461782e091e`.
+All nine requested native panels completed successfully, and all 126
+source/prediction pairs plus the ten callback examples were read. New46 WER
+changed from 10.74% to 9.74%, and protected user-demo5 from 31.91% to 28.72%.
+First10 regressed from 11.86% to 20.62%. Short replies often preserve content,
+but word loss, repeated spans, corrupt openings, incorrect MFTI/time and stress
+errors remain. Even the short `Дождь увлажняет почву` is corrupted, and
+`Никто ещё не пообедал` loses its opening. These small-panel results are mixed,
+not evidence of consistent improvement or readiness to deploy. Receipts are
+under `research/v32-context-followup/step600`. The ten callback examples at
+each of steps 1,200 and 1,800 were also read; archive duplication remains. V32 continues without
+rollback, and the demo remains stopped.
+
+All 442 V33 first-turn candidates and their supplied questions were read.
+129 malformed, uncertain factual/recipe or task-content examples were
+quarantined unchanged. The stock CUDA RUAccent adapter processed the remaining
+313; all accented targets were then read. Fourteen further exclusions include
+wrong contextual `ё` in sky/commotion words, missing lexical stresses and one
+malformed source (`шоколадой`) missed during the initial source review. That
+source-review amendment is explicitly recorded before fitting; no labels or
+histories were rewritten. Three full-text duplicates were excluded.
+
+The eligible first-turn dataset is `qwen-context-reviewed-v33-first`, with 274
+train and 22 validation rows. The forty-one preselected heldout groups are
+unchanged; normalized full-text overlaps with the active train/validation,
+including frozen evaluation, are excluded. These are manually checked
+automatic labels, not independent human gold.
+
+The unchanged BF16/SDPA GPU exporter produced
+`freeze-qwen-context-reviewed-v33-first`. Every one of its 296 records passed
+source/target identity, target token, length, paired-shape, finite-BF16 and
+metadata hash/count checks. Metadata SHA256 is
+`3a48a172cebf1bda6e2486edcfe6354f5d0e79a7ae5a7d33aff5a98a26dc1ade`;
+the complete audit is `research/v33-alpaca-next/first-feature-audit.json`.
+This dataset is prepared for a later continuation, not part of active V32.
+Another 280 literal followup candidates have verified actual histories and
+await complete source/target review. No model, loss, trainer or exporter code
+changed.
+
+The V33 first22 pre-fitting baseline using the immutable V31 final completed;
+all 22 source/prediction pairs were read. WER is 19.91%, with 9/22 preserving
+normalized content and 5/22 exactly matching automatic stress references.
+Long answers still repeat/drop words, and a short quoted grammar answer also
+corrupts. This is a pre-V33 reference, not a result from active V32 or a claim
+of improvement. It did not drive label rewrites. Its manual receipt is under
+`research/v33-alpaca-next/baseline-first22`.

@@ -774,6 +774,21 @@ unchanged heldouts and 989 Google replay IDs at factor 10 (81,015 epoch position
 75,224 feature hardlinks, 146 new payloads and protected-panel checks passed.
 The optional millions-mode data is separate and is not included in V19.
 
+All seven V18 final native panels completed and changed outputs were reviewed
+in full context. The fixed 53 abbreviation expansions are retained; DATE correct
+fragments improve 14 to 15/25. This coexists with new errors: a telephone number
+already written in words loses digits, `2` months becomes `20`, and a literary
+sentence loses a negation. Training CE alone does not detect these failures.
+
+The actual millions source batch contains 10,000 integer and 4,000 RUB training
+candidates plus 342 separately reserved rows. Stock RUAccent completed all rows.
+Review of its complete 57-wordform inventory found four missing polysyllabic
+stresses in three currency training rows; those rows are proposed for exclusion,
+not relabeling. Existing 3,110 validation / 2,302 evaluation rows stay unchanged.
+Before/after evaluation on all 342 new reserved examples is planned using the
+same stock decoder and frozen features. These five fixed nominal templates test
+large-number composition, not arbitrary-context normalization.
+
 Further primary-source research found
 [TVI/f5_tts_ru_accent](https://huggingface.co/datasets/TVI/f5_tts_ru_accent),
 172,520 stress-labeled rows. In 100 inspected pairs there are no digits or Latin

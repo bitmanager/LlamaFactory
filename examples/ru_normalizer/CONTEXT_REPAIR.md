@@ -361,3 +361,18 @@ completed V30 generation. Of these 150, 38 were excluded for source defects;
 the remaining 112 completed stock GPU RUAccent on dev GPU1. These staging rows
 are not part of the launched V30 data and still require full target review,
 duplicate checks and the fixed whole-conversation held-out split.
+
+All 112 accented targets were subsequently read. Ten were quarantined for
+wrong contextual castle stress, incorrect sky -> palate yo replacement,
+missing lexical stress or an uncertain movie-title pronunciation; labels were
+not rewritten. The fixed split yields 92 train and ten validation rows, with
+no normalized full-text overlaps or train/held-out group leakage. Every one of
+the 102 exported records passed source/reference/target token checks, finite
+BF16 checks and dimension/length checks.
+
+The next immutable cache, `freeze-features-v31-context-next`, is prepared with
+87,105 unique training rows and 3,191 validation rows; the frozen 2,302-row eval
+is retained. Existing replay includes 754 contextual rows and 400 numeric rows,
+giving 159,807 positions and 4,994 steps. Its plan under
+`research/v31-context-next` is not launched and must use V30's latest final
+after its native generation review. Active V30 inputs remain unchanged.

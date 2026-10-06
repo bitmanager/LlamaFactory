@@ -193,7 +193,8 @@ checkpoints; do not silently rewrite the panel to improve metrics.
 
 Letter-preservation checks do not certify every pronunciation convention. For
 example, all 326 current training examples containing written `МФК` use
-`эм фэ ка`. General alphabet rules suggest `эм эф ка`, while established
+`эм фэ ка`. [General alphabet rules](https://orfo.ruslang.ru/docs/biblio/russkoe_pravopisanie_s_kommentariiami_1.pdf)
+(printed pages 19–21) suggest `эм эф ка`, while established
 abbreviation-specific exceptions to letter names exist. The audit did not find
 an МФК-specific normative source. This remains an explicit pronunciation-policy
 limitation; these source-consistent targets have not been silently rewritten or
@@ -216,6 +217,26 @@ provenance. Existing clock values retain their original split; the new held-out
 32-example diagnostic panel is selected by the existing SHA256 rule (23 genitive,
 9 dative). This addition covers bounded clock constructions, not money, dates,
 phone numbers or arbitrary grammatical contexts.
+
+V6 continued from V5 on this mixture for one epoch (1,781 steps), batch 32,
+LR 1e-5, fresh cosine schedule with 3% warmup. It completed in 703 seconds with
+validation CE 0.03811. Native generation on unchanged diagnostic panels gives:
+
+| Panel | V5 | V6 |
+|---|---:|---:|
+| Original 64, content WER | 6.58% | 5.83% |
+| RU-abbreviation stratum, WER | 9.37% | 8.86% |
+| Latin stratum, WER | 13.61% | 9.90% |
+| Canonical numbers, exact | 64/64 | 63/64 |
+| Nominative clock / currency, content exact | 32/32 each | 32/32 each |
+| Oblique clock, exact including stress | 0/32 | 32/32 |
+| Mixed-context numeric, WER / exact | 37.04% / 0/32 | 35.04% / 1/32 |
+
+V6 is selected for research continuation, not a uniform quality win: old64 exact
+content falls from 47 to 44 examples, and `69671,060` is incorrectly spoken as
+`69671,006`. Incorrect stress and acronym substitutions remain. Both checkpoints
+are retained. V6 final/end1781 SHA256:
+`d43f9f0ac522e3a0d095e401c632019a074a465d1ea9b8534e562908f3a69266`.
 
 `eval_freeze_text.py` uses original greedy inference and JiWER on a fixed panel:
 16 Russian-abbreviation, 16 Latin, 16 long and 16 short held-out examples, chosen

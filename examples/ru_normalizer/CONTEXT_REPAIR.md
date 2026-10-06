@@ -950,3 +950,47 @@ from tokenizer configuration discovery, not a replacement of Qwen weights;
 the check used CPU configuration/tokenizer loading only, not CPU model inference.
 No model, trainer, loss or exporter implementation changed. Demo stays stopped;
 continuations use latest final weights with a fresh optimizer and schedule.
+
+## V35 first320 data review while V33 continues
+
+The next 128 first-turn questions and actual frozen-Qwen answers were read in
+full, bringing source review to 320/423. The remaining 103 first turns and
+all followups are still unreviewed and are not admitted to training.
+The first 64-source cohort retained 22 sources; all 22 accent targets were
+read. Incorrect imperative `рассм+отрите` was quarantined, leaving 21 train
+rows and no new eligible heldout rows. Preparation stopped before creating
+that standalone dataset; no export was launched. Combining these rows with
+the previous reviewed cohorts retained the original six heldout rows, without
+moving any conversation between splits.
+
+The next 64-source cohort retained 21 sources. All 21 accent targets were
+read; double stress in `ух+одов+ые` and missing lexical stress on `почва`
+were quarantined. The remaining 15 train and four validation rows inherit
+the split fixed before generation. Written answers and actual histories
+remain unchanged, with no normalized full-text overlap with the prepared
+dataset or frozen evaluation. Labels are checked automatic annotations,
+not independent human gold.
+
+The unchanged GPU exporter completed both fresh combined cohorts. Every one
+of the first256 cohort's 98 artifacts and the first320 cohort's 117 artifacts
+passed source/reference/token identity, length, finite-BF16, paired shape
+and metadata checks. First320 feature metadata SHA256 is
+`0b8b29483d63921e5582589acb21d256949603f7faee11f5d13acef7ca4fa12d`.
+The existing assembler appended its 107 train and ten validation rows to the
+separate prepared V34 cache, producing 88,749 train, 3,326 validation and
+the unchanged 2,302 frozen-eval rows.
+
+`research/v35-saiga-next/next-plan-first320.json` is the newer unlaunched V35
+plan: factor-64 replay covers 2,398 contextual and 400 numeric train rows,
+giving 265,023 positions and 8,282 steps at batch 32. It requires latest V34
+final weights and native review; V33 remains active and V34 remains next.
+Earlier first128/first192/first256 plans are retained as historical artifacts.
+Active V33 data and features were not modified.
+
+A read-only stress-syntax audit of all 88,444 active V33 train rows and all
+88,749 prepared first320 train rows found zero invalid plus placements and
+zero words with multiple stress markers. Its file-bound receipt explicitly
+does not prove correct syllables or pronunciation. All ten callback triples
+at V33 steps 4,800, 5,400 and 6,000 were read: the telephone number remains correct,
+but malformed archive repetitions and `нормализов+ана` persist. These cases
+do not support demo promotion. No model, loss, trainer or exporter code changed.

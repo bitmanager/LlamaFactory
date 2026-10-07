@@ -2213,3 +2213,120 @@ words or end early. MFTI, time-only 11:30 and first-pizza demo failures
 persist. Callback CE at 3000 is 0.07392206; all ten callback records exactly
 match reviewed step 2400. This remains a mixed intermediate checkpoint,
 with no demo promotion and no prediction-driven reference changes.
+
+## Further contextual data, monitoring and isolated learning-rate comparison
+
+V38 remains the same active run. All ten callback identities at steps
+3600, 4200 and 4800 were guarded; the one changed phone-number prediction
+was read in full each time. It alternates between fifty and sixty while
+still omitting another five. The other nine records exactly match the
+previously reviewed outputs. CE is 0.07398248, 0.07399379 and 0.07391466,
+respectively. These small fluctuations do not establish better generated
+quality. Receipts: `research/v38-context-followup/step*-callback-manual-review.json`.
+
+All twenty-one actual-history followups in source indices 448..511 were
+read; five malformed or uncertain source replies were excluded unchanged.
+All sixteen remaining automatic stress targets were read. Three incorrect
+or missing stresses were quarantined unchanged, leaving thirteen train
+pairs in the fixed pre-generation conversation split. Their artifacts
+passed the existing complete feature audit. No heldout was reassigned.
+
+The unchanged stock assembler produced another versioned cache,
+`data/freeze-features-v38-first512-google32-qa`: 99,417 unique train,
+3,588 validation and the same 2,302 frozen-evaluation rows. This appends
+79 train and four heldout pairs to live V38. All 83 appended artifacts
+are audited. Replay has 3,467 unique source IDs, factor 64, 317,838
+positions and 6,622 batch-48 steps. Metadata SHA256:
+`6462a05a7aae9ddd42583bee066cf56204046da11c122d37e1efbcbbd36a95d8`.
+Future V39 remains prepared only and requires reviewed V38 final weights.
+Prepared launch:
+`research/v38-scored-next/training-launch-prepared-first512-google32-memory-verified.json`.
+All launch inputs, replay IDs and indices, ordered dataset bytes, feature
+files and completion metadata passed preflight. Labels are checked
+automatic targets, not independent human/factual gold.
+
+Six intermediate `optimizer.pt` files from terminal V36/V37 runs were
+removed, 18.9876 GiB of logical file size, after checking successful
+container termination, final epoch/step, final model hashes and absence
+of live consumers of those runs. Every model and final optimizer/state
+was preserved; active V38 was not touched. Receipt:
+`research/v38-scored-next/v36-v37-intermediate-optimizer-cleanup.json`.
+
+Because generated validation remains mixed, a separate stock-trainer
+recipe comparison completed on reserved GPU 1:
+`normalizer-train-v38-lr3x-probe600`. It uses the same reviewed V37 final,
+live V38 dataset/replay, batch 48 and default seed, with LR 3e-6 instead
+of 1e-6 for 600 steps. The stock scheduler receives 196 warmup steps and
+cosine `num_cycles=0.031956968834045245`, matching the original 6,517-step
+cosine fraction over these first 600 steps while changing amplitude only.
+Eight fixed native panels, 193 rows, completed after training. Receipt:
+`research/v38-lr3x-probe600/launch.json`. This is an isolated comparison,
+not continuation or a demo release. Main V38 and prepared V39 recipe
+remain unchanged until evidence supports a different setting. No model,
+trainer or normalizer implementation changed.
+
+The probe exited successfully without OOM. All 193 source/history/reference
+identities were checked. Sixty selected tuples were reviewed: 39 previously
+unseen complete written/history/reference/prediction tuples were read, and
+21 exactly match tuples already read in prior manual reviews. All five
+demo examples were additionally read in full. The other 133 rows have
+metric and identity checks. Five panel WERs regress, two remain equal and
+one improves versus the main run at step 600. All 120 logged learning-rate
+values match the intended 3x ratio. This short, single-seed comparison does
+not support changing the main recipe: LR stays 1e-6. Probe weights are
+evaluation only. Receipt: `research/v38-lr3x-probe600/manual-review.json`.
+
+## V38 final review and V39 continuation
+
+Another fifty non-DATE Google numeric source pairs, ranked 3651..3700,
+were read in full. Thirteen source pairs passed review; all thirteen
+automatic accent targets were read. Four targets with missing or unresolved
+stresses were quarantined unchanged. Nine retained training pairs passed
+the existing feature audit. Receipts:
+`research/v38-google-nondate3651to3700/{source-manual-review,target-manual-review,feature-audit}.json`.
+These are checked automatic labels, not independent human/factual gold.
+
+The stock assembler produced the latest immutable dataset/cache pair,
+`data/{hidden-plan,freeze-features}-v38-first512-google41-qa`: 99,426 unique
+train, 3,588 validation and the same 2,302 frozen evaluation rows. It adds
+88 train and four heldout records to V38; all 92 appended artifacts were
+audited. Replay contains 3,476 unique source IDs, factor 64, giving 318,414
+positions and 6,634 batch-48 steps. Ordered source bytes, replay IDs/indices,
+metadata and completion hashes passed preflight. Metadata SHA256:
+`90d2e601a5deef1f413960585d1dfa2c5067529a80f3d0a7682f4cbaa92100a4`.
+
+V38 completed step 6,517, epoch 1, with train runtime 2,849.7273 seconds,
+validation CE 0.07394230, successful container exit and no OOM. All twenty
+native panels completed, 767 rows; every source/history/reference identity
+was guarded against the prior fixed baseline. In eight critical panels,
+193 rows were compared against step 3000. All changed predictions plus
+all five demo examples were read in full, 34 records. The other 159
+critical records and 574 other-panel records have metric/identity checks.
+Receipt: `research/v38-context-followup/final/manual-review.json`.
+
+Final WER is 11.5282% on combined22, 9.4453% on combined34, 7.3066% on
+combined46, 30.7692% on numeric32, 4.4944% on the V37-new9 panel,
+7.0352% on Saiga16, 7.6220% on new29 and 20.2128% on demo5. Some long
+reply clauses are restored, while other replies remain malformed or
+repetitive. The 666666-rouble amount regresses from its exact intermediate
+output. MFTI, 11:30 and first-pizza failures persist. Final quality is mixed;
+there is no demo promotion and no prediction-driven reference rewriting.
+
+Final root and final-checkpoint weights match; both immutable evaluation
+and continuation copies were independently hash-verified. SHA256:
+`4c9380a1e2ef3ea5e2aedd3776541ea125352272cffa268f96cf889ea382ad37`.
+V39 was launched from those reviewed final weights on the same GPU 0,
+with fresh optimizer/scheduler, BF16, batch 48, one epoch and LR 1e-6.
+Its existing trainer and model implementation are unchanged. All twenty
+final native output directories were created before launch. Receipt:
+`research/v38-scored-next/training-launch-first512-google41.json`.
+
+The fixed 33-new-heldout baseline completed on GPU 1 from the reviewed
+V38 final. All 33 source/history/reference values were checked; 29 output
+tuples exactly match the reviewed V38-final new29 panel, including prior
+exact manual-review reuse. The four additional complete tuples were read:
+both long wood-processing replies corrupt words, while the two gratitude
+replies preserve their literal words. Baseline WER is 7.7551%, literal
+exact match 17/33 and stressed exact match 2/33. Receipt:
+`research/v38-scored-next/baseline-v38-final-new33/manual-review.json`.
+No model, trainer or normalizer implementation changed; no PR was merged.

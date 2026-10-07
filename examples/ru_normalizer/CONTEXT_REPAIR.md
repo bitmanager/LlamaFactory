@@ -2045,3 +2045,48 @@ disjointness, all feature files, COMPLETE metadata, fixed eval bytes and
 native/baseline input paths. Metadata SHA256:
 `0f945414cdf486f73c0518ab4faf2e215262a964a73b055e696d818390d048ae`.
 No model/trainer/normalizer implementation was changed.
+
+## V37 final reviewed; V38 continuation launched
+
+V37 completed step 6162, epoch 1.0, in 2704.4434 seconds. Its container
+exited successfully with no OOM after all nineteen native panels, 738
+rows. The final model SHA256 is
+`42fab89fe5dac08aff6ae4ad3e7e043f341f051180d49e28198878bcd411fc0d`.
+The immutable final snapshot and latest continuation snapshot were copied
+and hash-verified. Only final model weights are used for continuation.
+
+All 738 native source/history/reference identities were guarded against
+the preceding fixed baselines. On seven critical panels, all 21 changed
+records against step 3000 plus the five complete demo examples were read
+with their histories and references. The other 712 records have metric
+and identity checks, not a claim of full manual review. Short hotel text
+became exact, while long replies remain damaged and some regressed.
+Numeric32 WER is 29.0598%; demo5 WER remains 20.2128%. The time-only demo
+still produces “eleven whole”, and MFTI is still wrong. This is a mixed
+research checkpoint, not a demo release. Receipts are under
+`research/v37-context-followup/final-manual-review.json`. Callbacks 5400
+and 6000 exactly match the previously reviewed ten records; their CE is
+0.07386626 and 0.07391478 respectively, not evidence of generated gains.
+
+Before V38, all 29 new heldout examples were evaluated on GPU 1 using
+the immutable V37 final snapshot and read in full: written text, actual
+history, automatic reference and prediction. WER is 7.4695%, literal
+exactness 12/29 and automatic stress-target exactness 1/29. Deletions,
+repetitions and stress errors persist. Automatic labels are not human
+gold. Baseline receipt:
+`research/v38-scored-next/baseline-v37-final-new29/manual-review.json`.
+
+V38 is now running as `normalizer-train-v38`, container
+`179a774957086948409f6d0efc74494fe20e6f9e4f853ac9eaca7ed98a9c594b`,
+on the same reserved GPU 0. It uses the prepared first384/Google21 data:
+295 new records, 99,338 unique training rows, 3,584 validation rows,
+312,782 replay positions and 6,517 steps. BF16, batch 48, one epoch and
+learning rate 1e-6 remain unchanged. Optimizer and scheduler start fresh;
+all twenty final native output directories were prepared before launch.
+Launch receipt: `research/v38-scored-next/training-launch-first384-google21.json`.
+No model/trainer/normalizer implementation changed, and no PR was merged.
+
+The further first384..447 accent staging was read in full, 29 targets.
+Three targets with incorrect surname stress or missing multisyllabic
+stress were quarantined unchanged. These staged records and pending
+followups are not in live V38; they remain future preparation.

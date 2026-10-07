@@ -3544,3 +3544,61 @@ were precreated. `LATEST_LAUNCHED.json` was updated only after verifying
 actual saved inputs. First validation is pending at600; this is startup
 verification, not a quality result. Launch and startup receipts:
 `research/v43-scored-next/{training-launch-first96raw-google127,v44-startup-first96raw-google127-verified}.json`.
+
+## V44 early generation review and next data
+
+V44 remains live on the same fixed GPU0. Callback CE at600/1200/1800 is
+0.07436353/0.07433112/0.07426769. All ten600 and1200 complete tuples were
+read; the1200 tuples exactly match600. At1800 the changed phone tuple was
+read and nine exact tuples reused from the recorded1200 full reads.
+The phone initially restores five-hundred/sixty while still dropping the
+separate five, then regresses to fifty at1800. Archive word-fragment
+repetition persists. Lower mean CE does not establish better generation.
+Receipts: `research/v44-context-followup/step{600,1200,1800}-callback-manual-review.json`.
+
+The stock GPU1 step1200 evaluation completed exit0 without OOM against
+an immutable evaluation-only checkpoint copy, SHA256:
+`8f38cf376dbf519bf37a89c61d1f43c63ee6be1a001f32d679b807bbb554e816`.
+All four panels /58 native rows bind this hash; source/history/reference
+identities match V43-final or the new fixed whole-group heldout pair.
+All58 complete tuples were reviewed:34 reread and24 exact tuples reused
+from recorded V43 full reads. Fixed19 content WER regresses4.0179% to
+5.8036%; numeric30.4843% and user-demo23.4043% are unchanged. The new
+dog-dialogue pair has22.2222% WER, drops a clause and repeats phrases.
+This new pair is a new baseline, not a before/after comparison. Technology
+innovations and appetite sentences corrupt words; juggling receives two
+stress marks. Some strict-WER errors are valid alternative time readings,
+but changed quantities such as1011 to a million and100million to100thousand
+are real errors. No intermediate warm start or demo promotion.
+Receipts: `research/v44-context-followup/step1200/{comparison,manual-read-selection,manual-review}.json`.
+
+The next raw-cohort slice uses first-answer indices96–127 from the same
+pinned970-answer cohort. All32 complete source contexts and19 actual-
+history followups were read. Nineteen first sources and11 followups passed
+source/collision checks; all30 automatic accent pairs were then read.
+Three first targets (uncertain reservation stress, missing смотрят/или)
+and one followup (missing было) were excluded unchanged. The accepted
+26 records are24 train and two originally fixed whole-group heldouts;
+no split reassignment or source/target rewrite occurred. These are checked
+frozen-Qwen/RUAccent automatic labels, not independent human/factual gold.
+Source/target receipts: `research/v44-scored-next/raw96to128*-manual-review.json`.
+
+Both stock CUDA accent jobs, the stock CUDA export plus full artifact audit,
+and the two-command stock assembly completed exit0 without OOM. All26
+records have exact target IDs, finite paired BF16 features with dimension
+2560, matching source lengths/hashes and no cross-split ID/text/group
+collision. `raw96to128-audit-command.py` differs from the existing audit
+template only in paths. Receipt:
+`research/v44-scored-next/raw96to128-feature-audit.json`.
+
+The next immutable cache is
+`data/{hidden-plan,freeze-features}-v44-first512full-first128raw-google127-qa`:
+99,917 train /3,611 validation /2,302 frozen records. Metadata SHA256:
+`6d0252352e13b75936b10f1d3797cb7d95f49704ce681380d8acda92d7008fe6`.
+Ordered append bytes, unchanged frozen bytes and exact replay identities
+were rechecked. Replay has3,967 IDs (3,440 contextual /527 numeric),
+factor64:349,838 positions /7,289 batch48 steps. Prepared V45 keeps BF16,
+LR1e-6, one epoch and the unchanged trainer/original decoder;23 native
+panels cover794 rows. It is not launched: reviewed V44-final and all four
+final baselines are required first. `LATEST_PREPARED.json` points to this
+new prepared plan; live V44 inputs were not modified.

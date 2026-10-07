@@ -2846,7 +2846,11 @@ demo eligible. Automatic targets are not independent human/factual gold.
 The same203-row stock native evaluation is now running on the factory
 GPU against an independent step1800 snapshot, SHA256
 `88868867d2928aed9bcb983ed757e288c1568cf0e31a6264830e082ee0c998ec`.
-Its launch is recorded in `research/v41-context-followup/step1800/native-launch.json`;
+The first evaluation attempt failed before producing predictions because
+its output directories were missing. The nine directories were created
+and only the evaluation was relaunched; main training was untouched.
+The corrected launch is recorded in
+`research/v41-context-followup/step1800/native-launch-directories-fixed.json`;
 its generated predictions have not yet been manually reviewed.
 
 All56 available first-answer sources in prompt slice256..319 were read

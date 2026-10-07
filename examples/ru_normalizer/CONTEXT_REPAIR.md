@@ -1495,3 +1495,53 @@ model-only warmstart and fresh optimizer/schedule. Earlier first384,
 first320 and first256 preparations remain immutable. V36's numeric-million
 party is still next after V35 final review. No model, trainer, exporter or
 normalization implementation changed; demo remains stopped.
+
+
+## V35 final review and V36 numeric continuation
+
+V35 finished at step 5,664 / epoch 1. Training took 2,496.1709 seconds
+(41.60 minutes), with final teacher-forced validation CE 0.0788380.
+The final standalone evaluation value comes from `eval_results.json`;
+the last checkpoint history contains the earlier step-5,400 CE instead.
+The container completed all 17 native panels / 515 rows and exited zero
+without OOM.
+
+The native results are mixed. On the fixed context-200 panel, content WER
+improved from V34's 4.5747% to 3.6812%, and original-64 from 3.0158% to
+2.8787%. The protected five-row demo improved from 36.1702% to 25.5319%,
+but still has only one content-exact row and zero stress-exact rows.
+Numeric-32 remains poor at 30.1994% versus 29.9145%. Combined-22/34/46
+are 12.6005% / 13.1934% / 7.5931%; Saiga-16 is 12.8141%. These panels
+show no uniform quality improvement and do not justify demo promotion.
+
+All 62 selected changed/demo source-reference-prediction triples were
+read in full, across `final-review-part1` and `final-review-part2`.
+Unchanged smaller-panel outputs reuse prior reviews only after exact
+prediction and source/reference/history guards. Context-200 and
+original-64 are metrics-only here. Long replies still corrupt, omit and
+repeat spans; a short smoking followup is now exact. Automatic stress
+references remain imperfect, including the already recorded Izuchite
+erratum; protected targets were not rewritten from predictions.
+Receipts and final model identity are in
+`research/v35-context-followup/final-manual-review.json`.
+
+The final root model and trainer state were copied with matching SHA256
+to `eval/v35-latest-for-continuation`. Final weights SHA256:
+`bc48d22ed7c37a7be7f4881bd68b75dd32f4aa0500317f2027d09f2e329b9fd3`.
+
+V36 was launched on the same GPU 0 as `normalizer-train-v36`, container
+`f77918e008b63ae3ee63fdc6f7449cb60266c799b0b51a26367fb36a3e3629ca`.
+It uses the exact prepared-memory commands, latest V35 final model-only
+warmstart and a fresh optimizer/scheduler. Data contain 98,856 unique
+train and 3,546 validation rows; 10,000 new train / 214 new validation
+examples expand nominative integers from one million to below one
+billion using stock num2words. New rows appear once. Existing contextual
+and numeric replay yields 281,871 positions / 5,873 steps, batch 48,
+BF16, LR 1e-6, one epoch. The frozen Qwen remains unchanged.
+
+All 18 native-panel output directories were created before launch;
+729 generated evaluation rows follow training. The following V37
+first448 cohort stays prepared only and must start from V36's reviewed
+final weights. No model/trainer/exporter/normalization implementation
+changed. Demo remains stopped. Disk free before launch was about
+69.8 GiB on drive1 and 150.2 GiB on drive2.

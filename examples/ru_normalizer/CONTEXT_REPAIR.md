@@ -3981,3 +3981,64 @@ second); this excludes validation and checkpoint saves. A separate stock
 zero-epoch evaluation of V46 on the identical expanded corpus is launched
 on GPU1 to establish a comparable CE baseline. It must verify zero
 optimizer steps and unchanged model weights before its result is accepted.
+
+That comparable V46 evaluation exited0: zero optimizer steps and exactly
+unchanged model SHA256. On the same11,150 rows and BF16/eval32, its CE was
+0.24649923, versus V47 step600 0.19118164. Later V47 CE was0.17940 at1200,
+0.17203 at1800,0.16681 at2400 and0.15182 at6600. These teacher-forced
+losses do not prove native pronunciation quality. Callbacks1200/2400 reuse
+the previously read complete tuples; the changed1800 archive tuple was
+read in full and incorrectly replaces «МФК» with «ООО».
+
+The separate V47 step600 snapshot was evaluated on120 fixed native rows:
+55 complete source/system/history/reference/prediction tuples reread,
+65 exact prior full-tuple reuse. Balalaika64 WER stays6.20%, stress exact
+5→10/64 but raw content exact39→37/64; five invalid-stress rows persist.
+Demos improve27.66→19.15%, contextual19 regresses5.58→6.92%, numeric32
+changes29.91→29.63%. Rare words, numeric magnitudes, first-word corruption,
+repetition and acronyms remain wrong. The snapshot is evaluation-only.
+Receipts: `research/v46-balalaika-bulk-next/expanded-ce-baseline-verified.json`
+and `research/v47-balalaika-bulk-mix/step600/manual-review.json`.
+
+## Requested cleanup of obsolete normalizer artifacts and Docker
+
+Before cleanup, this project occupied approximately1TiB across both drives;
+actual datasets/feature caches accounted for about127GiB. The larger part
+was saved optimizer states and repeated experiment/evaluation weights.
+Current V47, demo V45, warm V46, stock models, datasets, environments and
+source code were protected using runtime references and version bounds.
+
+325 old optimizer/nonfinal/evaluation files from completed V1–V43 runs were
+deleted. Canonical historical final models remained available. Stock
+`hardlink` consolidated matching old final files; all82 then-existing paths
+were checked for SHA256, ownership, mode and size. Afterwards41 obsolete
+per-checkpoint aliases were removed, retaining their41 canonical root
+final masters. Another27 obsolete state/copy files from explicitly named
+early hidden-plan/smoke/V1–V3 experiments were removed; seven canonical or
+last-partial models were retained. A preflight initially blocked the V1
+directory because the stock launcher includes a shadowed default output
+argument. The worker cgroup, effective last argument and saved actual
+TrainingArguments all confirmed V47 output/logging paths before cleanup
+continued; no training code was changed.
+
+The sum of observed free-space growth/allocated optimizer bytes across
+these operations was707.06GiB. This is an observed filesystem delta,
+not exclusive attribution while other cleanup can run concurrently.
+Subsequent scoped `du` measured324.49GiB for this project across the drives.
+All current model/data paths survived; training, the one-GPU demo and the
+existing TTS server remained live, and the tailnet demo health returned200.
+Receipts: `research/storage-cleanup-20261007/normalizer-cleanup-summary.json`
+and its listed operation manifests; copies are in local
+`validation/storage-cleanup-20261007`.
+
+Docker cleanup removed326 stopped normalizer containers on dev; on exp it
+removed56 similarly named tasks,289 older evaluators identified by their
+normalizer root/code paths, one old mount-failed created task and the
+already-stopped old demo. No force-removal, live stops or volume deletion
+was used. Bound model/data files and audit receipts remain on disk. The
+shared image `46950ef5920c` is still required by the running normalizer and
+demo and was retained. The recent V44/V45/V46 training-state containers
+and V47 step600 evaluation were retained for inspection. Docker's reported
+build cache was already zero after concurrent maintenance; direct dev
+checks also found no cache records in either default or Coolify builder.
+Other projects' containers/images and persistent volumes were not purged.

@@ -2598,3 +2598,73 @@ checked to point to the future V41 final run, not its warm start. Note:
 `research/v40-scored-next/v40-additional-panel-provenance-note.json`.
 No model, trainer or normalizer implementation changed, no live job or
 inputs were modified, and no demo or PR was promoted.
+
+## Additional V40 contextual followups
+
+Callbacks at steps 2400 and 3000 preserve all ten source/reference identities. The
+two changed tuples at each checkpoint were read in full; the other eight
+exactly reuse the preceding reviewed tuples. Validation CE is 0.07435153
+and 0.07399499 respectively. The phone example still loses a separate
+five and alternates between fifty and sixty; the payment sentence still
+corrupts the archive word. These are intermediate observations, not proof
+of final improvement. Receipts:
+`research/v40-context-followup/step{2400,3000}-callback-manual-review.json`.
+
+All 21 followups to the accepted questions 128..191 were read with their
+actual three-turn histories and system prompts. Six malformed or
+unverified sources were quarantined unchanged. All 15 retained automatic
+accent targets were read. Four were excluded unchanged: two omitted
+multisyllabic stress, one stressed the plural games incorrectly, and one
+changed the warmth noun to an inappropriate yo form. The plural was
+checked against the [Gramota dictionary](https://gramota.ru/poisk?mode=slovari&query=игра).
+Both rejected preselected heldout followups remain quarantined, without
+reassignment. The remaining 11 train-only records passed the existing
+feature audit, with exact source/target IDs and finite BF16 paired 2560
+features. Receipts:
+`research/v40-scored-next/first128to192-followup-*`.
+
+The stock assembler produced a newer immutable next dataset/cache:
+`data/{hidden-plan,freeze-features}-v40-first192full-google71-qa`,
+99,601 unique train, 3,594 validation and 2,302 unchanged frozen rows.
+Relative to live V40, there are 41 additional train and two validation
+records. Ordered byte concatenation, completion/source hashes and exact
+replay-ID lookup passed. Metadata SHA256:
+`7b76ae0f96aca02c8ce2276f496ea8fee69fd9de49778861d55d16baea247de8`.
+Replay now has 3,651 unique IDs (3,180 contextual, 471 numeric), factor64:
+329,614 positions and 6,867 batch48 steps. The fresh context cohort has
+145 train and six heldouts; its validation is unchanged.
+
+This preparation supersedes the preceding prepared V41 plan; both caches
+remain immutable. Current pointer:
+`research/v40-scored-next/LATEST_PREPARED.json`.
+V41 is still prepared only and requires reviewed V40-final weights plus
+fixed33 and six-row baselines before launch. All 21 final evaluation
+commands point to the future V41 run. No live restart, model/trainer
+implementation change, target rewrite, demo promotion or merge occurred.
+
+The step3000 model was independently copied with matching double SHA256
+to the evaluation-only snapshot `eval/v40-step3000-for-review`:
+`d69a4900691e1240dce6af5f418503546400a8abe813673e5fef6bb227254a77`.
+A stock nine-panel, 201-row native evaluation was launched on the factory
+GPU, separately from the live trainer:
+`research/v40-context-followup/step3000/native-launch.json`.
+Its final metric comparison and manual review are recorded separately.
+
+The nine-panel step3000 evaluation completed with exit0 and no OOM. All
+201 source/history/reference identities match the reviewed step600
+baseline. All 55 selected tuples were read in full: every changed
+prediction, all five demo examples and all four fresh heldouts. The other
+146 rows received identity/metric checks only. Relative to step600, four
+panel WER values improved, three worsened and two tied; relative to
+reviewed V39 final, seven improved and two worsened. The short hotel and
+education answers now reproduce their references exactly. Initial AI
+innovation wording and the neural-network ending were restored, while
+long-answer corruption, repeats and severe numeric errors persist. Demo
+WER remains 23.4043%; numeric WER is 29.9145%. No token limit was reached.
+The intermediate snapshot is neither continuation nor demo eligible.
+Receipt: `research/v40-context-followup/step3000/manual-review.json`.
+
+Step3600 validation CE is 0.07407371. All ten complete callback tuples
+exactly match the reviewed step3000 values; that full review is explicitly
+reused. V40 was verified live beyond 54% of its epoch, with no OOM.
+Receipt: `research/v40-context-followup/step3600-callback-manual-review.json`.

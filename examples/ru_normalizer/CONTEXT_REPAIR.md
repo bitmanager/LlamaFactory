@@ -2757,3 +2757,60 @@ Relative to live V40, 91 train and two validation records are added.
 The latest prepared pointer selects this first256full/google83 plan.
 V41 remains unlaunched pending reviewed V40-final weights and fixed
 baselines. No model/trainer implementation or live inputs changed.
+
+## Reviewed V40 final and V41 continuation
+
+V40 completed all 6,813 training steps and the scheduled native evaluations
+with container exit0 and no OOM. Training took3,008.889 seconds,2.264
+steps/s; train CE was0.00928299 and final validation CE0.07400079.
+The step6600 and final6813 callbacks were read against their preceding
+reviews: one changed complete tuple each, with the other nine reused
+exactly. The separate phone five and archive corruption persist.
+
+Root final weights, checkpoint6813 and the independent evaluation copy
+match SHA256:
+`5f2aafe65d3d2624badc2e59e61daf93a8a909e853a5051b133817bc89d89eee`.
+All20 final panels point to these weights and preserve all771
+source/history/reference identities. Relative to reviewed V39 final,
+eight panel WER values improve, four worsen and eight tie. Against the
+reviewed step3000 critical panels, four improve, three worsen and one
+ties. All31 selected complete tuples were read: every changed critical
+prediction plus all five user-demo examples. The other166 critical rows
+and574 remaining native rows received identity/metric checks only.
+
+The second pizza reply loses its repeat; the first pizza remains
+corrupt. MFTI and11:30 are still wrong. Charger/Pantheon wording improves,
+while the neural-network, education and own-day endings regress.
+Long-answer corruption, numeric grouping errors and repeats persist.
+Demo WER is20.2128%; protected numeric WER is30.1994%. This mixed result
+permits the authorized research continuation, with no demo promotion.
+The scheduled extra four-row panel uses V39 weights and is explicitly
+excluded from V40-final evidence. Receipts:
+`research/v40-context-followup/final/{all20-comparison,critical-comparison,manual-review,final-snapshot}.json`.
+
+An independent stock evaluation of verified final weights completed
+exit0 without OOM on the factory GPU: fixed33 plus all six fresh context
+heldouts. Fixed33 complete records exactly match the reviewed final
+native panel. All six fresh tuples were read with full history/system
+and reference: the diploma wording is preserved, the short AI reply has
+a yo-only difference, and Montessori/appetite/long-AI outputs remain
+corrupt. Fresh-six WER is9.1429%; it is not directly compared with the
+older four-row cohort. Receipts:
+`research/v40-scored-next/final-baseline-first256full-{launch,manual-review}.json`.
+
+Only after these reviews was the separate model-only continuation copy
+created and its SHA256 checked again. V41 is running on the same reserved
+GPU from that reviewed V40 final, using stock Trainer, BF16 batch48,
+LR1e-6 and one epoch with fresh optimizer/scheduler. Startup confirms
+439,416,570 trainable parameters,99,651 unique train,3,594 validation,
+332,814 replay positions and6,934 expected steps. All21 future final
+panels point to V41 weights and cover777 rows. Receipts:
+`research/v40-scored-next/training-launch-first256full-google83.json` and
+`v41-startup-first256full-google83-verified.json`.
+
+For continued disk headroom, nine inspected intermediate optimizer files
+from terminal successful V38/V39/V40 runs were removed, freeing28.48GiB.
+All model files and each final optimizer state were verified unchanged;
+active V41 was untouched. Drive2 then had60GiB free. Bounded-cleanup
+receipt: `research/v40-scored-next/v38-v40-intermediate-optimizer-cleanup.json`.
+No model/trainer implementation, targets, demo or merge state changed.

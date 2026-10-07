@@ -1926,3 +1926,74 @@ IDs/indices, split disjointness, ordered source concatenation, frozen
 evaluation bytes and completed feature metadata pass preflight. No
 model/trainer/normalizer implementation was changed. Existing CUDA
 accent/export adapters and CPU artifact/assembly operations were reused.
+
+## V37 callbacks through 3000; V38 first320 and contextual numbers
+
+The same V37 training container continues on GPU 0 without a restart.
+Step-1800 CE is 0.07402018; two callback outputs changed against 1200:
+the fifty-for-sixty substitution and request-clause duplication returned.
+All ten source IDs, full written text and references remain identical.
+Step-2400 CE is 0.07386696, and step-3000 CE is 0.07396349; both ten-record
+callbacks exactly match the reviewed step-1800 output. Lower CE does not
+establish better generated text. Callback receipts are saved separately.
+
+The next V38 block contains 53 retained pairs: 47 train and six heldouts
+from conversation groups selected before generation. All 52 available
+first question/answer pairs and all thirty eligible actual-history
+followups were read in full; 55 automatic accent targets were read.
+The missing stress on a content noun and an ambiguous imperative stress
+were quarantined unchanged. All 53 frozen feature records passed the
+existing complete artifact audit. Receipts: `first256to320-*.json`.
+
+All fifty existing Google non-DATE written/spoken pairs at fixed ranks
+3501..3550 were read; sixteen passed source review and were accented.
+All sixteen targets were read. One double stress marker and one unsupported
+genitive-plural stress were excluded unchanged after an indexed
+[official dictionary check](https://gramota.ru/meta/sazhen).
+The fourteen retained examples cover contextual times, durations,
+quantities and inflected numbers. They are train-only because their
+source shard already belongs to training. All fourteen feature artifacts
+pass the existing audit. These are checked automatic labels, not human
+gold or independently verified factual statements. Receipts are under
+`research/v38-google-nondate3501to3550`.
+
+The future V38 contextual cohort now has 228 pairs, 201 train and 27
+validation; the fourteen numeric-context training pairs bring the new
+data total to 242. The unchanged stock assembler produced
+`data/freeze-features-v38-first320-google14-qa`: 99,287 unique train rows,
+3,582 validation and 2,302 byte-identical frozen-evaluation rows. Live V37
+inputs and all quarantined originals remain intact. All 67 newly added
+feature records are audited. Replay has 3,337 exact source IDs, factor 64,
+309,518 positions and 6,449 steps at batch 48.
+
+The newest prepared launch is
+`research/v38-scored-next/training-launch-prepared-first320-google14-memory-verified.json`.
+It uses stock training plus twenty fixed native panels, 765 rows, and
+requires reviewed V37 final model weights with a fresh optimizer and
+scheduler. Preflight verifies ordered concatenation, source-ID replay,
+whole-group split disjointness, every feature file, completed metadata,
+fixed evaluation bytes and native input paths. Metadata SHA256:
+`819bb54c7f892121a1c8e17b9c717e9adf52c5e6d847271af80bee0a339ade82`.
+It remains prepared only; no model/trainer/normalizer source changed.
+
+V37 checkpoint 3000 was also copied and hash-verified as an immutable
+evaluation-only snapshot. Seven stock panels completed on GPU 1, 164
+rows, with full source/history/reference identities guarded against
+checkpoint 600. Every changed prediction plus all five demo entries was
+read in full: 45 selected complete records; the other 119 are metrics
+and hashes only. The first extra-evaluation launch failed before model
+loading because I had not prepared its output directories; creating
+those directories and rerunning the unchanged evaluator fixed the
+operational error. Training was not stopped or restarted.
+
+Against step 600, combined22 WER improves from 12.3324% to 10.1877%,
+combined34 from 10.3448% to 9.1454%, numeric32 from 29.6296% to 28.7749%
+and demo5 from 21.2766% to 20.2128%. Combined46 worsens from 6.5903% to
+6.7335%; new9 and Saiga16 WER are unchanged. The controller followup
+recovers its full text, and the second pizza example stops repeating a
+clause. However, the time-only example regresses to “eleven whole”,
+MFTI remains wrong, the first pizza reply remains corrupted, and one
+previously exact film reply gains repetition. One 100-ruble sum is
+restored, while 1011 rubles becomes one million eleven. Long-text and
+numeric failures persist. No promotion or prediction-driven relabeling.
+Receipt: `research/v37-context-followup/step3000/manual-review.json`.

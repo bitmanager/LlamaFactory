@@ -2668,3 +2668,47 @@ Step3600 validation CE is 0.07407371. All ten complete callback tuples
 exactly match the reviewed step3000 values; that full review is explicitly
 reused. V40 was verified live beyond 54% of its epoch, with no OOM.
 Receipt: `research/v40-context-followup/step3600-callback-manual-review.json`.
+
+## V40 steps4200/4800 and next first-answer slice
+
+Validation CE is 0.07400176 at step4200 and 0.07398513 at step4800.
+All ten source/written/reference identities match the preceding reviewed
+callbacks. The one changed tuple at4200 and two at4800 were read in full;
+unchanged complete tuples reuse the preceding review. The phone still
+omits a separate five and alternates sixty/fifty. The payment archive
+corruption persists. These intermediate snapshots are evaluation-only.
+Receipts: `research/v40-context-followup/step{4200,4800}-callback-manual-review.json`.
+
+For questions192..255, all54 available complete first answers were read
+with their actual history and system. Twenty-seven malformed, unexpanded
+or factually uncertain sources were quarantined unchanged. All27 retained
+automatic accent targets were read; four with missing multisyllabic
+stress were excluded unchanged. Limited doubtful forms were checked
+against primary references: Internet-post stress permits variation in
+[Gramota's answer307633](https://gramota.ru/poisk?mode=spravka&query=пост+цензора&simple=0),
+and the stressed vowel of drained matches
+[Academos](https://orfo.ruslang.ru/abc/part/de?end=40026&start=39726).
+These checks do not make the entire automatic target set human gold.
+The original heldout assignment was preserved; all23 surviving records
+are train-owned. Their stock export/audit finished exit0 without OOM,
+checking every record's IDs, exact target tokens, finite BF16 paired2560
+features and source hashes. Receipts: `research/v40-scored-next/first192to256-*`.
+
+The stock assembler finished exit0 without OOM. The new immutable full
+dataset/cache is `data/{hidden-plan,freeze-features}-v40-first256-google71-qa`:
+99,624 train, 3,594 validation and 2,302 unchanged frozen evaluation rows.
+Ordered appendices, validation bytes, frozen rows and completion/source
+hashes passed. Metadata SHA256:
+`c2befaee844a9bbd5986c039f4f011241174d18c58aeb5fffb048939d28b3ce9`.
+The fresh context cohort contains168 train and the same six heldouts.
+Replay contains3,674 unique IDs:3,203 contextual and471 numeric; factor64
+gives331,086 positions and6,898 batch48 steps. Relative to live V40,
+64 train and two validation records are added.
+
+`research/v40-scored-next/LATEST_PREPARED.json` now points to the
+first256 V41 preparation. All21 final native commands point to future
+V41 weights. Launch remains conditional on reviewed V40-final weights
+and the fixed33 plus six-row baselines; no V41 job has been launched.
+Earlier caches/plans remain immutable. V40 was verified live beyond76%
+of its epoch. No model/trainer implementation, live inputs, demo or PR
+approval state was changed.

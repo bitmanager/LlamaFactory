@@ -2195,6 +2195,25 @@ Metadata SHA256:
 `2d47d5827a36b36100b940d725e715b63f7af777695e26c73bba80cf46b6aa80`.
 No model, trainer or normalizer implementation changed; no PR was merged.
 
+Checkpoint 3000 was copied and double-hash-verified for evaluation only,
+SHA256 `25e13219ffca07a37ed2e111e8fca13adc99d406f7db5903ee88218b343b6300`.
+All eight stock native panels, 193 rows, completed on GPU 1 with exit 0
+and no OOM. All source/history/reference identities were guarded against
+step 600. Every changed prediction plus all five demo examples was read
+in full, 57 records; the remaining 136 have metric and identity checks.
+Receipt: `research/v38-context-followup/step3000/manual-review.json`.
+
+Against step 600, Saiga16 WER improves 12.5628% to 10.8040% and combined46
+7.4499% to 7.1633%; combined22 regresses 10.1877% to 11.2601%, combined34
+8.6957% to 10.9445%, and new29 7.3171% to 8.3841%. Numeric32 remains
+30.4843%, demo5 20.2128%. The 666666-rouble amount becomes exact, but the
+7..10-day interval regresses to 7..17 and three million is still wrong.
+Some repeated clauses disappear, others return; long replies still lose
+words or end early. MFTI, time-only 11:30 and first-pizza demo failures
+persist. Callback CE at 3000 is 0.07392206; all ten callback records exactly
+match reviewed step 2400. This remains a mixed intermediate checkpoint,
+with no demo promotion and no prediction-driven reference changes.
+
 ## Further contextual data, monitoring and isolated learning-rate comparison
 
 V38 remains the same active run. All ten callback identities at steps
@@ -2372,23 +2391,3 @@ examples; fixed33 and the new fixed1 require final-weight baselines.
 Preflight: `research/v39-scored-next/continuation-replay-first64-google52-preflight.json`.
 No live cache, model, trainer or normalizer implementation changed.
 No PR was merged.
-
-Checkpoint 3000 was copied and double-hash-verified for evaluation only,
-SHA256 `25e13219ffca07a37ed2e111e8fca13adc99d406f7db5903ee88218b343b6300`.
-All eight stock native panels, 193 rows, completed on GPU 1 with exit 0
-and no OOM. All source/history/reference identities were guarded against
-step 600. Every changed prediction plus all five demo examples was read
-in full, 57 records; the remaining 136 have metric and identity checks.
-Receipt: `research/v38-context-followup/step3000/manual-review.json`.
-
-Against step 600, Saiga16 WER improves 12.5628% to 10.8040% and combined46
-7.4499% to 7.1633%; combined22 regresses 10.1877% to 11.2601%, combined34
-8.6957% to 10.9445%, and new29 7.3171% to 8.3841%. Numeric32 remains
-30.4843%, demo5 20.2128%. The 666666-rouble amount becomes exact, but the
-7..10-day interval regresses to 7..17 and three million is still wrong.
-Some repeated clauses disappear, others return; long replies still lose
-words or end early. MFTI, time-only 11:30 and first-pizza demo failures
-persist. Callback CE at 3000 is 0.07392206; all ten callback records exactly
-match reviewed step 2400. This remains a mixed intermediate checkpoint,
-with no demo promotion and no prediction-driven reference changes.
-

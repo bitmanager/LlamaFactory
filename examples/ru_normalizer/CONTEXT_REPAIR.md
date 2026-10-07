@@ -3139,3 +3139,43 @@ Launch receipt: `research/v41-scored-next/training-launch-first448full-google96.
 All21 native output directories were created before launch. The stock
 training/evaluation implementation, frozen agent Qwen, and demo remain
 unchanged. This is continued research training, not approval to deploy.
+
+## V42 step600 and prepared numeric appendix
+
+V42 is live and was not restarted. All ten complete step600 callback
+tuples were manually read and source/reference-matched against V41-final.
+Only the phone changes: sixty replaces the wrong fifty, but a standalone
+five is still missing. The other nine predictions, including archive
+duplication and Power BI stress, are unchanged. Validation CE is0.07451852.
+Receipt: `research/v42-context-followup/step600-callback-manual-review.json`.
+
+An independent stock evaluation was launched on GPU1 for nine critical
+panels /215 rows, including all18 fresh contextual heldouts. The immutable
+step600 model-only copy is evaluation-only, SHA256:
+`d2461cdb02e934c55e7bee67b0f8b016d27adb83a51ffe3c89369b59466ad305`.
+Docker: `normalizer-eval-v42-step600`; launch receipt:
+`research/v42-context-followup/step600/native-launch.json`.
+The main training continues on GPU0; the evaluation has not yet been
+reviewed and does not qualify this checkpoint for continuation or demo.
+
+All50 complete Google nonDATE written/spoken pairs at ranks3951–4000 were
+read. Twelve quantity/model-code pairs were retained unchanged after
+train ownership and collision checks; incorrect cases/year readings,
+fragments, raw abbreviations and uncertain proper names were excluded.
+All12 stock accent targets were read. One omitted stress on multisyllabic
+`или` and was excluded unchanged. All11 remaining paired BF16 feature
+artifacts passed the stock CUDA export and tensor/hash audit. No label
+was revised from a model prediction. These are checked automatic labels,
+not independent human/factual gold.
+
+The stock assembled next cache is
+`data/{hidden-plan,freeze-features}-v42-first448full-google107-qa`:
+99,779 train /3,606 validation /2,302 frozen rows, metadata SHA256:
+`61428e4b8e6a5214993fe100af3c1bf6ae4b36cc2337d452ecceabd7a64b04a0`.
+Ordered train appendix and unchanged validation/frozen bytes were checked.
+Prepared V43 replay has3,829 IDs (3,322 contextual /507 numeric), factor64:
+341,006 positions /7,105 batch48 steps. All21 future native panels cover789
+rows and bind future V43-final weights. V43 remains unlaunched and requires
+reviewed V42-final weights and fixed33/fresh18 baselines. Pointer:
+`research/v42-scored-next/LATEST_PREPARED.json`.
+No model/trainer code or live input changed.

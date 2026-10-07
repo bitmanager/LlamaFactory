@@ -3855,3 +3855,45 @@ The latest versioned Balalaika staging is
 sample exclusions to the unchanged source/length/initial guards. All new
 targets above192 were rejected by ID, with no clipping or label repair.
 This remains a candidate dataset, not a live training cache or human gold.
+
+## V45 final and the first reviewed Balalaika continuation
+
+V45 training/native chain exited0 without OOM:7,327 steps in3,248.43
+seconds,108.27 examples/second. Explicit final validation CE0.07421132.
+Root/final7327 weights match SHA256
+`dae82842b57abdc6c87c9bc9aa43eb3d844eee032d84417a8285846e9245af27`.
+All24 native panels /796 rows bind that final and retain full identities.
+Of86 critical selected tuples,22 were reread completely and64 reuse exact
+prior full reads. All ten callbacks at5400/6000/6600/7200/final7327 exactly
+reuse the read step600 tuples. Final numeric WER31.05%, contextual19 8.04%,
+demos22.34%; dog2 improves24.07→14.81%, while movie titles regress and
+long-text/start/amount errors persist. No overall improvement or demo
+promotion is claimed. Final review/continuation receipts:
+`research/v45-context-followup/final/{snapshot-and-native-audit,manual-read-selection,manual-review,continuation-eligible}.json`.
+
+Only exact retained IDs from the78 fully read Balalaika pairs were promoted
+to the small research subset:41 train /9 whole-family heldouts, with
+original labels. Its stock GPU export exited0; all50 payloads were checked
+for exact IDs/text/token IDs, paired finite BF16 [N,2560] features and
+complete original targets <=192. The stock two-command assembly exited0:
+99,987 train /3,622 validation /unchanged2,302 frozen. New cache metadata
+SHA256 `14df1005b04d6add8077494ff0eb1a989d187b83bd7092767db4d1f1e69cf841`.
+Ordered split bytes and replay lookups were verified. Caption rows have no
+invented user history;3,456 actual-history and540 numeric replay IDs retain
+their meaning, with41 separate literal-caption replay IDs. Factor64 gives
+354,318 positions /7,382 batch48 steps.
+
+Before continuation, all nine new baseline tuples were read in full:
+WER4.82%, raw exact without stress3/9 and with stress1/9. Missing words,
+wrong stresses and ё errors remain; normalized WER folds ё and does not
+prove pronunciation. V46 is launched on fixed GPU0 from reviewed model-only
+V45 final with fresh optimizer/scheduler, unchanged LR1e-6/BF16/one-epoch
+recipe and original model/trainer. Its final chain has25 native panels
+/805 rows. Receipts: `research/v45-balalaika-next/{assembly-launch,baseline-manual-review,next-plan-balalaika50,training-launch-v46-balalaika50}.json`.
+
+In parallel, GPU1 runs the separate stock frozen-Qwen export for the full
+237,777/7,537 **candidate** pool. Its source data remains immutable and not
+admitted wholesale. When merging that larger pool later, the41/9 IDs now
+present in the continuation must be excluded explicitly; no silent dedup
+or mutation of the live candidate export is permitted. Producer receipt:
+`research/ready-stressed-data-20261007/feature-export-candidates-all15-launch.json`.

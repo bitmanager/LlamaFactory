@@ -3684,3 +3684,174 @@ referenced its run. Only inspected intermediate optimizer files at4200,
 final5622 optimizer retain their file identities. Drive2 then had20.24GiB
 free. Exact optimizer resume for removed intermediates is unavailable.
 Receipt: `research/v44-scored-next/v31-intermediate-optimizer-cleanup.json`.
+
+## Further numeric data while V44 completes
+
+V44 callback CE at6000/6600 is0.07402080/0.07403434. All ten complete
+tuples at6000 exactly match the reviewed5400 tuples; all ten6600 exactly
+match6000. Exact full-tuple reuse receipts are
+`research/v44-context-followup/step{6000,6600}-callback-manual-review.json`.
+Phone and archive content errors remain; no new generation-quality claim.
+
+All50 complete written/spoken pairs from pinned Google non-DATE
+SHA256-ranked positions4101–4150 were read. Sixteen sources passed
+source/collision checks and all16 accent pairs were read. Three targets
+were excluded unchanged: missing stress on улица, wrong stress on начал,
+and uncertain specialized-name stress. Accepted13 training-only records
+retain their original source-group ownership. No label rewriting,
+prediction-driven repair or split reassignment. Labels remain automatic
+Kestrel/RUAccent, not independent human/factual gold.
+
+The stock GPU1 accent and export/full artifact-audit jobs, then the stock
+two-command assembly, completed exit0 without OOM. All13 records have
+matching IDs, source/reference text and target token IDs, finite paired
+BF16 features of dimension2560, correct source lengths/hashes and targets
+within192 tokens. Receipts:
+`research/v44-google-nondate4101to4150/{source-manual-review,target-manual-review,feature-audit}.json`.
+
+The newest prepared immutable cache is
+`data/{hidden-plan,freeze-features}-v44-first512full-first160raw-google140-qa`:
+99,946 train /3,613 validation /2,302 frozen records, adding53 train and
+four fixed heldouts relative to live V44. Metadata SHA256:
+`62c68ead59fb768e0bc551db96345a2ec59c385d991dd33d3426a7de48ec76fd`.
+Ordered train append bytes, unchanged validation/frozen bytes and all
+replay identities were verified. Replay has3,996 IDs (3,456 contextual
+/540 numeric), factor64:351,694 positions /7,327 batch48 steps. The
+existing237-token maximum plus the13 new <=192-token records retains
+the previous batch48 logits-size bound below INT_MAX. Prepared V45 has
+24 native panels /796 rows and five final-baseline commands. The latest
+pointer now selects this cache; prior prepared caches are retained.
+Reviewed V44-final and baselines remain required. Batch48 is retained and
+the proposed CE layout change remains awaiting explicit user approval.
+
+## V44 final review and V45 continuation
+
+V44 Docker exited0 without OOM. Training took3,201.54 seconds, averaged
+108.79 examples/second, and explicit final validation CE was0.07405418.
+Root weights and final checkpoint7257 have identical SHA256
+`afd2f67083a30212f9df787529e90af0db07dd618f8129158ccb97dd106ce7b7`.
+All22 native panels /792 rows bind that hash and preserve their complete
+source/reference/history identities against V43 baselines. Among82 selected
+critical tuples,30 were reread completely and52 exactly reuse recorded
+prior full reads. Other native rows were checked for identities/metrics;
+this is not a claim of manually reading all792 outputs.
+
+Generation results are mixed and do not prove general improvement:
+
+| Fixed panel | V43 final WER | V44 final WER |
+| --- | ---: | ---: |
+| Numeric32 | 30.48% | 31.34% |
+| Contextual19 | 4.02% | 5.58% |
+| Contextual33 | 6.80% | 7.76% |
+| User demos5 | 23.40% | 24.47% |
+
+Movie titles recovered in two selected examples, while long-text loops,
+corrupted starts, numeric magnitude/percent/slash errors and stress errors
+remain. Callback7200/final7257 complete ten-tuples were also read. Five
+stock final baseline panels /58 rows completed exit0 without OOM: first54
+full tuples match native results; four new dog/poetry heldouts were read.
+This final is eligible for the user's latest-final *research continuation*,
+not a demo promotion or claim that quality gates passed.
+Receipts: `research/v44-context-followup/final/{snapshot-and-native-audit,manual-read-selection,manual-review,continuation-eligible}.json`
+and `research/v44-scored-next/final-newheldouts-baseline-review.json`.
+
+V45 is running on the fixed GPU0 from model-only V44 final, fresh optimizer
+and scheduler:99,946 unique train /3,613 validation /2,302 frozen;
+351,694 positions /7,327 batch48 steps, BF16, LR1e-6, one epoch, unchanged
+model/trainer. Actual checkpoint600 training args and runtime inputs were
+checked; all logged gradients were finite. Runtime repeat JSON wraps the
+original selection with row/position counts: its nested value matches the
+prepared selection exactly, rather than matching the whole file's bytes.
+Step600 CE is0.07397500; all ten callbacks exactly match read V44-final
+tuples. Step1200 evaluation has60 rows: nine changed full tuples were read
+and51 reuse exact recorded full reads. Numeric WER stays31.34%; contextual19
+worsens to8.04%, demos improve to21.28% but remain corrupted. This
+intermediate is evaluation-only. Receipts:
+`research/v44-scored-next/{training-launch-v45-first160raw-google140,v45-startup-first160raw-google140-verified}.json`
+and `research/v45-context-followup/step1200/{manual-read-selection,manual-review}.json`.
+
+## Approved Balalaika format adapter
+
+The user approved only a Parquet-to-existing-JSONL data adapter.
+`prepare_balalaika.py` copies `punct`/`accent` unchanged, reuses existing
+label validators, rejects train/heldout aliases and all duplicate inputs,
+pins source revision/bytes, and quarantines reviewed source IDs without
+rewriting labels. All nine focused tests pass, including the real Parquet
+path, foreign heldout rows without group metadata, aliases, duplicates,
+review exclusions, invalid labels and source-family separation.
+
+Pinned source: `lab260/openstt_balalaika@c39c8215542af39855943c7ca5c8845bd39650f0`.
+The inspected `podcast_id` equals the chunk filename and does not establish
+original recording identity. Therefore all phone-call parts share one group
+and all YouTube variants share another; the YouTube family is held out.
+This provides whole-source separation, not reconstructed conversation
+history or independently proved cross-corpus recording separation.
+
+Three metadata parts contain4,653 rows; all30 hash-ranked sample texts were
+read. Ten source IDs were marked for quarantine (eight additional to
+structural filtering), including wrong `самоё`, clipped words, punctuation
+artifacts and uncertain stresses/transcriptions. The reviewed staging has
+2,120 train /2,024 validation /509 quarantined records. These are automatic
+RuPunct/RUAccent annotations, not human gold. `training_eligible=false`:
+further linguistic/length review and immutable feature export remain;
+this data has not been inserted into live V45. Receipts:
+`research/ready-stressed-data-20261007/balalaika-first30-manual-review.json`,
+`data/balalaika-text-staging-v45-first3-reviewed/manifest.json`.
+
+## Cleanup and TTS cache correction
+
+Explicit user authorization removed obsolete Lychee archives and330 stopped
+Lychee containers across dev/exp, plus local remnants. Current normalizer
+weights/data/final optimizers were preserved; identical immutable evaluation
+weights were consolidated with the stock hardlink tool. Ten old local
+completed runs lost24 intermediate optimizer files (75.95GiB logical bytes);
+cleanup stopped at an assertion before further runs. Their final optimizers
+were rechecked. This partial cleanup is recorded, not claimed fully complete.
+
+The old archive also contained the live TTS cache under a different container
+mount path. That cache was mistakenly removed during cleanup; the live TTS
+process stayed healthy. The same pinned TTS model, speech tokenizer, voice
+catalog revision and replacement files were restored with stock HF downloads.
+A real synthesis returned HTTP200 and57,600 PCM bytes in0.424 seconds.
+RUAccent's eight required pinned assets (512,643,919 bytes) were restored
+and checked with its stock asset downloader and offline presence check.
+No TTS restart or GPU reassignment occurred. Recovery receipt:
+`research/storage-cleanup-20261007/{tts-cache-recovery-smoke,ruaccent-cache-recovery}.json`.
+
+## Larger ready-text pool and label limits
+
+All15 pinned Balalaika metadata parts were downloaded (158,113,945 bytes;
+no audio download). They contain450,415 records. Initial staging yielded
+248,562 train /7,755 heldout candidates;194,098 were quarantined, including
+158,723 empty text pairs and25,576 missing polysyllabic stresses. This is
+not a claim that all remaining linguistic labels are correct.
+
+A full stock-tokenizer length audit found25 original training targets
+over192 tokens (maximum268); validation maximum97. These source IDs are
+quarantined unchanged, rather than clipped. Original live V45 remains
+immutable. The adapter also reuses conservative raw-acronym/initial and
+unspoken bare-letter checks from the existing Ruslan/Google adapters.
+That staging has237,784 train /7,538 validation candidates before the
+additional representative linguistic exclusions.
+
+All48 complete source/target pairs (six per accepted source family) were
+read, in addition to the earlier30. Many utterances stop mid-sentence;
+some cut words, leave initials unspoken, or contain uncertain names and
+ASR spelling. Eleven sampled source IDs were marked for quarantine; these
+were not repaired. This corpus is useful as a broad automatic text/stress
+candidate pool, not automatically high-quality instruction responses or
+reconstructed dialogues. Eligibility remains false pending further review,
+source-bound immutable GPU feature export and evaluation. Receipts:
+`research/ready-stressed-data-20261007/{all15-staging-audit,balalaika-all15-token-length-audit,balalaika-all15-stratified-source-review}.json`.
+
+V45 callbacks1200 through4800 all exactly reuse the ten complete tuples
+already read at V44 final/V45 step600; phone and archive faults persist.
+The eight required pinned RUAccent assets have also been restored and
+verified without model inference; TTS synthesis passed after restoration.
+
+The latest versioned Balalaika staging is
+`data/balalaika-text-staging-v45-all15-length192-noletters-reviewed`:
+237,777 train /7,537 validation /205,101 quarantined. It adds the reviewed
+sample exclusions to the unchanged source/length/initial guards. All new
+targets above192 were rejected by ID, with no clipping or label repair.
+This remains a candidate dataset, not a live training cache or human gold.

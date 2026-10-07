@@ -2712,3 +2712,48 @@ and the fixed33 plus six-row baselines; no V41 job has been launched.
 Earlier caches/plans remain immutable. V40 was verified live beyond76%
 of its epoch. No model/trainer implementation, live inputs, demo or PR
 approval state was changed.
+
+## V40 late callbacks and additional followups/quantities
+
+Steps 5400 and 6000 have validation CE 0.07396645 and 0.07400539.
+All ten source/written/reference identities match. The changed phone
+tuple was read in full at each checkpoint; the other nine complete
+tuples reuse their prior review. Sixty is restored at5400 and fifty
+returns at6000, while the separate five remains missing. Archive-word
+corruption is unchanged. These snapshots remain evaluation-only.
+Receipts: `research/v40-context-followup/step{5400,6000}-callback-manual-review.json`.
+
+All 23 followups to the accepted first-answer slice were read with their
+actual three-turn histories and system prompts. Four questionable or
+malformed sources were quarantined unchanged. All 19 automatic targets
+were read against the same sources; four omitted multisyllabic stress
+and were excluded unchanged. The remaining 15 train-owned records
+passed the stock feature audit. No heldout group was reassigned.
+Receipts: `research/v40-scored-next/first192to256-followup-*`.
+
+All 50 quantity records at non-DATE ranks3851..3900 were read in full.
+The ranking is SHA256 of source ID, verified against all 50 preceding
+rank identities. Twelve normalization pairs were retained unchanged;
+wrong cases, unresolved abbreviations, ambiguous year readings and
+damaged fragments were excluded. All 12 accent targets were read and
+passed content/stress guards. Doubtful forms were checked against primary
+references: [Gramota](https://gramota.ru/poisk?mode=slovari&page=9&query=шестьсот+шестьдесят+шесть)
+confirms the marked vowel in the oblique sixty form, while the
+[orthographic dictionary](https://gramota.ru/storage/public/normdicts/orfograficheskij_slovar.pdf)
+permits the retained plural genitive of sazhen. No targets were rewritten.
+Stock export/audit checked all 12 records and completed exit0 without OOM.
+Receipts: `research/v40-google-nondate3851to3900/*`. These automatic
+Kestrel/RUAccent labels are not independent human or factual gold.
+
+Two stock assemblies completed exit0 without OOM. The latest immutable
+full dataset/cache is `data/{hidden-plan,freeze-features}-v40-first256full-google83-qa`:
+99,651 train, 3,594 validation and 2,302 unchanged frozen rows. Metadata:
+`80fb2d826586b7434018e25f2992cb56ae94fa23edc8accdf7747cfab410dc3d`.
+Ordered appendices, unchanged validation/frozen bytes, completion hashes
+and replay-ID mapping passed. Replay has 3,701 IDs: 3,218 contextual and
+483 numeric. Factor64 gives 332,814 positions and 6,934 batch48 steps.
+The fresh contextual cohort has 183 train and the same six heldouts.
+Relative to live V40, 91 train and two validation records are added.
+The latest prepared pointer selects this first256full/google83 plan.
+V41 remains unlaunched pending reviewed V40-final weights and fixed
+baselines. No model/trainer implementation or live inputs changed.

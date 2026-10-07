@@ -2976,3 +2976,55 @@ requires reviewed V41-final weights and stock fixed33/fresh14 baselines;
 its run and continuation directory were absent at preflight. Pointer:
 `research/v41-scored-next/LATEST_PREPARED.json`. No model/trainer code,
 live dataset, demo or merge state changed.
+
+## Reviewed step4200 generation and prepared first352 context data
+
+Step4200 independent evaluation completed exit0 without OOM. All203
+source/history/system/reference identities match step1800 and every
+panel manifest binds the copied step4200 weight hash. All53 selected
+complete tuples were read: every changed output plus all five user-demo
+and six fresh-context examples. The other150 received identity/metric
+checks only. Receipts: `research/v41-context-followup/step4200/`.
+
+Against step1800, three panels improve WER and six worsen. The second
+pizza loses its repeated clause; `Никто ещё не пообедал` and the product
+designer wording are restored. First-pizza and MFTI/time failures remain.
+Numeric WER rises29.0598% to31.0541%:22,000 becomes220,000 and666666
+loses its previously correct reading. Fresh-six WER rises8% to9.7143%.
+Long neural-network/story/toothpaste/knitting corruption persists.
+This intermediate checkpoint is not continuation/demo eligible.
+
+All ten complete step4800 callback tuples were read and are identical
+to step4200; validation CE is0.07414708. The main V41 job remains live.
+Receipt: `research/v41-context-followup/step4800-callback-manual-review.json`.
+
+For prompt indices320–351,29 complete actual frozen-Qwen first answers
+were read with their system/user history; three sources were missing or
+incomplete. Ten were retained before accenting. All ten followups to
+those sources were also read with actual three-turn histories; seven
+were retained before accenting. Unresolved factual assertions, malformed
+answers and context problems were excluded unchanged. All17 resulting
+accent targets were read; three omitted multisyllabic stress and were
+excluded unchanged. The14 retained records comprise13 train and one
+originally heldout source. The deliberate falsehood example retains its
+original user instruction in the heldout history; it is not factual gold.
+Receipts: `research/v41-scored-next/first320to352*`.
+
+Stock CUDA export and all14 paired-tensor audits completed exit0 without
+OOM. Four stock assembly commands completed exit0. Ordered appendices
+and frozen bytes were checked. The latest full dataset/cache is
+`data/{hidden-plan,freeze-features}-v41-first352full-google96-qa`:
+99,716 train,3,603 validation and2,302 frozen rows. Metadata SHA256:
+`c2089229074478d4fd541fff8b3e2f7bb69d4cdb04d61809f9020526274604db`.
+The fresh contextual cohort now has235 train and15 heldouts. Targets
+remain reviewed automatic labels, not independent human/factual gold.
+
+The unlaunched V42 preparation now selects3,766 replay IDs (3,270
+contextual /496 numeric), factor64,336,974 positions and7,021 batch48
+steps. This adds65 train/nine validation records relative to live V41.
+All21 future native panels point to V42-final weights and cover786 rows;
+the fresh panel and baseline use all15 fresh heldouts. V42 still requires
+reviewed V41-final weights and fixed33/fresh15 baselines. Its run and
+warm-start directory were absent at preflight. Latest prepared pointer:
+`research/v41-scored-next/LATEST_PREPARED.json`. No model/trainer code,
+live inputs, demo or merge state changed.

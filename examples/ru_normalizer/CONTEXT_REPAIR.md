@@ -2934,3 +2934,45 @@ directories were absent at preflight; output directories must be created
 before invoking the stock evaluator. The latest prepared pointer remains
 `research/v41-scored-next/LATEST_PREPARED.json`. No model/trainer code,
 live input, demo or merge state changed.
+
+## V41 continues; reviewed callbacks and next numeric appendix
+
+V41 remains live without restart. All ten complete callback tuples at
+steps3000,3600 and4200 were read; fixed source/reference identities match.
+Validation CE is0.07456820,0.07416057 and0.07416787 respectively. The phone
+sequence still loses digits and the archive sentence remains corrupt.
+This does not demonstrate an overall quality gain. Callback receipts:
+`research/v41-context-followup/step{3000,3600,4200}-callback-manual-review.json`.
+
+An independent step4200 evaluation was launched on the factory GPU for
+nine critical panels /203 rows. Its model-only snapshot was double-hashed:
+`62b9815ca0747e8d8495ece664126784172aa011ae7ff7b54cdef17db44f5b1b`.
+All output directories were created before the stock evaluator. This is
+evaluation only; no intermediate weights qualify for continuation or demo.
+Receipt: `research/v41-context-followup/step4200/native-launch.json`.
+
+All50 Google non-DATE source pairs at ranks3901–3950 were read in full;
+16 were retained unchanged before accenting. All16 automatic accent
+targets were then read in full. Thirteen were retained unchanged; one
+omitted a multisyllabic stress and two unresolved pronunciation checks
+were quarantined. The retained `сем+идесяти` agrees with the primary
+[Gramota dictionary entry](https://gramota.ru/poisk?mode=slovari&query=%D0%A1%D0%B5%D0%BC%D1%8C%D0%B4%D0%B5%D1%81%D1%8F%D1%82).
+No target was rewritten. These are reviewed automatic labels, not human
+or factual gold. Receipts: `research/v41-google-nondate3901to3950/`.
+
+Stock export and all13 tensor audits completed exit0 without OOM. Stock
+assembly completed exit0; ordered appendices and unchanged heldout bytes
+were checked. The next immutable dataset/cache is
+`data/{hidden-plan,freeze-features}-v41-first320full-google96-qa`:
+99,703 train,3,602 validation and2,302 frozen rows. Metadata SHA256:
+`317c9b30c3838c99bc2a052df2b3388f5bc045c3979844efa60c984e656c0736`.
+Replay has3,753 IDs (3,257 contextual /496 numeric); factor64 yields
+336,142 positions /7,003 batch48 steps. Relative to live V41,52 train
+and eight validation records were added. Fresh contextual heldouts remain14.
+
+This supersedes only the prior unlaunched V42 preparation. All21 future
+native panels cover785 rows and point to V42-final weights. V42 still
+requires reviewed V41-final weights and stock fixed33/fresh14 baselines;
+its run and continuation directory were absent at preflight. Pointer:
+`research/v41-scored-next/LATEST_PREPARED.json`. No model/trainer code,
+live dataset, demo or merge state changed.

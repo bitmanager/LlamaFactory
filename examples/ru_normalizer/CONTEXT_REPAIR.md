@@ -2090,3 +2090,69 @@ The further first384..447 accent staging was read in full, 29 targets.
 Three targets with incorrect surname stress or missing multisyllabic
 stress were quarantined unchanged. These staged records and pending
 followups are not in live V38; they remain future preparation.
+
+## V38 live validation and first448 preparation
+
+The same V38 container remains running. At step 600 callback CE is
+0.07374033; all ten complete records were read and identity-guarded.
+One phone number restores “sixty”, though a separate five is still lost;
+one repeated request clause disappears, but a malformed archive word
+remains. At step 1200 CE is 0.07356288 and all ten callback records exactly
+match the reviewed step-600 outputs. This is not a generated-quality gain.
+Receipts under `research/v38-context-followup`:
+`step600-callback-manual-review.json` and `step1200-callback-manual-review.json`.
+
+Checkpoint 600 was copied and hash-verified for evaluation only:
+`eval/v38-step600-for-review`, model SHA256
+`e930ac3234d7644300fe74b2fb6aae63dcf2fb6bfc504c6bf88efc3f807e24d2`.
+Eight stock native panels, 193 rows, completed on GPU 1 with exit 0 and
+no OOM. Every changed prediction against V37 final plus all five demo
+examples was read in full with written text, history, reference and
+previous prediction: 61 records. The other 132 have metrics and identity
+checks. All 193 source/history/reference identities remain unchanged.
+Receipt: `research/v38-context-followup/step600/manual-review.json`.
+
+Combined22 WER improves 10.9920% to 10.1877%, combined34 9.8951% to
+8.6957%, and Saiga16 14.5729% to 12.5628%. Combined46 regresses 6.7335%
+to 7.4499%, new9 1.6854% to 5.0562%, and numeric32 29.0598% to 30.4843%.
+The new29 panel improves 7.4695% to 7.3171%, literal exactness 12/29 to
+14/29; automatic stress-target exactness remains 1/29. The product-designer
+answers recover full content; montage repetition disappears. The 7..10
+day interval is correct again. A short hotel opening regresses, long
+texts remain corrupted/repeated, and time/MFTI/first-pizza demo failures
+persist. No demo promotion or label rewriting.
+
+All 29 actual-history followups for first384..447 were also read in full;
+eight source pairs were excluded unchanged. All 21 remaining accent
+targets were read, and five missing/incorrect stresses excluded. Together
+with the already-reviewed first answers, 42 pairs remain: 38 train and
+four fixed whole-conversation heldouts. Every feature artifact passed
+the existing audit. Receipts: `research/v38-scored-next/first384to448-*.json`.
+
+All fifty Google non-DATE written/spoken pairs at fixed ranks 3601..3650
+were read. Fourteen passed source review; all fourteen automatic stress
+targets were read, and three missing/unresolved stresses were excluded
+unchanged. The eleven remaining train-only records include inflected
+quantities and an instrumental three-digit number. Relevant numeral
+stresses were checked against indexed normative entries for
+[seventy](https://gramota.ru/poisk?mode=slovari&query=Семьдесят) and
+[nine hundred](https://ruslang.ru/sites/default/files/doc/normativnyje_slovari/tolkovyj_slovar_chast1_A-N.pdf).
+Every feature artifact passed the existing audit. Automatic labels are
+not human gold; source factual assertions were not independently checked.
+Receipts: `research/v38-google-nondate3601to3650/*.json`.
+
+The unchanged stock assembler produced a fresh future cache:
+`data/freeze-features-v38-first448-google32-qa`, 99,387 unique train,
+3,588 validation and 2,302 byte-identical frozen-evaluation rows. All
+53 newly appended records are audited. Exact source-ID replay has 3,437
+rows, factor 64, 315,918 positions and 6,582 batch-48 steps. Metadata SHA256:
+`40674ad1b9d15cf8e729e123640652689f5dbc04a3822208e30b0ef95db6ded9`.
+
+The future V39 launch is prepared only:
+`research/v38-scored-next/training-launch-prepared-first448-google32-memory-verified.json`.
+It requires reviewed V38 final model weights, a fresh optimizer/scheduler,
+and the recorded stock baseline on all 33 new heldouts. Twenty final
+native panels cover 771 rows. Preflight verifies ordered concatenation,
+all feature files, COMPLETE metadata, exact replay IDs, unchanged frozen
+evaluation bytes and native input paths. Live V38 inputs remain unchanged;
+no model/trainer/normalizer implementation was changed.

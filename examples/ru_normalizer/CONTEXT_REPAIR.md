@@ -2391,3 +2391,68 @@ examples; fixed33 and the new fixed1 require final-weight baselines.
 Preflight: `research/v39-scored-next/continuation-replay-first64-google52-preflight.json`.
 No live cache, model, trainer or normalizer implementation changed.
 No PR was merged.
+
+## V39 continued review and first128 preparation
+
+Live V39 inputs and recipe remain unchanged. Callback identities passed
+at steps 4200, 4800 and 5400; all ten complete tuples exactly match their
+reviewed predecessor. Validation CE is 0.07386687, 0.07383141 and
+0.07383610 respectively. Receipts:
+`research/v39-context-followup/step{4200,4800,5400}-callback-manual-review.json`.
+
+Thirty-six complete followup replies from the previously reviewed first64
+sources were read with their actual histories. Six malformed, mixed-language
+or unresolved-abbreviation answers were excluded unchanged. All thirty
+stock accent targets were read; two targets with wrong or missing stresses
+were quarantined, leaving 27 train and one fixed heldout reply. All 28
+exported feature records passed the existing artifact audit. Receipts:
+`research/v39-scored-next/first64-followup-*`.
+
+For question indices 64..127, 58 complete first answers were read; six
+incomplete answers were unavailable. Thirty-four sources were retained
+and all 34 automatic accent targets were read in full. This contributes
+33 train and one preselected whole-group heldout pair. All 34 feature
+records passed audit. Sources with malformed grammar, unresolved written
+abbreviations, digits lacking spoken targets or unsupported specific
+biographies were excluded unchanged. Actual Qwen system/history values
+are preserved; source-dataset bot answers remain unused. Receipts:
+`research/v39-scored-next/first64to128-*`.
+
+The existing assembler also built the combined fresh context cohort:
+`data/{qwen-context-reviewed,freeze-qwen-context-reviewed}-v39-combined-first128`,
+93 train and three heldouts. Native evaluation of all three heldouts from
+the immutable V39-step3000 snapshot completed with exit 0 and no OOM.
+Every source/history/reference identity was checked and all three complete
+tuples read. Normalized WER is 7.6923% overall; one AI followup has WER 0
+but differs in yo spelling, while the initial AI reply collapses words and
+the appetite reply repeats a clause. Literal/stressed exact match remains
+0/3. This tiny diagnostic cannot establish generalization and cannot
+replace the required reviewed-final baseline. Receipt:
+`research/v39-scored-next/baseline-v39-step3000-first128-new3/manual-review.json`.
+
+Fifty additional non-DATE Google numeric pairs, ranks 3751..3800, were
+read in full. Fourteen sources and all fourteen automatic accent targets
+were reviewed. Six unresolved proper-name, district or specialized-term
+stress targets were quarantined unchanged, leaving eight training pairs.
+All eight exported records passed audit. Receipts:
+`research/v39-google-nondate3751to3800/`.
+
+The latest immutable full dataset/cache is
+`data/{hidden-plan,freeze-features}-v39-first128-google60-qa`:
+99,538 unique train, 3,591 validation and the unchanged 2,302 frozen
+evaluation rows. Relative to live V39, it adds 112 train and three
+validation records; all 115 appended artifacts were audited. Ordered
+bytes across all five appendices, completion/source hashes and whole-group
+separation passed. Replay has 3,588 unique IDs, factor 64, giving 325,582
+positions and 6,783 batch-48 steps. Metadata SHA256:
+`a02c5a59e950ec22b2185f4f064d28b64d31e10a7666e66aee55b9c59c961276`.
+
+V40 remains prepared only, requiring reviewed V39 final weights. The
+unchanged BF16/batch48/LR1e-6/one-epoch recipe uses fresh optimizer and
+scheduler. Twenty-one native panels total 774 examples; fixed33 plus
+fresh fixed3 require final-weight baselines before continuation.
+Latest preflight:
+`research/v39-scored-next/continuation-replay-first128-google60-preflight.json`.
+Automatic labels remain reviewed automatic labels, not independent
+human/factual gold. No model, trainer or normalizer implementation changed;
+no live inputs were mutated and no PR was merged.

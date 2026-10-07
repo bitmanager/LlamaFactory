@@ -42,3 +42,32 @@ also exposed model errors: Qwen preserved `Битменеджер`, but the text
 `Г+итменеджер` and later `М+е`. The interface deliberately displays these raw
 outputs. Passing the interface test is not a model-quality claim; most training
 examples lacked dialogue history, so contextual live inputs need further evaluation.
+
+Redeployed on 2026-10-07 at the user's request: dev GPU 2 (UUID
+`GPU-dd032e60-3b80-204f-01a2-531b2bb6349f`), container
+`normalizer-text-demo-v45-dev`, reviewed **V45 final**. Its immutable snapshot
+SHA256 is `dae82842b57abdc6c87c9bc9aa43eb3d844eee032d84417a8285846e9245af27`.
+The old exp demo is stopped. The existing UI/decoder code is reused unchanged;
+both models share this one GPU. The container publishes only loopback 8616.
+The persistent minipc `normalizer-demo-tunnel.service` now forwards 8510 to dev,
+and the existing Tailscale Serve 8444 route is retained:
+`https://minipc.tail683b27.ts.net:8444/`. Other serving routes are untouched.
+
+Deployment validation: HTTPS health and HTML returned HTTP 200, and the
+external-origin Streamlit WebSocket upgraded with HTTP 101. Two actual AppTest
+requests through the existing interface returned nonempty Qwen and decoder
+outputs without UI errors, including a follow-up using conversation history.
+The first smoke attempt failed because the source directory was absent from
+the test process's import path; the container working directory and PYTHONPATH
+were corrected before the successful test, without changing Python code.
+
+Smoke input: `Повтори точно: встреча в МГУ завтра в 15:30.` Qwen returned
+`Встреча в МГУ завтра в 15:30.`, but the head returned
+`Встр+еча в М+орту з+автра в пятн+адцать час+ов тридцат+и.` The follow-up
+`Где и во сколько встреча?` produced Qwen's `В МГУ, завтра в 15:30.` and
+the head's `В М+э у, з+автра в пятн+адцать час+ов тр+идцать мин+ут.`
+Request times were 1.01 s and 0.48 s in the test process; this is not a latency
+benchmark. These examples expose ongoing acronym/pronunciation errors and do
+not establish model quality. V46 is not promoted to this demo. Deployment and
+test receipts are in `research/demo-v45-20261007` on dev; the tailnet check is
+also saved under local `validation/demo-v45-20261007`.

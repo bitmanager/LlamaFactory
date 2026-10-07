@@ -1509,8 +1509,9 @@ without OOM.
 The native results are mixed. On the fixed context-200 panel, content WER
 improved from V34's 4.5747% to 3.6812%, and original-64 from 3.0158% to
 2.8787%. The protected five-row demo improved from 36.1702% to 25.5319%,
-but still has only one content-exact row and zero stress-exact rows.
-Numeric-32 remains poor at 30.1994% versus 29.9145%. Combined-22/34/46
+but still has only one content-exact row. Its protected references lack
+complete stress annotations, so stress-exact score is not a valid measure
+of accent quality on that panel. Numeric-32 remains poor at 30.1994% versus 29.9145%. Combined-22/34/46
 are 12.6005% / 13.1934% / 7.5931%; Saiga-16 is 12.8141%. These panels
 show no uniform quality improvement and do not justify demo promotion.
 
@@ -1545,3 +1546,68 @@ first448 cohort stays prepared only and must start from V36's reviewed
 final weights. No model/trainer/exporter/normalization implementation
 changed. Demo remains stopped. Disk free before launch was about
 69.8 GiB on drive1 and 150.2 GiB on drive2.
+
+
+## V36 step 600 and complete V37 source review
+
+V36's step-600 teacher-forced validation CE is 0.0747336. The validation
+set now has 3,546 rows, so this number is not directly comparable with
+V35's 3,332-row validation. All ten callback identities/references were
+guarded against the reviewed V35 final callback. Only the archive/payment
+example changed; its complete triple was read and still contains a
+corrupted word and repeated span. The other nine predictions match the
+previous review exactly. Receipt:
+`research/v36-context-followup/step600-callback-manual-review.json`.
+A six-panel native review of 155 rows was launched on GPU 1 from a
+SHA-verified step-600 copy, strictly for evaluation, never continuation.
+
+All remaining 61 complete first question/actual-Qwen-answer pairs for
+prompt indices 448 through 511 were read. First answers at indices
+452, 454 and 458 were unavailable/truncated and excluded. Sixteen first
+answers passed source review; all sixteen accent targets were read and
+retained. Fifteen eligible followups were read with exact generated
+history guards. Ten passed source review; all ten accent targets were
+read and retained. Dubious claims, malformed wording and nonliteral
+normalization outside this cohort were quarantined unchanged. No output
+prediction was used to relabel a target.
+
+The entire first512 source selection is now reviewed. The newest cohort
+`qwen-context-reviewed-v37-combined-first512` contains 226 records:
+217 train / 9 validation. The new held-out first answer inherits its
+whole-conversation split assigned before generation. All 226 feature
+artifacts pass exact source/reference/token checks, paired finite BF16
+shape and source-token lengths, and metadata hashes. Feature audit:
+`research/v37-saiga-next/combined-first512-feature-audit.json`.
+Automatic accent labels are checked examples, not independent human gold.
+
+Fresh full data/cache contain 99,073 unique train / 3,555 validation and
+unchanged 2,302 frozen-eval rows. Contextual/numeric replay covers
+2,722 + 400 train rows, factor 64: 295,759 positions / 6,162 steps at
+batch 48. Replay ordering and source IDs pass preflight for both live
+V36 and the new preparation. Live inputs were not modified.
+Newest cache metadata SHA256:
+`2fd616fc115648042e086c4a48b4d307b03a9f29ef9081e28a39188fbf87ce59`.
+
+Use the newest future launch
+`research/v37-saiga-next/training-launch-prepared-combined-first512-memory.json`.
+It remains prepared only: 19 native panels / 738 rows, latest V36 final
+model-only warmstart and fresh optimizer/scheduler. Earlier first448 and
+smaller preparations stay immutable. The model, trainer, exporter and
+normalization source were not changed; demo remains stopped.
+
+
+The step-600 native evaluation subsequently completed all 155 rows with
+exit zero and no OOM. Compared with V35 final, WER is 21.2766% on demo-5,
+7.5931% on combined-46, 13.6432% on combined-34, 13.9410% on combined-22,
+12.5628% on Saiga-16 and 29.0598% on numeric-32. Results are mixed;
+combined-22/34 worsened despite a small numeric-WER improvement.
+All 36 selected changed/demo complete source/reference/prediction triples
+were read. A style followup is now stress-exact, but quote loss, repeated
+spans, corrupt words and wrong stress persist. A phone number is wrongly
+expanded as millions, sums still lose magnitudes, and an ordinal date
+remains a cardinal number. Protected pizza/MFTI examples are still wrong.
+No intermediate checkpoint is promoted or used for continuation.
+SHA-bound receipt: `research/v36-context-followup/step600/manual-review.json`.
+The live training process passed step 1,110 without OOM. Disk free after
+new data preparation/evaluation was about 66.3 GiB on drive1 and 145.4 GiB
+on drive2; other workloads remain untouched.

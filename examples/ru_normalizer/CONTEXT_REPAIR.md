@@ -3383,3 +3383,80 @@ unique rows and343,502 epoch positions. The first48 logged losses and
 gradient norms were finite; the job was live at3.35% of its epoch, with
 loss0.0070 and gradient norm0.1861. Receipt:
 `research/v42-scored-next/v43-startup-first512full-google118-verified.json`.
+
+## V43 intermediate review and next contextual data
+
+V43 remained live on the same GPU0 throughout these checks. Callback CE
+at600/1200/1800/2400/3000/3600/4200/4800 is0.07476083,0.07470420,
+0.07458054,0.07460655,0.07448252,0.07455509,0.07437587 and0.07433801. At1800 all
+ten complete tuples were read; at2400/3000/3600 the one changed complete
+tuple was read and nine exact tuples reused from recorded full reads.
+All ten4200 tuples exactly match3600; all ten4800 exactly match4200.
+The phone at3600 recovers five hundred
+and sixty but still drops the separate five. Archive corruption persists.
+Receipts: `research/v43-context-followup/step{1800,2400,3000,3600,4200,4800}-callback-manual-review.json`.
+
+The stock GPU1 step1200 job completed exit0 without OOM. Its evaluation-only
+snapshot SHA256 is
+`b6da9aa77b76cea4b7aba400e0f07efccb5088876195458974b2baf63f5626f1`.
+All nine panels /216 rows bind that snapshot and match V42-final source,
+history and reference identities. Five panel WER values improve and four
+worsen. Fixed33 improves8.8435%→6.9388%, fixed19 improves6.9196%→6.0268%,
+while numeric worsens30.7692%→31.0541%. Small overlapping panels and
+automatic references do not establish a general quality gain.
+
+All73 selected critical tuples were reviewed:53 complete tuples reread,
+20 exact complete tuples reused from recorded full reads. Selection covers
+every changed critical output, all five user demos and all19 contextual
+heldouts. Other143 rows were identity/metric checked only. The1917 example
+recovers exactly; tango and scientific-management sentences recover words.
+Long wood-processing, consultant, programming and appetite sentences remain
+corrupted. Pizza repeats less, but MFTI/time remains wrong. No intermediate
+warm-start or demo promotion. Receipts:
+`research/v43-context-followup/step1200/{comparison,manual-read-selection,manual-review}.json`.
+
+The next raw-cohort slice was reviewed without altering live V43 inputs.
+For the first64 raw first-answer records, all64 full source contexts and
+33 actual-history followups were read. All56 candidate accent pairs were
+read;46 training-only records passed source, target, collision and tensor
+checks. For raw first-answer indices64–95, all32 source contexts and17
+actual-history followups were read. All28 candidate accent pairs were
+read;20 train and2 originally fixed whole-group heldouts passed. Grammar,
+invented facts, raw unnormalized numbers/acronyms, missing stresses and
+doubtful stress labels were excluded unchanged. No split reassignment,
+source rewriting or prediction-driven target repair occurred. These remain
+checked automatic labels, not independent human/factual gold.
+
+Both stock CUDA export/audit jobs and both two-command stock assemblies
+completed exit0 without OOM. Source IDs, target IDs, finite paired BF16
+2560-dimensional features, token lengths and metadata hashes were audited
+for all68 accepted records. Source/target receipts and export audits are
+`research/v43-scored-next/{first64raw,raw64to96}-quality-review.json`
+and `{first64raw,raw64to96}-feature-audit.json`.
+
+The newest prepared cache is
+`data/{hidden-plan,freeze-features}-v43-first512full-first96raw-google118-qa`:
+99,884 train /3,609 validation /2,302 frozen records, adding66 train and2
+heldouts relative to live V43. Metadata SHA256:
+`b017a4f628fa917b8f2c62c53632d0c088978ca994dc4e613815835fec633e67`.
+Ordered train/validation appendices and unchanged frozen bytes were verified.
+Replay has3,934 exact IDs (3,416 contextual /518 numeric), factor64:
+347,726 positions /7,245 batch48 steps. Prepared V44 keeps BF16, LR1e-6,
+one epoch and the unchanged trainer/original Freeze-Omni decoder. Its22
+future native panels cover792 rows. The previous prepared cache is retained.
+
+`research/v43-scored-next/LATEST_PREPARED.json` now points to
+`next-plan-first96raw-google118.json` and its prepared launch/preflight.
+V44 is not launched: it requires reviewed V43-final weights, fixed33/fixed19
+and fresh2 baselines, free-space checks and precreated native output
+directories. Intermediate checkpoints remain evaluation-only. No model,
+trainer or demo implementation was changed.
+
+To preserve space for continuation, terminal V30 was rechecked against its
+Docker exit0 state and root/final4810 weight hash. No running Docker command
+referenced that run. Only the inspected intermediate optimizer files at
+3600/4200/4800 were removed, freeing9.49GiB; all root/checkpoint model files
+and the final4810 optimizer retained inode/size/mtime. Exact optimizer resume
+for those intermediates is unavailable. Drive2 then had26.62GiB free; live
+V43 files were untouched. Receipt:
+`research/v43-scored-next/v30-intermediate-optimizer-cleanup.json`.

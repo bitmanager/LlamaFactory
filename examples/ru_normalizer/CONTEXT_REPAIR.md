@@ -1864,3 +1864,65 @@ loss/gradient entries confirm actual optimizer steps, GPU utilization
 99%, and no OOM. The upstream scalar-loss reporting warning remains
 unchanged; no model/trainer source was modified. The V38 first192
 preparation remains next after reviewed V37 final weights.
+
+## V37 live validation and V38 first256 preparation
+
+V37 continues on GPU 0 from reviewed V36 final, without a restart or
+source changes. The step-600 callback CE is 0.07400479. All ten complete
+callback records were read; two changed against V36 final: the request
+clause repetition disappeared, but the damaged archive word remains,
+and the phone-number example still loses a separate five. Step 1,200 CE
+is 0.07421462; all ten callback records exactly match the reviewed
+step-600 callback. Receipts: `step600-callback-manual-review.json` and
+`step1200-callback-manual-review.json` under
+`research/v37-context-followup`.
+
+A separate immutable evaluation-only copy of checkpoint 600 was tested
+on seven stock native panels, 164 rows, on GPU 1. Source IDs, full source
+text, history and references match V36-final baselines. Every changed
+output plus all five demo examples was read in full: 49 selected
+written/history/reference/previous/prediction records. Other rows are
+metrics/hash-only. This intermediate snapshot is never a continuation
+source. Snapshot SHA256:
+`05b68acefef6021610c204c85d7360499ff32df53a477cc3533d8312b532d3a4`.
+
+Performance remains mixed. Combined34 WER improves from 12.8936% to
+10.3448%; new9 from 2.2472% to 1.6854%; demo5 from 23.4043% to 21.2766%.
+Saiga16 worsens from 12.5628% to 14.0704%, combined22 WER is unchanged,
+and numeric32 remains poor at 29.6296%. The sell/continue substitution,
+one career-advice repetition and one film-text repetition were corrected.
+The time-only demo restores thirty, but MFTI still becomes MFK and both
+pizza replies remain corrupted or repeated. Long neural-network,
+toothpaste and artistic passages still lose content. The numeric
+100-ruble example becomes ten rubles, and the previously correct
+seven-to-ten-day range regresses. No label changes or demo promotion.
+Receipt: `research/v37-context-followup/step600/manual-review.json`.
+
+The next 64 V38 source prompts (192..255) were reviewed: all sixty
+available first question/answer pairs and all 32 eligible actual-history
+followups were read. Stock CUDA RUAccent produced 55 targets; all were
+read, with one uncertain proper-name stress target quarantined unchanged.
+54 records remain, 48 train and six preassigned whole-conversation
+heldouts. All 54 frozen feature artifacts pass the existing full source,
+target-token, shape, finite-BF16 and metadata-hash audit. The suspected
+`разд+елим` stress was confirmed correct against the indexed official
+dictionary conjugation and retained, not incorrectly relabeled.
+Receipts: `research/v38-scored-next/first192to256-*.json`.
+
+The combined first256 V38 cohort now contains 175 reviewed examples,
+154 train and 21 validation. Fresh stock assemblies preserve all live
+inputs and existing heldout references, including the recorded erratum.
+Future full cache: `data/freeze-features-v38-combined-first256-qa`,
+99,226 unique train rows, 3,576 validation and 2,302 unchanged frozen
+evaluation rows. Replay has 3,276 selected rows, factor 64, yielding
+305,614 positions and 6,367 steps at batch 48. Its metadata SHA256 is
+`aaac7cbf3900ca287c9424421cc9fa8a5d2123eadb9178c48efc849168f5346a`.
+
+The latest prepared launch is
+`research/v38-scored-next/training-launch-prepared-combined-first256-memory-verified.json`:
+stock training plus twenty native panels, 759 rows. It is prepared only;
+reviewed V37 final weights remain required before launch. Replay source
+IDs/indices, split disjointness, ordered source concatenation, frozen
+evaluation bytes and completed feature metadata pass preflight. No
+model/trainer/normalizer implementation was changed. Existing CUDA
+accent/export adapters and CPU artifact/assembly operations were reused.

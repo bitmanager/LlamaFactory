@@ -3067,3 +3067,75 @@ V42 still requires reviewed V41-final weights and stock fixed33/fresh17
 baselines. Its run and continuation directory were absent at preflight.
 Latest prepared pointer: `research/v41-scored-next/LATEST_PREPARED.json`.
 No model/trainer code, live input, demo or merge state changed.
+
+## First448 preparation and V41 end-of-training callback
+
+The first384–415 sources and followups were read in full. Seventeen
+unchanged accented targets survived review, all in existing train groups.
+The first416–447 sources and followups were also read in full; 24 targets
+survived, comprising23 train and one originally heldout source. Missing
+multisyllabic stress, malformed wording and uncertain content were
+excluded unchanged. These remain reviewed automatic labels, not human
+gold. Receipts: `research/v41-scored-next/first384to416*` and
+`research/v41-scored-next/first416to448*`.
+
+Both stock CUDA exports and all41 paired-tensor audits passed; both sets
+of four stock assembly commands completed exit0 without OOM. Immutable
+full data/features: `data/{hidden-plan,freeze-features}-v41-first448full-google96-qa`:
+99,768 train /3,606 validation /2,302 frozen rows. Metadata SHA256:
+`cc235da0f80c9023094efd974fb3298c4f81250ed5cbb9228f4b06edce171c50`.
+Ordered appendices and frozen bytes were verified. The new contextual
+cohort has287 train and18 heldouts. Live V41 inputs are unchanged.
+
+The next V42 preparation selects3,818 replay IDs (3,322 contextual and496
+numeric), factor64:340,302 positions and7,090 batch48 steps. Relative to
+live V41, this adds117 train and12 validation examples. Its21 native
+panels cover789 rows and bind future V42-final weights. Fixed33/fresh18
+baseline commands require reviewed V41-final weights; output directories
+must exist before stock evaluation. Latest prepared pointer:
+`research/v41-scored-next/LATEST_PREPARED.json`.
+
+V41 completed6,934 optimizer steps, one epoch, in3,047.58 seconds
+(50.79 minutes;2.275 steps/s). Train CE is0.00788682, final validation CE
+0.07412665. All ten complete final callback tuples were manually read and
+are identical to step6000: the phone still drops a five and changes sixty
+to fifty, and the archive word still repeats. Native final generation
+evaluation remains in progress at this preparation point. This is not
+evidence of broad quality improvement or approval for demo promotion.
+No model/trainer implementation changed.
+
+## Reviewed V41 final and launched V42
+
+V41's Docker job terminated exit0 without OOM after21 native panels
+completed777 rows. Root final, checkpoint6934 and model-only review copy
+agree on SHA256:
+`02caa75eecbacd9409118f9471da31fb1ed00b813596e2567b2175636cca812f`.
+All21 panel manifests bind that final weight hash. The20 common panels
+identity-match771 V40-final rows: seven improve WER, nine worsen and four
+tie. V41 is not a demonstrated overall improvement and is not promoted.
+
+Critical comparison against step4200 covers203 identical tuples. All38
+selected complete tuples were read: every changed critical prediction,
+all five user demos and all six fresh heldouts. Other native rows received
+identity/metric checks only. Five critical panels improve, two worsen
+and two tie. The1917 date is restored; long neural/story endings partly
+recover, but content corruption persists. Second-pizza repetition returns;
+demo WER20.2128% to23.4043%. Numeric WER31.0541% to30.4843% remains high.
+Receipts: `research/v41-context-followup/final/`.
+
+After review, a model-only continuation copy was made from final weights.
+Stock CUDA fixed33/fresh18 baselines completed exit0 without OOM and bind
+the same hash. Fixed33 exactly reuses the final native tuples; it was not
+entirely reread. All18 complete fresh tuples were read with their histories
+and source/reference/prediction context. Fresh WER is7.4699%, half match
+the reference without stress; wrong stress, omissions and long-text
+corruption remain. This small automatic-reference panel does not certify
+general quality. No target was changed after seeing its prediction.
+
+V42 was launched on the same GPU0 with reviewed V41-final weights, a fresh
+optimizer/scheduler and the prepared first448 data/replay configuration.
+Docker: `normalizer-train-v42`; run: `freeze-text-v42-context-followup`.
+Launch receipt: `research/v41-scored-next/training-launch-first448full-google96.json`.
+All21 native output directories were created before launch. The stock
+training/evaluation implementation, frozen agent Qwen, and demo remain
+unchanged. This is continued research training, not approval to deploy.

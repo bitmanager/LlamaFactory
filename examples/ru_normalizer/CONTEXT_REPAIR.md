@@ -2879,3 +2879,58 @@ All21 future final panels point to V42-final weights and cover781 rows.
 The future run and continuation-weight directory were absent at preflight.
 Latest prepared pointer: `research/v41-scored-next/LATEST_PREPARED.json`.
 No model/trainer implementation, demo or merge state changed.
+
+## Reviewed V41 step1800 and prepared first320 followups
+
+The corrected step1800 native evaluation completed exit0 without OOM.
+All nine panels use the independently copied step1800 weights and all203
+source/history/system/reference identities match reviewed step600.
+All56 selected complete tuples were read in full: every changed output,
+all five user-demo examples and all six fresh context heldouts. The other
+147 rows received identity/metric checks only. Receipt:
+`research/v41-context-followup/step1800/{comparison,manual-review}.json`.
+
+Against step600, six panels improve WER, two worsen and one ties.
+Numeric WER falls31.3390% to29.0598%; the666666-ruble sentence is now
+exact. The second pizza restores preferences but repeats a phrase.
+Charger wording, short rain, the movie answer and the Ruslan joke improve.
+MFTI/time/large-number/percentage errors persist. The long story now ends
+early; neural-network, art, sport and knitting wording remain corrupt.
+Fresh-six WER regresses5.1429% to8%. These mixed intermediate results
+are neither continuation nor demo eligible.
+
+Step2400 validation CE is0.07426338. All ten complete callback tuples
+were read in full and equal step1800 exactly; the phone omission and
+archive corruption persist. Receipt:
+`research/v41-context-followup/step2400-callback-manual-review.json`.
+Live V41 continues with the original dataset/cache and training recipe.
+
+All31 actual frozen-Qwen followups to the reviewed first-answer sources
+were read with their three-turn histories and system prompt. Five
+unresolved, malformed or context-inconsistent outputs were quarantined
+unchanged. All26 remaining automatic accent targets were then read in
+full; three with omitted multisyllabic stress were excluded unchanged.
+The retained23 comprise19 train and four originally heldout records.
+No heldout group was reassigned and no source/target was rewritten.
+Receipts: `research/v41-scored-next/first256to320-followup-*`.
+
+Stock export/audit completed exit0 without OOM and checked all23 records
+for identities, target IDs, finite paired BF16 features, source lengths
+and hashes. Four stock assembly commands also completed exit0. The latest
+immutable full dataset/cache is
+`data/{hidden-plan,freeze-features}-v41-first320full-google83-qa`, with
+99,690 train,3,602 validation and2,302 byte-identical frozen rows.
+Metadata SHA256:
+`33cb8a61d42394cf8f763fc1e2249423c4dd3586bc0540a995b2f3677178d18e`.
+The fresh contextual cohort has222 train and14 heldouts. Automatic
+Qwen/RUAccent labels remain checked pseudo-labels, not independent gold.
+
+This supersedes the prior unlaunched V42 preparation. Replay now contains
+3,740 IDs:3,257 contextual and483 numeric; factor64 gives335,310 positions
+and6,986 batch48 steps. All21 future native panels point to V42-final
+weights and cover785 rows. V42 still waits for reviewed V41-final weights
+and stock fixed33 plus fresh14 baselines. Its run and continuation-copy
+directories were absent at preflight; output directories must be created
+before invoking the stock evaluator. The latest prepared pointer remains
+`research/v41-scored-next/LATEST_PREPARED.json`. No model/trainer code,
+live input, demo or merge state changed.

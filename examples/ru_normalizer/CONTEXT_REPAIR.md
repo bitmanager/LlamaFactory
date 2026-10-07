@@ -1611,3 +1611,11 @@ SHA-bound receipt: `research/v36-context-followup/step600/manual-review.json`.
 The live training process passed step 1,110 without OOM. Disk free after
 new data preparation/evaluation was about 66.3 GiB on drive1 and 145.4 GiB
 on drive2; other workloads remain untouched.
+
+
+At step 1,200, V36 CE decreased to 0.0744552 on the same expanded
+validation set. The one changed archive/payment callback triple was
+read in full and still repeats the damaged archive word. All ten outputs
+now exactly match the previously reviewed V35 final callback. This is
+loss improvement without demonstrated generated-quality improvement in
+that callback. Receipt: `step1200-callback-manual-review.json`.

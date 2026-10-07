@@ -2156,3 +2156,60 @@ native panels cover 771 rows. Preflight verifies ordered concatenation,
 all feature files, COMPLETE metadata, exact replay IDs, unchanged frozen
 evaluation bytes and native input paths. Live V38 inputs remain unchanged;
 no model/trainer/normalizer implementation was changed.
+
+## V38 continuation monitoring and further reviewed data
+
+The same training container continues without restart. Callback CE at
+steps 1800 and 2400 is 0.07395233 and 0.07379425. All ten complete callback
+records exactly match the previously reviewed step-600/1200 outputs;
+there is no demonstrated generated gain in this small panel. Receipts:
+`research/v38-context-followup/step1800-callback-manual-review.json` and
+`step2400-callback-manual-review.json`.
+
+All sixty available first answers in the final preselected source block,
+indices 448..511, were read with their actual histories. Twenty-one passed
+source review and the existing stock CUDA accent tool. All twenty-one
+written/reference pairs were then read. Four uncertain or incorrect stress
+targets were quarantined unchanged, leaving seventeen training pairs.
+The fixed holdout assignment was preserved; no retained group belongs to
+validation and no empty validation file was introduced. Source assertions
+are not independently verified factual gold, and automatic accent targets
+are not human gold. Receipts: `research/v38-scored-next/first448to512-*.json`.
+
+The stock frozen-Qwen exporter and existing artifact audit completed on
+all seventeen pairs: exact source IDs, source text, target token IDs,
+finite paired BF16 features, token lengths and metadata hashes. The stock
+assembler produced `data/freeze-features-v38-first512-firstonly-google32-qa`:
+99,404 unique training rows, 3,588 validation rows and the same 2,302 frozen
+evaluation rows. It adds 66 train and four heldout records to live V38.
+Live V38 inputs and the earlier prepared caches remain unchanged.
+
+The further V39 plan remains prepared only, requires reviewed V38 final
+weights, and starts a fresh optimizer/scheduler. Its source-ID replay
+contains 3,454 unique rows, factor 64, 317,006 positions and 6,605 batch-48
+steps. All replay indices and source IDs are checked against the new
+ordered dataset. The thirty-three fixed new heldouts and final native
+panels remain unchanged. Prepared launch:
+`research/v38-scored-next/training-launch-prepared-first512-firstonly-google32-memory-verified.json`.
+Metadata SHA256:
+`2d47d5827a36b36100b940d725e715b63f7af777695e26c73bba80cf46b6aa80`.
+No model, trainer or normalizer implementation changed; no PR was merged.
+
+Checkpoint 3000 was copied and double-hash-verified for evaluation only,
+SHA256 `25e13219ffca07a37ed2e111e8fca13adc99d406f7db5903ee88218b343b6300`.
+All eight stock native panels, 193 rows, completed on GPU 1 with exit 0
+and no OOM. All source/history/reference identities were guarded against
+step 600. Every changed prediction plus all five demo examples was read
+in full, 57 records; the remaining 136 have metric and identity checks.
+Receipt: `research/v38-context-followup/step3000/manual-review.json`.
+
+Against step 600, Saiga16 WER improves 12.5628% to 10.8040% and combined46
+7.4499% to 7.1633%; combined22 regresses 10.1877% to 11.2601%, combined34
+8.6957% to 10.9445%, and new29 7.3171% to 8.3841%. Numeric32 remains
+30.4843%, demo5 20.2128%. The 666666-rouble amount becomes exact, but the
+7..10-day interval regresses to 7..17 and three million is still wrong.
+Some repeated clauses disappear, others return; long replies still lose
+words or end early. MFTI, time-only 11:30 and first-pizza demo failures
+persist. Callback CE at 3000 is 0.07392206; all ten callback records exactly
+match reviewed step 2400. This remains a mixed intermediate checkpoint,
+with no demo promotion and no prediction-driven reference changes.

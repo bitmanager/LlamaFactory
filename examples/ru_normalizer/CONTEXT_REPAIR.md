@@ -2530,3 +2530,71 @@ warm start and null resume. First optimizer steps were observed with no
 OOM. Launch receipt:
 `research/v39-scored-next/training-launch-first128full-google60.json`.
 No demo was promoted and no PR was merged.
+
+## V40 intermediate review and prepared V41 data
+
+V40 remains running on its fixed training GPU, without OOM. Callback
+validation CE is 0.07380804 at step600, 0.07385915 at step1200 and
+0.07378000 at step1800. All ten callback identities match. Step1200
+exactly reuses the previously reviewed step600 tuples. The single changed
+step1800 tuple was read in full: the payment sentence loses one repeat,
+but archive-word corruption remains. Callback receipts are under
+`research/v40-context-followup/step*-callback-manual-review.json`.
+
+The independent step600 native evaluation completed with exit0 and no
+OOM: nine panels, 201 rows. All source/history/reference identities passed
+against reviewed V39-final baselines. Five panel WER values improved,
+two worsened and two tied. All 52 selected tuples were read in full,
+including every changed prediction, all five demo examples and all four
+fresh heldouts. The other 149 rows received identity/metric checks only.
+The rain followup is exact and the devices example restores keyboard and
+controller, but the long pizza reply adds a repeat. Demo WER worsened
+from 20.2128% to 23.4043%; numeric WER worsened from 30.1994% to 30.4843%.
+This intermediate snapshot is evaluation-only. Receipt:
+`research/v40-context-followup/step600/manual-review.json`.
+
+The next source slice contains 55 complete actual frozen-Qwen first
+answers for questions128..191; all were read with their actual histories.
+Twenty-nine source rows were excluded unchanged. All 26 retained accent
+targets were read; five double-marked, unmarked or contextually wrong
+targets were quarantined unchanged. The remaining 19 train and two
+preselected heldout records passed the stock feature audit. Fixed groups
+were retained, not reassigned after filtering. Receipts:
+`research/v40-scored-next/first128to192-*`.
+
+All 50 Google non-DATE candidates at deterministic ranks3801..3850 were
+read. Fourteen source pairs survived; all automatic accent targets were
+read and three unresolved or unmarked targets were quarantined unchanged.
+The remaining 11 train pairs passed the stock feature audit. No targets
+were corrected from model predictions. Receipts:
+`research/v40-google-nondate3801to3850/{source-manual-review,target-manual-review,feature-audit}.json`.
+Checked automatic labels remain distinct from independent human gold.
+
+The existing assembler produced an immutable next full dataset/cache:
+`data/{hidden-plan,freeze-features}-v40-first192-google71-qa`,
+99,590 unique train, 3,594 validation and 2,302 unchanged frozen rows.
+Relative to live V40, it adds 30 train and two validation records.
+Completion/source hashes, ordered appendices and exact replay ID lookup
+passed. Metadata SHA256:
+`3d48022e4769cf431e2fc596828c427981a357c5a43f9e9b303d0b9e3a8524c8`.
+Replay contains 3,640 unique IDs (3,169 contextual and 471 numeric),
+factor64: 328,910 positions and 6,853 batch48 steps. The fresh context
+cohort now has 134 train and six heldouts.
+
+V41 is prepared only. It retains BF16/batch48/LR1e-6/one epoch, model-only
+warm start from reviewed V40 final and fresh optimizer/scheduler.
+Twenty-one final native panels total 777 rows. Fixed33 plus all six
+fresh heldouts require final-weight baselines before continuation.
+Preflight:
+`research/v40-scored-next/continuation-replay-first192-google71-preflight.json`.
+
+An operational provenance error was found in V40's scheduled additional
+four-row panel: that command points to the preceding V39 warm-start
+weights. Its scheduled output must not be reported as a V40-final result.
+The other 20 final panels point to the V40 run. After V40 finishes, run
+the stock six-row baseline separately on verified V40-final weights and
+read all six tuples before continuing. All 21 prepared V41 panels were
+checked to point to the future V41 final run, not its warm start. Note:
+`research/v40-scored-next/v40-additional-panel-provenance-note.json`.
+No model, trainer or normalizer implementation changed, no live job or
+inputs were modified, and no demo or PR was promoted.

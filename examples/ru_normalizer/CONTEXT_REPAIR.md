@@ -1997,3 +1997,51 @@ previously exact film reply gains repetition. One 100-ruble sum is
 restored, while 1011 rubles becomes one million eleven. Long-text and
 numeric failures persist. No promotion or prediction-driven relabeling.
 Receipt: `research/v37-context-followup/step3000/manual-review.json`.
+
+## V38 first384 preparation; V37 continues through 4800
+
+The same V37 container remains live. Callback CE is 0.07385074 at 3600,
+0.07395019 at 4200 and 0.07387508 at 4800. All ten complete callback
+records at each milestone exactly match the previously reviewed
+step-3000/1800 outputs. This verifies unchanged generated behavior,
+not a quality gain; the separate selected native review remains at 3000.
+Receipts: `step3600/4200/4800-callback-manual-review.json`.
+
+For question indices 320..383, all 59 available first pairs and all 28
+eligible actual-history followups were read in full. 51 automatic accent
+targets were read; five missing or uncertain contextual stresses were
+quarantined unchanged. The 46 retained records, 44 train and two fixed
+whole-conversation heldouts, passed every existing feature-artifact audit.
+Receipts: `research/v38-scored-next/first320to384-*.json`.
+
+All fifty existing Google non-DATE written/spoken pairs at fixed ranks
+3551..3600 were read. Eight passed source review; all eight accent targets
+were read, and one unresolved word stress was excluded unchanged without
+claiming a confirmed error. Seven train-only pairs remain, including an
+inflected six-digit price range, millions, multiplicities and quantities.
+The price-range spelling and stress `четырёхсо́т` were checked against the
+indexed [official orthographic dictionary](https://gramota.ru/storage/public/normdicts/orfograficheskij_slovar.pdf)
+and retained. All seven feature artifacts passed the existing audit.
+Automatic normalization/accent labels are not independent gold, and
+source factual assertions were not independently verified. Receipts:
+`research/v38-google-nondate3551to3600/*.json`.
+
+The latest future V38 cohort has 274 contextual pairs (245 train and 29
+validation) plus 21 numeric-context train pairs: 295 new records total.
+Fresh stock assembly gives `data/freeze-features-v38-first384-google21-qa`,
+99,338 unique train rows, 3,584 validation and 2,302 unchanged frozen eval
+rows. Replay has 3,388 exact source IDs, factor 64, 312,782 positions and
+6,517 steps at batch 48. All 53 newly appended feature records are audited.
+Live V37 inputs and excluded originals remain untouched.
+
+The latest launch is prepared only:
+`training-launch-prepared-first384-google21-memory-verified.json` under
+`research/v38-scored-next`. It requires reviewed V37 final model weights
+and keeps a fresh optimizer/scheduler. Its twenty native panels cover 767
+rows. The plan additionally records a stock V37-final baseline command
+for all 29 new heldouts, to run before or alongside the V38 start. Preflight
+guards exact source-ID replay, ordered concatenation, whole-group split
+disjointness, all feature files, COMPLETE metadata, fixed eval bytes and
+native/baseline input paths. Metadata SHA256:
+`0f945414cdf486f73c0518ab4faf2e215262a964a73b055e696d818390d048ae`.
+No model/trainer/normalizer implementation was changed.

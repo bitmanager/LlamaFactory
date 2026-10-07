@@ -3179,3 +3179,55 @@ rows and bind future V43-final weights. V43 remains unlaunched and requires
 reviewed V42-final weights and fixed33/fresh18 baselines. Pointer:
 `research/v42-scored-next/LATEST_PREPARED.json`.
 No model/trainer code or live input changed.
+
+## V42 validation review and next contextual appendix
+
+The independent step600 evaluation completed exit0 without OOM. All215
+tuples identity-match their V41-final baselines and bind the evaluation
+snapshot hash recorded above. All64 selected critical tuples were
+reviewed:54 complete tuples reread and10 exact unchanged fresh tuples
+explicitly reused from their previous full-context review. The other151
+rows received identity/metric checks only. Four of nine panels improve
+WER and five worsen. The game-device list recovers, but numeric and
+long-text corruption persists; the fresh panel has regressions as well
+as recoveries. Receipt: `research/v42-context-followup/step600/manual-review.json`.
+This intermediate snapshot is not promoted or used for continuation.
+
+All ten complete callback tuples at steps1200,1800 and2400 were read.
+Validation CE is0.07437962,0.07468115 and0.07462338 respectively.
+The phone alternates between fifty/sixty and drops words; at2400 it also
+drops five hundred. Archive duplication and Power BI stress persist.
+These small callback panels do not show a general quality improvement.
+Receipts: `research/v42-context-followup/step{1200,1800,2400}-callback-manual-review.json`.
+The main V42 job remains live and has not been restarted.
+
+The first448–480 source slice had30 complete first answers; prompt451 and
+478 were incomplete and excluded. All30 source contexts and16 actual
+follow-up contexts were read. Sixteen first answers and12 follow-ups
+passed source screening. All28 automatic accent targets were then read;
+seven with missing multisyllabic stress were excluded unchanged.
+The original fixed whole-conversation split yields20 train and1 heldout.
+No source/target was rewritten, and original Saiga bot answers remain
+unused. These are checked automatic labels, not independent human gold.
+All21 stock CUDA-exported artifacts passed the paired-tensor/hash audit.
+
+Four stock assembly commands completed exit0 without OOM. Next cache:
+`data/{hidden-plan,freeze-features}-v42-first480full-google107-qa`:
+99,799 train /3,607 validation /2,302 frozen rows. Metadata SHA256:
+`7d46e6a034e562834d40fab0df52146d99aa79e90af252202838391123a69526`.
+Ordered train/validation appendices and unchanged frozen bytes were
+verified. Relative to live V42, this adds31 train and1 validation example,
+including the previously prepared11 numeric examples. Replay has3,849
+IDs (3,342 contextual /507 numeric), factor64:342,286 positions /7,131
+batch48 steps. The fresh contextual cohort has307 train and19 heldouts.
+All21 future native panels cover790 rows and bind future V43-final weights.
+`research/v42-scored-next/LATEST_PREPARED.json` now points to this preparation.
+V43 remains unlaunched pending reviewed V42-final and fixed33/fresh19
+baselines. Live inputs and model/trainer implementation remain unchanged.
+
+After verifying V41's terminal exit0 state, only its inspected intermediate
+optimizer files at5400/6000/6600 were removed, freeing9.49GiB. All V41
+model files and the final6934 optimizer retain their original inode,
+size and modification time; live V42 was untouched. Exact optimizer
+resume from those three intermediate snapshots is no longer available.
+Receipt: `research/v42-scored-next/v41-intermediate-optimizer-cleanup.json`.

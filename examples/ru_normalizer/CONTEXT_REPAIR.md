@@ -3602,3 +3602,85 @@ LR1e-6, one epoch and the unchanged trainer/original decoder;23 native
 panels cover794 rows. It is not launched: reviewed V44-final and all four
 final baselines are required first. `LATEST_PREPARED.json` points to this
 new prepared plan; live V44 inputs were not modified.
+
+## V44 later callbacks, further data, and batch checks
+
+V44 remains live. Callback CE at2400/3000/3600/4200/4800/5400 is
+0.07467640/0.07468767/0.07419716/0.07424978/0.07411681/0.07427519.
+The2400 ten complete tuples exactly match1800. At3000 and3600 only the
+archive stress on `ваш` changes; the changed complete tuple was read and
+nine exact tuples reused each time. All ten4200/4800/5400 tuples match
+their preceding reviewed tuples. Phone quantity loss and archive fragment
+repetition persist. Receipts:
+`research/v44-context-followup/step{2400,3000,3600,4200,4800,5400}-callback-manual-review.json`.
+
+For raw first-answer indices128–159, all32 complete source contexts and14
+actual-history followups were read. Fourteen first sources and12 followups
+passed source/collision checks; all26 accent pairs were read. Six first
+targets and two followups were excluded unchanged for missing stress or
+uncertain coined-name pronunciation. Accepted18 records are16 train and
+two originally fixed whole-group heldouts. Wrong factual attributions,
+bad action sequences, malformed language and unnormalized digits/Latin
+names were excluded at source review. These are still checked automatic
+labels, not independent human/factual gold. No source/target rewrite or
+split reassignment. Both stock accent jobs, stock CUDA export/full artifact
+audit and stock two-command assembly completed exit0 without OOM.
+Receipts: `research/v44-scored-next/raw128to160*-manual-review.json`,
+`raw128to160-quality-review.json` and `raw128to160-feature-audit.json`.
+
+Newest prepared cache:
+`data/{hidden-plan,freeze-features}-v44-first512full-first160raw-google127-qa`:
+99,933 train /3,613 validation /2,302 frozen records, adding40 train and
+four fixed heldouts relative to live V44. Metadata SHA256:
+`c7e250747daeea594b025e11e89440ace95f9ccb3cbf813d9973a0c66418ee84`.
+Ordered append bytes, unchanged frozen bytes and all replay identities
+were rechecked. Replay has3,983 IDs (3,456 contextual /527 numeric),
+factor64:350,862 positions /7,310 batch48 steps. Prepared V45 has24 native
+panels /796 rows and five final-baseline commands. It requires reviewed
+V44-final; intermediate and timing weights remain ineligible for warm
+start or demo. Live V44 inputs and model/trainer implementation are unchanged.
+
+Short stock-trainer timing tests used the same GPU1, reviewed V43-final
+model-only warm start, immutable first128raw cache, seed and replay.
+Each completed run trained80 steps with periodic save/eval disabled;
+the stock explicit final evaluation remained enabled. Batch48 took32.72s
+(117.35 samples/s); batch64 took36.49s (140.31 samples/s), about19.6% more
+samples/s. Allocated GPU peaks calculated from recorded initial allocation
+plus train allocation/peak deltas were23.80/29.94GiB. Batch64 completed
+exit0 without OOM; batch96 failed with CUDA illegal memory access during
+backward, not an OOM. Timing weights are diagnostic only. This short test
+does not prove full-epoch memory safety or quality improvement.
+
+A full tokenizer-length check caught a wrong preflight assumption:
+192 is the generation/new-candidate review cap, not a global training-
+target cap. The existing exporter preserves complete targets. Train
+maximum is237 target tokens (18 rows exceed192); validation maximum184.
+The worst cached target was checked against the tokenizer length. With
+EOS and151,674 output classes, the largest logits tensor has1,732,723,776
+elements at batch48,2,310,298,368 at64 and3,465,447,552 at96. Thus64 can
+cross signed32-bit indexing bounds even though its80-step sample passed.
+Batch48 remains the prepared full-run configuration; no clipping or
+removal of existing long targets occurred.
+
+The original transposed3D CrossEntropyLoss resembles the affected path
+described in [PyTorch issue190139](https://github.com/pytorch/pytorch/issues/190139).
+The exact crashing kernel in our96 test has not been established.
+The installed runtime is PyTorch2.9.1+cu130/CUDA13.0. A stock-operator
+float64 small-tensor check of3D versus flattened2D CE gives identical
+sum loss and maximum gradient difference6.94e-17, preserving ignore-index
+semantics. A controlled flat2D BF16 CUDA test beyond INT_MAX produced
+finite gradients and matching first/last sampled gradients, but failed
+the strict1e-5 relative uniform-loss tolerance: observed relative error
+0.00067155. The failed check is preserved; this is not reported as a full
+numerical pass or full-decoder fix. No loss/model code was changed.
+The proposed two-line input-layout change requires the user's approval
+under their minimum-own-code rule, then further CUDA/full-decoder checks.
+Receipts: `research/v44-scored-next/batch-timing/{comparison,batch96-failure,token-length-observations,stock-ce-shape-equivalence,large-flat-strict-check-failed,stock-ce-large-flat-cuda-observations}.json`.
+
+For continuation capacity, terminal V31 was rechecked against Docker exit0
+and identical root/final5622 weight hashes. No running Docker command
+referenced its run. Only inspected intermediate optimizer files at4200,
+4800 and5400 were removed, freeing9.49GiB; all model weights and the
+final5622 optimizer retain their file identities. Drive2 then had20.24GiB
+free. Exact optimizer resume for removed intermediates is unavailable.
+Receipt: `research/v44-scored-next/v31-intermediate-optimizer-cleanup.json`.

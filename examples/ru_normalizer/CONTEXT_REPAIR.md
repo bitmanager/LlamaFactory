@@ -3280,3 +3280,106 @@ heldouts; future21 native panels cover790 rows. The latest prepared pointer
 now names first512full. V43 remains unlaunched pending reviewed V42-final
 and fixed33/fresh19 baselines. Live training, its inputs, the original
 Freeze-Omni implementation and demo remain unchanged.
+
+## V42 late validation and next numeric/contextual cache
+
+All ten complete callback tuples at4200,4800,5400,6000 and6600 were read.
+Validation CE is0.07464183,0.07458366,0.07441431,0.07459671 and0.07450352.
+At4800 all ten predictions equal4200. At5400 the phone loses five hundred
+and changes sixty to fifty;6000 restores those words but still omits the
+separate five. At6600 all ten equal6000. Archive repetition and the Power BI
+stress error persist. Receipts are
+`research/v42-context-followup/step{4200,4800,5400,6000,6600}-callback-manual-review.json`.
+These examples do not establish broad improvement.
+
+All50 complete Google non-DATE sources at ranks4001–4050 were read.
+Fourteen passed source and collision screening; all14 automatic accent
+targets were read. Wrong nautical `весел`/`вёсел` stress and two uncertain
+compound-word targets were excluded unchanged. Eleven training-only
+examples passed the stock CUDA export and paired-tensor/hash audit.
+Receipts: `research/v42-google-nondate4001to4050/{source,target}-manual-review.json`.
+
+Two stock assembly commands completed exit0 without OOM. The latest
+prepared cache is
+`data/{hidden-plan,freeze-features}-v42-first512full-google118-qa`:
+99,818 train /3,607 validation /2,302 frozen records. Metadata SHA256:
+`8936a200c9a82999dfa7cc5ae71ea95d670fa8854270b6210fb15880ec8d7126`.
+Ordered training concatenation and unchanged validation/frozen bytes were
+verified. Relative to live V42 it adds50 train and1 heldout. Replay has
+3,868 IDs (3,350 contextual /518 numeric), factor64:343,502 positions,
+7,157 batch48 steps. V43 remains prepared pending reviewed V42-final and
+fixed33/fresh19 baselines; live inputs remain immutable.
+
+A new512-conversation Saiga Scored cohort has also been generated using
+the unchanged frozen-Qwen generator. The pinned source parquet matches
+the prior SHA256; prior questions and current train/validation/frozen
+user questions were blocked, with zero normalized prior-question overlap.
+Whole-group32 heldouts were fixed before generation. The stock GPU1 job
+completed exit0 without OOM:970 complete answers and54 incomplete answers
+excluded automatically. All raw answers remain training-ineligible pending
+full source/accent review. These generated labels are not human gold.
+Artifacts: `research/v43-scored-next/{source-manifest,generation-launch}.json`
+and `raw/manifest.json`. No model/trainer implementation was changed.
+
+## V42 final review and V43 continuation
+
+V42 completed exit0 without OOM on2026-10-07T06:25:35Z. Training took
+3,109.0482s (51.82min),7,090 steps at2.28steps/s. Train CE0.00736645;
+the explicit final evaluation CE is0.07447233. The final evaluation runs
+after the root Trainer state is saved: its CE was read from the Docker
+evaluation log rather than the older last entry in that state file.
+All ten complete final7090 callback tuples were read. The phone loses
+five hundred and changes sixty to fifty; archive duplication persists.
+
+Root-final, checkpoint7090, evaluation-only copy and continuation copy
+match SHA256:
+`fa1e8f790ad726f85a9ec8e9dc442c429c84e52f23ede98095cc5437978d7eb0`.
+All21 native panels /789 rows bind this final hash, with strict
+source/history/reference identity checks against V41-native or its fresh
+baseline. Nine panels improve WER, six worsen and six tie; these small,
+overlapping panels are not a single independent benchmark score.
+Numeric WER30.7692%, user-demo23.4043% and fresh18 WER7.4699% remain poor
+or unchanged. Education/film-analysis sentences recover, while numbers,
+long-text corruption, MFTI/time and pizza failures remain. No demo
+promotion or broad-quality claim is justified.
+
+All60 selected critical tuples were reviewed:42 complete tuples reread
+and18 exact complete tuples explicitly reused from recorded full reads.
+The remaining729 native rows received identity/metric checks only.
+Selection covers every changed critical output versus step3000, all five
+user demos and all18 fresh heldouts. Receipts:
+`research/v42-context-followup/final/{snapshot-and-native-audit,manual-read-selection,manual-review}.json`.
+
+The stock GPU1 baseline job completed exit0 without OOM. Fixed33 exactly
+matches V42-native output and has WER8.8435%; it was identity/metric
+checked, not all reread. Fresh19 was fully reviewed:18 exact native-final
+tuples reused and one new complete tuple read. The new wise-youth example
+preserves all words but puts the stress on `способен` incorrectly.
+Fresh19 WER6.9196% has a different denominator from fresh18 and does not
+establish improvement. Receipt:
+`research/v42-scored-next/baseline-v42-final-first512full-manual-review.json`.
+
+After verifying terminal V42 state, only its inspected intermediate
+optimizer files at5400/6000/6600 were removed, freeing9.49GiB. All model
+files and final7090 optimizer retain inode/size/mtime; intermediate exact
+optimizer resume is unavailable. Drive2 then had36.33GiB free. Receipt:
+`research/v42-scored-next/v42-intermediate-optimizer-cleanup.json`.
+
+V43 was launched from the reviewed V42-final model only, with a fresh
+optimizer/scheduler on the same fixed GPU0. It uses the prepared
+first512full-google118 cache, batch48, BF16, LR1e-6, one epoch /7,157
+steps and the unchanged stock trainer/original Freeze-Omni decoder.
+All21 future native output directories were precreated and790 evaluation
+rows bind future V43-final weights. Launch:
+`research/v42-scored-next/training-launch-first512full-google118.json`.
+The new512-conversation raw cohort remains ineligible:44 complete source
+contexts have been screened so far, with24 provisional candidates pending
+accent/collision/tensor checks. No raw generated record was admitted.
+
+V43 startup was verified against actual saved run inputs and Docker state:
+439,416,570 trainable parameters, resumeNone, exact reviewed-final warm
+start, immutable feature metadata hash, exact replay selection,99,818
+unique rows and343,502 epoch positions. The first48 logged losses and
+gradient norms were finite; the job was live at3.35% of its epoch, with
+loss0.0070 and gradient norm0.1861. Receipt:
+`research/v42-scored-next/v43-startup-first512full-google118-verified.json`.

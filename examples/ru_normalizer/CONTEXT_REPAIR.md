@@ -1441,3 +1441,57 @@ model-only warmstart, fresh optimizer/schedule, unchanged LR 1e-6 and
 stock memory metrics. V36 numeric-million data remain the immediate next
 party after V35 final review. No model, trainer, exporter or normalization
 source changed. Demo remains stopped.
+
+## V35 step 4800 and expanded first448 cohort
+
+V35 remains active. Step 4,800 validation CE is 0.0788631; all ten
+callback source/reference/prediction triples exactly match the fully
+reviewed step 4,200 callback. The same repetitions, number corruption and
+stress error persist. Equality and callback hash are recorded in
+`step4800-callback-manual-review.json`; no broader native improvement is
+inferred from this callback.
+
+At step 5,400, CE is 0.0788434 and all ten callback triples still match
+the already reviewed step 4,800 predictions exactly. The receipt is
+`step5400-callback-manual-review.json`. The live process passed 96% of
+the epoch without OOM; final weights and native review are still pending.
+An observation caught the callback before the checkpoint state file was
+written; re-polling the same live process confirmed the completed save.
+Training was not restarted.
+
+All 63 complete first question/actual-Qwen-answer pairs from indices 384
+through 447 were read; the incomplete first answer at index 416 was
+excluded. Twenty first answers and fourteen of their twenty followups
+passed source review. All 34 automatic accent targets were read. One
+followup omitted lexical stress on vlaga and was quarantined unchanged.
+The other thirteen followup targets were retained.
+
+Two uncertain stress cases were independently checked. Gramota's indexed
+[vypolnimyy entry](https://gramota.ru/meta/vypolnimyy) confirms the suffix
+stress used by the automatic target; its direct page returned 403.
+Its [reference answer 307633](https://gramota.ru/poisk?mode=spravka&query=%D0%BF%D0%BE%D1%81%D1%82%D0%B5+%D0%B8%D0%BB%D0%B8+%D0%BF%D0%BE%D1%81%D1%82%D1%83+%D0%B2+%D1%81%D0%BE%D1%86%D0%B8%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D1%85+%D1%81%D0%B5%D1%82%D1%8F%D1%85&simple=0)
+allows both root and ending stress for post in the social-network sense.
+The automatic ending-stressed target was therefore retained, rather than
+incorrectly relabeled. No predictions were used to rewrite targets.
+
+The newest first448 cohort contains 200 records: 192 train and the same
+eight held-out validation rows. All 200 paired feature artifacts pass the
+existing identity/token/shape/length/finite-BF16/hash audit. Metadata SHA256:
+`8fe77daa4c7b2e630945ac74ea051dadcd6170689d0f1919e44b5ff64b2177ed`.
+Histories, system prompts and original whole-conversation splits are
+preserved. These are checked automatic accent labels, not independent
+human gold. Prompt indices 448 through 511 remain unreviewed and excluded.
+
+Fresh full V37 data/features contain 99,048 unique train / 3,554 validation
+and unchanged 2,302 frozen-eval rows. Replay covers 2,697 contextual and
+400 existing numeric train rows, factor 64: 294,159 positions / 6,129
+steps at batch 48. Source-ID ordering and metadata-hash preflight passes
+for active V35, prepared V36 and this newest V37 cache.
+
+Use the newest future launch
+`research/v37-saiga-next/training-launch-prepared-combined-first448-memory.json`.
+It remains prepared only: 19 native panels / 737 rows, latest V36 final
+model-only warmstart and fresh optimizer/schedule. Earlier first384,
+first320 and first256 preparations remain immutable. V36's numeric-million
+party is still next after V35 final review. No model, trainer, exporter or
+normalization implementation changed; demo remains stopped.

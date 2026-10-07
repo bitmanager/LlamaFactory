@@ -1808,3 +1808,59 @@ reference and generated-output records exactly match the previously
 reviewed step-4,800/3,600 callbacks. The archive/request corruption still
 persists. This is a verified unchanged callback, not a quality gain.
 Receipt: `step5400-callback-manual-review.json`.
+
+## V36 final validation and V37 continuation launch
+
+V36 finished successfully, no OOM, at step 5,873 and epoch 1.0. Stock
+training runtime was 2,565.94 seconds (42.77 minutes), training loss
+0.0120230, and standalone final validation CE 0.07419799. The final
+ten-example callback exactly matches the previously reviewed step-5,400
+callback. The expanded V36 validation set differs from V35's set, so
+their raw CE values are not directly compared.
+
+All eighteen stock native panels completed, 729 generated rows, with
+source/history/reference identities guarded against V35 final (the new
+million214 panel uses its separately recorded V35-final baseline).
+Against the fully reviewed V36 step-3,000 critical panels, every changed
+prediction plus all five demo entries was read in full: 28 selected
+written/history/reference/baseline/prediction records. Other final native
+rows are metrics-only; their hashes and metrics are recorded, not
+misrepresented as a complete manual read.
+
+Compared with V35 final, WER improved on combined46 (7.5931% to 6.7335%),
+combined34 (13.1934% to 12.8936%), combined22 (12.6005% to 12.3324%) and
+the five demo entries (25.5319% to 23.4043%). Context200 regressed from
+3.6812% to 4.5747%, and original64 from 2.8787% to 3.2214%. Numeric32
+remains poor at 29.9145%; the easy million214 panel remains perfect and
+unchanged. Time/MFTI corruption, repeated pizza text and severe long-text
+omissions persist. This is mixed performance, not a successful demo
+release. Receipt: `research/v36-context-followup/final-manual-review.json`.
+
+The immutable model-only continuation snapshot is
+`eval/v36-latest-for-continuation`, SHA256
+`64c1c3942e863e97ef6926c7961efb2452e7339ee37811d43c5feb877e95592c`.
+It matches the final training weights and the independent final-review
+snapshot. The final complete optimizer remains saved in the original
+run; continuation uses a fresh optimizer and scheduler.
+
+A separate stock GPU-1 evaluation of V36 final on all nine new V37
+heldouts completed without OOM. Every full source/history/reference/
+prediction triple was read. WER is 2.2472%, seven of nine preserve the
+literal text without stress, and two are stress-exact against automatic
+references. One response loses a word and repeats a phrase; another
+replaces “sell” with “continue”. This is the fixed before-training
+baseline, not an already trained V37 result. Receipt:
+`research/v37-saiga-next/baseline-v36-final-new9/manual-review.json`.
+
+The verified first512 V37 launch started on the same GPU 0 as
+`normalizer-train-v37`, container
+`ef7fc11a9a5d6818e3abfc7500a7460012864857e6b609fc6abf59d9b0608709`,
+at `2026-10-07T00:59:48.698160843Z`. It continues the reviewed final V36
+weights with 226 new reviewed examples, 99,073 unique train rows,
+3,555 validation rows and 295,759 replay positions: 6,162 steps, batch
+48, BF16, one epoch, LR 1e-6. All nineteen subsequent native panels
+(738 rows) are scheduled using unchanged stock commands. Initial finite
+loss/gradient entries confirm actual optimizer steps, GPU utilization
+99%, and no OOM. The upstream scalar-loss reporting warning remains
+unchanged; no model/trainer source was modified. The V38 first192
+preparation remains next after reviewed V37 final weights.

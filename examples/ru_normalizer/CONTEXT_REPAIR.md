@@ -3897,3 +3897,87 @@ admitted wholesale. When merging that larger pool later, the41/9 IDs now
 present in the continuation must be excluded explicitly; no silent dedup
 or mutation of the live candidate export is permitted. Producer receipt:
 `research/ready-stressed-data-20261007/feature-export-candidates-all15-launch.json`.
+
+## V46 final review and the larger V47 corpus
+
+V46 exited0 without OOM after7,382 steps:3,297.55 seconds,107.45
+positions/second; explicit final validation CE0.07501890. Root/final7382
+weights match `f5f944bd039f3bb0233dd9b8552a7d9cb3e6da41d361ea0f318427fb26f3a73f`.
+All25 native panels /805 identities bind that final. Of96 critical tuples,
+32 complete source/system/history/reference/prediction tuples were reread,
+64 exactly reuse prior complete reads. The separate69-row step6600 panel
+was also reviewed (13 rereads /56 exact reuse), without using that
+intermediate for continuation. Both last callbacks7200/7382 were read in
+full and matched actual validation sources/labels.
+
+Results are mixed: contextual19 WER8.04→5.58%, numeric32 31.05→29.91%,
+but user-demo5 22.34→27.66%, Saiga16 6.03→10.55%. The nine new literal
+Balalaika heldouts have6.02% WER versus4.82% before continuation. Numeric
+magnitude errors, missing words, repeated phrases and malformed starts
+persist; education recovered completely but the pizza example regressed.
+This is a research continuation, not a quality gate for production. The
+user-requested demo stays on reviewed V45 final. Receipts:
+`research/v46-context-followup/final/{snapshot-and-native-audit,manual-read-selection,manual-review,continuation-eligible}.json`.
+
+The large frozen-Qwen export completed successfully. Eight CPU artifact
+audit shards also exited0: disjoint modulo8 partitions fully checked all
+237,777 train /7,537 validation payloads for exact original IDs/text/labels,
+token IDs, paired finite BF16 features and lengths. Their coverage/counts
+were aggregated; only then was the redundant sequential CPU auditor
+stopped. This proves artifact integrity, not linguistic correctness.
+Receipt: `research/ready-stressed-data-20261007/candidate-all15-full-feature-audit-parallel-complete.json`.
+
+Another64 complete source/target pairs were read across eight source/split
+strata (the sample filename says72, but its actual recorded size is64).
+Malformed words appeared in stories/audiobooks; one public-speech label
+changed contextual «все» to «всё». For this run, the two uncurated
+story/audiobook families and that explicit public-speech ID were excluded,
+while the six individually reviewed story/book rows remained. Original
+labels were not repaired from model outputs. Phone/radio/public-speech,
+lectures and address pairs provide more vocabulary, but remain automatic
+silver labels. They are literal transcript/stress pairs, not instruction
+answers, reconstructed histories or new digit-to-word supervision.
+
+Stock `assemble_features.py` assembled the pre-caption V45 corpus with the
+large candidate cache, then stock `quarantine_features.py` removed exactly
+124,299 training IDs. Choosing the pre-caption base avoids double-counting
+the41/9 caption IDs; all previous V46 train/validation rows were subsequently
+checked to survive exactly once and unchanged. No model/trainer/helper code
+was changed. The final cache is
+`data/freeze-features-v46-balalaika-bulk-filtered`, metadata SHA256
+`cc6bac091b4055d487a64e383457c215db9b9e7f8f245f02ea00f69c0ad70a29`:
+213,424 unique train /11,150 validation /unchanged2,302 frozen.
+Relative to V46 this adds113,437 train and7,528 validation rows. Replay
+indices were remapped by exact source IDs:4,037 IDs, factor64,
+467,755 epoch positions /9,745 batch48 steps.
+
+Before training, a stock GPU baseline on64 fixed SHA256-selected YouTube
+heldouts exited0 and all64 complete tuples were read. WER6.20%, CER4.18%,
+raw text without stress preserved39/64, exact including automatic stresses
+5/64, invalid stress5/64. Some references themselves contain clipped or
+uncertain ASR words, so these are diagnostics rather than human gold.
+
+V47 is launched on the same fixed GPU0 from reviewed model-only V46 final
+with fresh optimizer/scheduler, BF16, LR1e-6, batch48 and one epoch. The
+existing26 native final panels contain869 rows. Startup inputs and actual
+replay counts were checked; observed loss and gradient norms are finite.
+The new run uses drive1 because drive2 had only78GiB free at launch.
+Separately, nine intermediate optimizer files in completed V44/V45/V46
+runs were removed (28.48GiB logical bytes); all checkpoint model hashes and
+their final optimizers were preserved, and live V47 was untouched. Drive2
+then had107GiB free. Final review, filtering, baseline, launch and startup
+receipts: `research/v46-balalaika-bulk-next`. Optimizer cleanup receipt:
+`research/storage-cleanup-20261007/v44-v46-intermediate-optimizers.json`.
+
+At V47 step600, saved actual arguments confirm BF16=true, FP16=false,
+batch48/eval32, one epoch, LR1e-6 and eval/save every600. First expanded
+validation CE0.19118164 was measured on11,150 rows; it is not directly
+comparable to V46's0.07502 on3,622 rows. All ten callback source/reference/
+prediction tuples were read and matched actual validation IDs/labels.
+Simple numeric cases and several abbreviations remain correct; the phone
+sequence still collapses, and the archive example repeats a clause.
+The observed training-only log interval is2.52 steps/second (121 positions/
+second); this excludes validation and checkpoint saves. A separate stock
+zero-epoch evaluation of V46 on the identical expanded corpus is launched
+on GPU1 to establish a comparable CE baseline. It must verify zero
+optimizer steps and unchanged model weights before its result is accepted.

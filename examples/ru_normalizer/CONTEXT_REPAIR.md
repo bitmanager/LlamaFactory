@@ -1619,3 +1619,98 @@ read in full and still repeats the damaged archive word. All ten outputs
 now exactly match the previously reviewed V35 final callback. This is
 loss improvement without demonstrated generated-quality improvement in
 that callback. Receipt: `step1200-callback-manual-review.json`.
+
+
+## V36 step 1800 and scored-corpus question preparation
+
+V36's step-1,800 CE is 0.0749663, slightly worse than step 1,200 on the
+same expanded validation set. The one changed archive/payment callback
+triple was read in full. All ten outputs now match the already reviewed
+step-600 callback exactly; the damaged archive word and repeated request
+span persist. Receipt: `step1800-callback-manual-review.json`. The same
+training container remains live; it was not restarted or rolled back.
+
+Another ready source was downloaded from the pinned
+[Saiga scored dataset](https://huggingface.co/datasets/IlyaGusev/saiga_scored/tree/67b92821ebc018ba0e3a0fc0f2b54854c2ab089b).
+Its 41,609 records include dialogue scores, language, topic, complexity
+and a regex-quality flag. The source Parquet is 114,832,798 bytes, SHA256
+`8ba2fecc57f0c85d5d31c5d806541b0eae78b7f45eace089ec885fa0aa7cd982`.
+The complete dataset card and schema were read; it is a prompt source
+only, with no original assistant responses admitted as targets.
+
+For the future V38 candidate, 512 distinct literal Russian first-user
+questions were selected from source dialogues with score at least nine,
+no regex-quality flag, and eleven varied topic groups. These metadata
+scores describe the original dialogues, not our generated answers.
+Prior normalized question overlap is zero. Thirty-six whole-conversation
+validation groups were assigned before generation. Prompt source and
+selection hashes are in `research/v38-scored-next/source-manifest.json`.
+
+The unchanged CUDA/BF16 frozen-Qwen engine was launched on GPU 1 as
+`normalizer-data-v38-gpu1`, container
+`bae6f4eafddaf5c554ed3d867b6c55ea0abfe2da20825e261b4af62b17f59f30`.
+It generates first and followup answers with actual history and the same
+system prompt. Raw generation is not training eligible; full scoped
+source/target review and artifact audit are still required. V37's fully
+reviewed first512 preparation remains the immediate next party after
+V36 final review. No model/trainer/normalization implementation changed.
+
+## V36 step 3000 generated review and V38 first64 preparation
+
+The main V36 container continues without restart or OOM. Callback CE was
+0.0744539 at step 2,400 and 0.0742912 at step 3,000. The step-2,400
+callback exactly matched the reviewed step-1,800 outputs. At step 3,000,
+the one changed archive/payment triple was read completely: a repeated
+request span disappeared, but the damaged archive word remained.
+
+The stock step-3,000 native evaluator finished successfully on the same
+six fixed panels, 155 rows. All 40 changed predictions plus the unchanged
+greeting (41 selected full written/history/reference/baseline/prediction
+records) were read against the fully reviewed step-600 baseline. Source,
+history, reference and optional-field presence were guarded unchanged.
+WER improved on combined22 (13.9410% to 12.8686%), combined34 (13.6432%
+to 12.4438%), combined46 (7.5931% to 7.0201%) and Saiga16 (12.5628% to
+10.0503%). Numeric32 slightly worsened (29.0598% to 29.3447%); the five
+user-demo entries worsened substantially (21.2766% to 30.8511%).
+Long-text omissions/repetition, time/MFTI corruption and phone/money/case
+errors persist. This is mixed validation, not a successful demo release.
+Receipt: `research/v36-context-followup/step3000/manual-review.json`.
+
+A separate unchanged stock evaluator compared V35 final and V36 step
+3,000 on 214 fixed new million-range heldouts. Both achieved zero WER and
+identical predictions on every row. Twelve representative full triples
+were read; the remaining 202 rows are metrics-only. This narrow test has
+two short nominative-integer templates. It demonstrates no gain from
+the added numeric party and says nothing about dates, phone numbers,
+money or grammatical case. Receipt:
+`step3000/million-comparison-manual-review.json`.
+
+V38's frozen-Qwen generation completed with 968 complete answers and 56
+truncations. All outcomes passed source/actual-history identity checks;
+raw answers remain ineligible. The first 64 questions and eligible
+first/followup answers were reviewed in full, then all 47 accent targets
+were read. Three targets with wrong imperative/surname stress were
+quarantined unchanged. The admitted cohort contains 44 rows (40 train,
+four whole-conversation heldouts); all 44 cached CUDA/BF16 feature pairs
+passed the artifact audit. The remaining questions are not admitted.
+
+An independent existing-label audit read all four matching source/target
+pairs. One confirmed wrong writer-surname stress was removed from the
+fresh future V38 training cache. Two valid adjective matches were kept.
+One heldout-label error is documented separately; protected heldout
+bytes were not edited. The live V36 and already prepared V37 inputs
+remain immutable.
+
+The future V38 first64 cache has 99,112 unique train rows, 3,559
+validation rows and 2,302 fixed evaluation rows. Source-ID replay
+preflight passed for live V36, prepared V37 and prepared V38. The stock
+train plus 20 native panels (742 rows) is prepared, not launched. V37's
+reviewed 226-row first512 cohort remains next after V36 final review;
+V38 must then continue from the reviewed V37 final weights with a fresh
+optimizer and scheduler. No trainer, model or normalizer source changed.
+
+At step 3,600, CE is 0.0743968. The single changed callback triple was
+read fully; its repeated archive/request span returned. Nine other
+entries are guarded identical to step 3,000, and all ten now exactly
+match the previously reviewed step-600 callback. Receipt:
+`step3600-callback-manual-review.json`. Training remains live.

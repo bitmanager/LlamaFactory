@@ -3231,3 +3231,52 @@ model files and the final6934 optimizer retain their original inode,
 size and modification time; live V42 was untouched. Exact optimizer
 resume from those three intermediate snapshots is no longer available.
 Receipt: `research/v42-scored-next/v41-intermediate-optimizer-cleanup.json`.
+
+## V42 step3000 generation review and remaining source slice
+
+All ten complete callback tuples at3000 and3600 were manually read.
+Validation CE is0.07461700 and0.07471382. At3000 the phone restores five
+hundred and sixty, but still omits the separate five. At3600 only the
+optional monosyllabic stress on `за` changes; archive duplication persists.
+Receipts: `research/v42-context-followup/step{3000,3600}-callback-manual-review.json`.
+
+The independent stock GPU1 evaluation of step3000 completed exit0 without
+OOM: nine panels /215 rows, all source/history/reference identities
+matched against step600 and V41-final. The evaluation-only model copy
+matches the checkpoint before/after copying, SHA256:
+`efa0ac68c2ca2fd81b46aec7594296f01b3902171e1052ea7de9bab8a6f2af77`.
+All nine panel manifests bind this hash. All67 selected tuples were
+reviewed:50 complete tuples reread, seven exact V41-final tuples reused
+from recorded full reads, and ten unchanged fresh tuples reused from the
+recorded step600 review. The remaining148 received identity/metric checks
+only. Receipt: `research/v42-context-followup/step3000/manual-review.json`.
+
+Against V41-final, five panels improve WER, one worsens and three tie;
+against step600, six improve, two worsen and one ties. Self-analysis
+recovers exactly and much of the coffee/neural-network content recovers,
+but the game-device list and product-design follow-up regress. User-demo
+WER returns to23.4043%; numeric WER30.1994% remains high. Pizza, MFTI/time,
+large quantities and long-text repetitions remain unsuitable for demo
+promotion. No reference was changed from a prediction.
+
+The remaining first480–512 slice had27 complete first answers; prompt482,
+483,489,500 and511 were incomplete. All27 sources and all seven follow-up
+contexts of the accepted parents were read. Seven first answers and seven
+follow-ups passed source screening and collision checks. All14 accent
+targets were read; wrong stress on `Кол+я` and missing multisyllabic stress
+were excluded unchanged, leaving eight training-only rows. Original
+whole-conversation heldouts were retained, with no accepted heldout in
+this slice. All eight stock CUDA-exported paired artifacts passed audit.
+
+Four stock assembly commands completed exit0 without OOM. Latest next
+cache: `data/{hidden-plan,freeze-features}-v42-first512full-google107-qa`,
+99,807 train /3,607 validation /2,302 frozen rows, metadata SHA256:
+`f98eedd9d441b4bcdba3ee5e41f258a54b5331a3250a3e1548f489f1296f20b0`.
+Ordered training appendices and unchanged validation/frozen bytes were
+verified relative to first480. Compared with live V42 this adds39 train
+and1 heldout. Replay has3,857 IDs (3,350 contextual /507 numeric), factor64:
+342,798 positions /7,142 batch48 steps. The fresh cohort has315 train and19
+heldouts; future21 native panels cover790 rows. The latest prepared pointer
+now names first512full. V43 remains unlaunched pending reviewed V42-final
+and fixed33/fresh19 baselines. Live training, its inputs, the original
+Freeze-Omni implementation and demo remain unchanged.

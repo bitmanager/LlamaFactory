@@ -1714,3 +1714,54 @@ read fully; its repeated archive/request span returned. Nine other
 entries are guarded identical to step 3,000, and all ten now exactly
 match the previously reviewed step-600 callback. Receipt:
 `step3600-callback-manual-review.json`. Training remains live.
+
+## V38 first128 data review and operational preflight
+
+The next 64 scored-corpus questions produced 53 complete first answers;
+all 53 question/actual-Qwen-answer pairs were read in full. Twenty were
+retained. Quarantine includes broken grammar, invented film/song facts
+and numeric/abbreviation outputs outside this literal-content cohort.
+All twenty eligible followup answers were read with their actual first
+answer as history; thirteen passed source review. All 33 resulting
+accent targets were read, and one unstressed multisyllabic borrowed word
+was excluded unchanged. The extra cohort has 32 rows (27 train, five
+previously assigned whole-conversation heldouts).
+
+The unchanged CUDA/BF16 exporter completed successfully. All 32 feature
+pairs passed source/reference/token-ID, finite-BF16, shape, source-length
+and metadata-SHA checks. The unchanged assembler combined these with
+the earlier 44 reviewed rows: V38 now has 76 admitted examples, 67 train
+and nine validation. No raw or unreviewed answer is admitted. Receipts:
+`research/v38-scored-next/first64to128-quality-review.json`,
+`first64to128-feature-audit.json` and
+`combined-first128-quality-review.json`.
+
+The fresh full future V38 cache contains 99,139 unique train rows,
+3,564 validation rows and 2,302 unchanged frozen-evaluation rows. Replay
+has 3,189 exact source IDs, factor 64: 300,046 training positions and
+6,251 steps at batch 48. The one previously audited bad training label
+remains excluded; live V36 and prepared V37 datasets remain unchanged.
+
+An operational review found stale inherited summary counters in older
+prepared launch JSONs. Their execution commands already pointed at the
+correct caches. Fresh `*-memory-verified.json` launch records reconcile
+the summary with authoritative cache/replay counts and stock evaluator
+modes: V37 is 226 new rows and 738 native-evaluation rows; V38 is 76 new
+rows and 747 native-evaluation rows. No model/trainer code was changed.
+`continuation-replay-combined-first128-preflight.json` confirms source-ID
+order, metadata/source hashes, counts and evaluation input references.
+Both launches are still prepared only; V37 requires reviewed V36 final
+weights, and V38 requires reviewed V37 final weights.
+
+V36 callback CE reached 0.0741777 at step 4,200 and 0.0741743 at step
+4,800. All ten generated callback entries, including their sources and
+references, exactly match the previously reviewed step-3,600 outputs.
+The archive/request duplication persists; lower CE is not evidence of
+a generated-quality gain. Receipts: `step4200-callback-manual-review.json`
+and `step4800-callback-manual-review.json`.
+
+Previously authorized disk housekeeping removed only six optimizer
+files from terminal V32/V35 intermediate checkpoints, freeing 18.99 GiB.
+Every model file and both final complete optimizers were retained; live
+V36 was untouched. Available space on the run disk was 112.37 GiB after
+cleanup. Receipt: `old-intermediate-optimizer-cleanup.json`.

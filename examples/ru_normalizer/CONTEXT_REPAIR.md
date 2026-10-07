@@ -3460,3 +3460,87 @@ and the final4810 optimizer retained inode/size/mtime. Exact optimizer resume
 for those intermediates is unavailable. Drive2 then had26.62GiB free; live
 V43 files were untouched. Receipt:
 `research/v43-scored-next/v30-intermediate-optimizer-cleanup.json`.
+
+## V43 final review and V44 data
+
+V43 completed on GPU0 with Docker exit0 and no OOM at
+2026-10-07T07:26:17Z. Training took 3,134.56 seconds (52.24 minutes),
+7,157 steps at 2.283 steps/second; train CE was 0.00604129. Explicit
+final `eval_results.json` reports CE 0.07419398. The root Trainer state
+was saved before explicit final evaluation and is not the final-CE source.
+Late callback CE at 5400/6000/6600 was 0.07426841/0.07423548/0.07419645.
+At 5400 the phone output regressed to fifty and dropped five/five-hundred;
+at 6000 all ten complete tuples were unchanged. At 6600 only an archive
+stress changed; all ten final7157 tuples exactly match those reviewed6600
+tuples. Archive corruption remains. Callback receipts are in
+`research/v43-context-followup/step{5400,6000,6600,7157}-callback-manual-review.json`.
+
+Root-final, checkpoint7157, evaluation-only copy and reviewed model-only
+continuation copy match SHA256:
+`4536d5e032e9222cab7d370f3d9d80af168fc0eebf78bbb491db52af1759d8b2`.
+All 21 native panels /790 rows bind the final weights and retain exact
+source/history/reference identities. Eleven overlapping panels improve
+content WER, five worsen and five tie. Fixed19 improves 6.9196% to
+4.0179%, fixed33 8.8435% to 6.8027%, numeric 30.7692% to 30.4836%;
+user-demo WER remains 23.4043%. Content WER removes stress markers and
+does not measure synthesized speech. Automatic references are not human gold.
+
+All 77 selected critical tuples were reviewed: 42 complete tuples reread,
+35 exact complete tuples reused from recorded full reads. Other 713 rows
+received identity/metric checks only. Long outputs still drop words,
+repeat fragments and corrupt names. The appetite followup changes hunger
+to an unrelated word; programming loses graphics/game-logic detail.
+Business-plan content is intact but a word receives two stress markers.
+No general-quality claim or demo promotion follows from these results.
+Receipts: `research/v43-context-followup/final/{snapshot-and-native-audit,manual-read-selection,manual-review}.json`.
+
+The stock GPU1 final baseline completed exit0 without OOM. Its fixed33
+and fixed19 outputs exactly match all corresponding native-final rows;
+the two new whole-group heldouts were fully read and both match their
+automatic reference including stress. Those two examples are insufficient
+to establish generalization. Receipt:
+`research/v43-scored-next/baseline-final-first96raw-google127-review.json`.
+
+Fifty pinned Google non-DATE source pairs at SHA256-ranked positions
+4051–4100 were fully read. Eleven candidate accent targets were read;
+two missing-stress targets were excluded unchanged and nine train-only
+pairs accepted. The stock CUDA export audited every target ID and paired
+finite BF16 feature, and the stock two-command assembly completed exit0.
+Receipts: `research/v43-google-nondate4051to4100/{source-manual-review,target-manual-review,feature-audit}.json`.
+
+The next immutable cache is
+`data/{hidden-plan,freeze-features}-v43-first512full-first96raw-google127-qa`:
+99,893 train /3,609 validation /2,302 frozen records, adding 75 train and
+two heldouts relative to V43. Metadata SHA256:
+`91aad9d254e82b7ff7a481b4aeac04be8271c76e679eb5e7b8c7be4da9e13004`.
+Replay has 3,943 exact IDs (3,416 contextual /527 numeric), factor64:
+348,302 positions /7,257 batch48 steps. V44 keeps BF16, LR1e-6, one epoch,
+the unchanged trainer and original Freeze-Omni decoder; 22 native panels
+cover 792 rows. All source hashes and replay identities were rechecked.
+
+A full read-only review of the wrapper, trainer, exporter, original
+decoder/masks/inference and installed Transformers confirmed eager
+attention in the Freeze-Omni decoder and SDPA in the frozen-Qwen exporter.
+Eager no-mask text prefill is bidirectional; an accidental SDPA-causal
+prefill was not established in this runtime. No numerical forward-versus-
+stepwise parity test was run, and no new bug or universal FlashAttention
+claim is asserted. Receipt:
+`research/v43-context-followup/attention-code-review.json`.
+
+After verifying terminal V43 and absence of live references to its run,
+only intermediate optimizer states at5400/6000/6600 were removed,
+freeing9.49GiB. All weights and final7157 optimizer retain their file
+identities. Drive2 then had34.47GiB free. Exact intermediate optimizer
+resume is unavailable. Receipt:
+`research/v43-scored-next/v43-intermediate-optimizer-cleanup.json`.
+
+V44 was launched on the same fixed GPU0 from reviewed V43-final model
+weights only, with a fresh optimizer/scheduler. Actual saved run inputs
+confirm resumeNone, 439,416,570 trainable parameters, the exact new
+feature path, and byte-equivalent replay selection with99,893 unique
+rows /348,302 epoch positions. Docker is live without OOM and startup
+losses/gradient norms are finite. All22 future native output directories
+were precreated. `LATEST_LAUNCHED.json` was updated only after verifying
+actual saved inputs. First validation is pending at600; this is startup
+verification, not a quality result. Launch and startup receipts:
+`research/v43-scored-next/{training-launch-first96raw-google127,v44-startup-first96raw-google127-verified}.json`.

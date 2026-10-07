@@ -1765,3 +1765,46 @@ files from terminal V32/V35 intermediate checkpoints, freeing 18.99 GiB.
 Every model file and both final complete optimizers were retained; live
 V36 was untouched. Available space on the run disk was 112.37 GiB after
 cleanup. Receipt: `old-intermediate-optimizer-cleanup.json`.
+
+## V38 first192 reviewed data; V36 step 5400
+
+All 59 available first question/actual-Qwen-answer pairs from question
+indices 128–191 were read completely; 27 passed source review and had
+zero normalized full-text collision with preceding data. All 27 eligible
+followup pairs were read with their real first-answer history; twenty
+passed source review. All 47 automatic accent targets were read. One
+wrong accusative-plural stress on “doors” was excluded unchanged after
+a [dictionary inflection check](https://gramota.ru/meta/dver); one missing
+stress on a multisyllabic content verb was also excluded unchanged.
+A suspected “circulate” stress was checked against the dictionary and
+retained; suspicion alone was not treated as a confirmed label error.
+
+The retained extra cohort contains 45 rows (39 train, six preassigned
+whole-conversation heldouts). The unchanged CUDA/BF16 exporter exited
+successfully, and every one of the 45 feature pairs passed the complete
+artifact audit. Receipts: `first128to192-quality-review.json` and
+`first128to192-feature-audit.json` in `research/v38-scored-next`.
+
+The unchanged assembler produced a fresh combined first192 cohort:
+121 admitted source/target pairs, 106 train and 15 validation. The full
+future V38 cache now contains 99,178 unique train rows, 3,570 validation
+rows and 2,302 unchanged frozen-evaluation rows. Replay has 3,228 exact
+source IDs and factor 64, giving 302,542 positions and 6,303 steps at
+batch 48. The first128 preparation and all live inputs remain intact.
+
+The newest V38 launch is
+`training-launch-prepared-combined-first192-memory-verified.json`:
+stock training plus twenty fixed native panels, 753 generated rows.
+It remains prepared only and requires reviewed V37 final weights.
+V37's immediate next launch remains
+`training-launch-prepared-combined-first512-memory-verified.json`,
+226 new reviewed examples, requiring reviewed V36 final weights.
+`continuation-replay-combined-first192-preflight.json` confirms exact
+source-ID order, source/metadata hashes, counts and native input paths
+for both launch plans. No model/trainer/normalizer implementation changed.
+
+V36 reached step 5,400 with callback CE 0.07421194. All ten source,
+reference and generated-output records exactly match the previously
+reviewed step-4,800/3,600 callbacks. The archive/request corruption still
+persists. This is a verified unchanged callback, not a quality gain.
+Receipt: `step5400-callback-manual-review.json`.

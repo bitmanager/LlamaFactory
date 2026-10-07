@@ -2456,3 +2456,77 @@ Latest preflight:
 Automatic labels remain reviewed automatic labels, not independent
 human/factual gold. No model, trainer or normalizer implementation changed;
 no live inputs were mutated and no PR was merged.
+
+## V39 final review and additional contextual followups
+
+V39 completed 6,634 steps and one epoch in 2,921.3169 seconds (48.7
+minutes). Training throughput was 2.271 steps/s. The step6000 and
+step6600 validation CE values were 0.07389706 and 0.07386593. All callback
+source/reference identities passed; each changed phone-number prediction
+was read in full. The nine unchanged tuples exactly match their prior
+reviewed values. The phone example still omits a separate five and
+alternates between fifty and sixty. Final native checks are recorded
+separately; low teacher-forced CE does not establish correct generation.
+
+Thirty-three complete followup replies from the reviewed questions
+64..127 were read with actual three-turn histories. Eight malformed or
+unresolved-abbreviation sources were excluded unchanged. All 25 retained
+automatic accent targets were read; two lacked a stress mark on a
+multisyllabic word and were quarantined unchanged. The remaining 22 train
+and one preselected heldout records passed the existing feature audit.
+The standalone word `авто́` was checked against the
+[Gramota dictionary](https://gramota.ru/meta/avto), preserving that
+correct automatic label. Receipts:
+`research/v39-scored-next/first64to128-followup-*`.
+
+The stock assembler produced a fresh immutable full dataset/cache:
+`data/{hidden-plan,freeze-features}-v39-first128full-google60-qa`,
+99,560 unique train, 3,592 validation and 2,302 unchanged frozen rows.
+Relative to live V39, all 134 added train and four added validation
+records were manually reviewed and feature-audited. Exact ordered
+appendix bytes, source/completion hashes and fixed whole-group splits
+passed. The combined fresh context cohort has 115 train and four
+heldouts. Replay has 3,610 unique IDs, factor64, giving 326,990 training
+positions and 6,813 batch48 steps. Metadata SHA256:
+`4cd5012f88cddd4c6df8eaa6cf9a683d961a53b80c2947c6dcacaafebca67931`.
+
+The prepared V40 recipe retains BF16, batch48, LR1e-6 and one epoch with
+a fresh optimizer/scheduler. It includes 21 final native panels with
+775 rows. Final V39 fixed33 and fresh fixed4 baselines are required
+before launch. Latest preflight:
+`research/v39-scored-next/continuation-replay-first128full-google60-preflight.json`.
+No model, trainer or normalizer implementation was changed; reviewed
+automatic targets remain distinct from independent human/factual gold.
+
+V39 and its 20 native panels completed with exit0 and no OOM. All 771
+source/history/reference identities and panel metrics were checked against
+the fixed V38-final baselines. Panel WER improved in nine, worsened in
+six and was unchanged in five. Against V39 step3000, the eight critical
+panels improved in four, worsened in two and were unchanged in two.
+All 29 selected complete tuples were read: every changed critical
+prediction and all five demo examples. The other 168 critical and 574
+remaining native rows received metric/identity checks, not a claim of
+full manual review. Long-text corruption and numeric failures persist;
+the demo panel still has 20.2128% WER. Receipt:
+`research/v39-context-followup/final/manual-review.json`.
+
+Final-weight baselines also completed on the separate factory GPU. The
+fixed33 result exactly matches the corresponding final native tuples;
+its two changed predictions were read in the critical review. All four
+fresh heldout tuples were read in full after identity checks. Their
+normalized WER is 8.4746%, with one AI followup preserving content but
+differing in yo spelling; initial AI and appetite examples still collapse
+or repeat words. Four samples cannot establish generalization.
+
+Final root and checkpoint6634 weights matched, and both immutable
+review/continuation copies were verified by SHA256:
+`1bda6e0e78cd295db8be90b17bacf1ac9dc25cbd2859bc810a2de06be4eb1c22`.
+The continuation copy contains model weights and provenance; optimizer
+and scheduler are fresh. V40 was launched on the same fixed training
+GPU as `normalizer-train-v40`, container
+`1f99730eb6f1f124c5dd4441a09d0cf95d6c2c4b8550f80f440ec72cd2e024f0`.
+Actual `run_inputs.json` confirms the new feature cache, reviewed V39
+warm start and null resume. First optimizer steps were observed with no
+OOM. Launch receipt:
+`research/v39-scored-next/training-launch-first128full-google60.json`.
+No demo was promoted and no PR was merged.

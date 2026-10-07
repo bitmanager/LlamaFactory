@@ -2195,25 +2195,6 @@ Metadata SHA256:
 `2d47d5827a36b36100b940d725e715b63f7af777695e26c73bba80cf46b6aa80`.
 No model, trainer or normalizer implementation changed; no PR was merged.
 
-Checkpoint 3000 was copied and double-hash-verified for evaluation only,
-SHA256 `25e13219ffca07a37ed2e111e8fca13adc99d406f7db5903ee88218b343b6300`.
-All eight stock native panels, 193 rows, completed on GPU 1 with exit 0
-and no OOM. All source/history/reference identities were guarded against
-step 600. Every changed prediction plus all five demo examples was read
-in full, 57 records; the remaining 136 have metric and identity checks.
-Receipt: `research/v38-context-followup/step3000/manual-review.json`.
-
-Against step 600, Saiga16 WER improves 12.5628% to 10.8040% and combined46
-7.4499% to 7.1633%; combined22 regresses 10.1877% to 11.2601%, combined34
-8.6957% to 10.9445%, and new29 7.3171% to 8.3841%. Numeric32 remains
-30.4843%, demo5 20.2128%. The 666666-rouble amount becomes exact, but the
-7..10-day interval regresses to 7..17 and three million is still wrong.
-Some repeated clauses disappear, others return; long replies still lose
-words or end early. MFTI, time-only 11:30 and first-pizza demo failures
-persist. Callback CE at 3000 is 0.07392206; all ten callback records exactly
-match reviewed step 2400. This remains a mixed intermediate checkpoint,
-with no demo promotion and no prediction-driven reference changes.
-
 ## Further contextual data, monitoring and isolated learning-rate comparison
 
 V38 remains the same active run. All ten callback identities at steps
@@ -2330,3 +2311,84 @@ replies preserve their literal words. Baseline WER is 7.7551%, literal
 exact match 17/33 and stressed exact match 2/33. Receipt:
 `research/v38-scored-next/baseline-v38-final-new33/manual-review.json`.
 No model, trainer or normalizer implementation changed; no PR was merged.
+
+## V39 monitoring and next reviewed data
+
+V39 remains running on its original GPU and immutable inputs. Callback
+source/reference identities passed at steps 600, 1200, 1800, 2400, 3000
+and 3600. Validation CE at 3000 is 0.07371009 and at 3600 is 0.07372542.
+The phone example still drops a separate digit and oscillates between
+fifty and sixty. Changed complete tuples were read; unchanged tuples
+reuse exact prior reviews. Receipts are under
+`research/v39-context-followup/step*-callback-manual-review.json`.
+
+Native validation completed on GPU 1 at steps 600 and 3000, 197 fixed
+examples each, with successful container exits and no OOM. Every
+source/history/reference identity was checked. All changed predictions
+plus all five demo examples were read in full: 50 selected tuples at
+600 and 55 at 3000. The other 147 and 142 records respectively have
+metric/identity checks. Step-3000 versus step-600 WER improves on two
+panels and regresses on six. Numeric WER is 30.4843%, demo WER 20.2128%,
+and the fixed new33 WER 7.4830%. Range seven-to-ten and one freelance
+reply recover; 666666, million amounts, long clauses and repetitions
+remain problematic. Intermediate snapshots are evaluation only; no
+demo promotion or prediction-driven target rewriting occurred.
+Receipts: `research/v39-context-followup/{step600,step3000}/manual-review.json`.
+
+Another fifty Google non-DATE numeric pairs, ranks 3701..3750, were
+read in full. Sixteen source pairs and all sixteen accent targets were
+reviewed; eleven training pairs remain after quarantining unresolved
+stress targets unchanged. All eleven exported artifacts passed audit.
+Receipts: `research/v39-google-nondate3701to3750/`.
+
+From cached SaigaScored, 512 unseen Russian questions across eleven
+topics were selected. Thirty-six whole conversation groups were fixed
+as heldout before generation. The unchanged frozen-Qwen generator
+produced 957 complete answers and rejected 67 incomplete outputs;
+all 1024 actual system/history records passed integrity checks.
+Saiga assistant answers are not used as targets. Of the first 64
+questions, 61 complete first answers were read; 36 source pairs and
+all 36 accent targets were reviewed. Two incorrect targets were
+quarantined unchanged, leaving 33 train and one fixed heldout pair.
+All 34 frozen-feature artifacts passed audit. Automatic accent labels
+remain checked automatic labels, not independent human/factual gold.
+Unreviewed raw outputs are excluded from training.
+Receipts: `research/v39-scored-next/first64-*`.
+
+The stock assembler prepared a fresh dataset/cache,
+`data/{hidden-plan,freeze-features}-v39-first64-google52-qa`, with
+99,470 unique training pairs, 3,589 validation pairs and the unchanged
+2,302 frozen evaluation rows. This adds 44 train and one validation
+pair to live V39. Ordered bytes, whole-group separation, source hashes,
+feature counts and completion hashes passed. Replay has 3,520 unique
+IDs, factor 64, giving 321,230 positions and 6,693 batch-48 steps.
+Metadata SHA256:
+`0e27aed2fa3daee676a821c4abffea72b56b42ab5128785a290eccdca6bdcab0`.
+
+V40 is prepared only, requiring reviewed V39 final weights with fresh
+optimizer/scheduler. Its existing recipe remains BF16, batch 48,
+one epoch and LR 1e-6. Twenty-one final native panels contain 772
+examples; fixed33 and the new fixed1 require final-weight baselines.
+Preflight: `research/v39-scored-next/continuation-replay-first64-google52-preflight.json`.
+No live cache, model, trainer or normalizer implementation changed.
+No PR was merged.
+
+Checkpoint 3000 was copied and double-hash-verified for evaluation only,
+SHA256 `25e13219ffca07a37ed2e111e8fca13adc99d406f7db5903ee88218b343b6300`.
+All eight stock native panels, 193 rows, completed on GPU 1 with exit 0
+and no OOM. All source/history/reference identities were guarded against
+step 600. Every changed prediction plus all five demo examples was read
+in full, 57 records; the remaining 136 have metric and identity checks.
+Receipt: `research/v38-context-followup/step3000/manual-review.json`.
+
+Against step 600, Saiga16 WER improves 12.5628% to 10.8040% and combined46
+7.4499% to 7.1633%; combined22 regresses 10.1877% to 11.2601%, combined34
+8.6957% to 10.9445%, and new29 7.3171% to 8.3841%. Numeric32 remains
+30.4843%, demo5 20.2128%. The 666666-rouble amount becomes exact, but the
+7..10-day interval regresses to 7..17 and three million is still wrong.
+Some repeated clauses disappear, others return; long replies still lose
+words or end early. MFTI, time-only 11:30 and first-pizza demo failures
+persist. Callback CE at 3000 is 0.07392206; all ten callback records exactly
+match reviewed step 2400. This remains a mixed intermediate checkpoint,
+with no demo promotion and no prediction-driven reference changes.
+

@@ -2814,3 +2814,64 @@ All model files and each final optimizer state were verified unchanged;
 active V41 was untouched. Drive2 then had60GiB free. Bounded-cleanup
 receipt: `research/v40-scored-next/v38-v40-intermediate-optimizer-cleanup.json`.
 No model/trainer implementation, targets, demo or merge state changed.
+
+## V41 intermediate review and next immutable data
+
+V41 remains running from reviewed V40-final weights. The step600,1200 and
+1800 callbacks have validation CE0.07440100,0.07441442 and0.07414754.
+All ten callback identities were checked; the step600 changed tuple and
+all ten step1200/1800 written/reference/predictions were read in full.
+The complete step1800 tuples equal step1200 exactly. The separate phone five
+and archive-word corruption persist. Receipts:
+`research/v41-context-followup/step{600,1200,1800}-callback-manual-review.json`.
+
+Independent stock native evaluation of step600 completed exit0 without
+OOM on the factory GPU. All nine panel manifests point to snapshot SHA256
+`2ac49c26c964085d832578ba9948d617d0e69022580fa4f2fba652e5a5a9d6b9`.
+All203 identities match the reviewed V40-final panels/baseline. All53
+selected tuples were read in full, including every changed prediction,
+all five demo examples and all six fresh contextual heldouts. The other
+150 rows received identity/metric checks only. Receipt:
+`research/v41-context-followup/step600/{comparison,manual-review}.json`.
+
+Fresh-six WER improves from9.1429% to5.1429%: appetite repetition is
+removed and transport wording returns, though the AI compound word
+becomes corrupt. Older critical panels regress: demo WER20.2128% to
+24.4681%, numeric WER30.1994% to31.3390%. Neural-network and game-device
+wording are severely damaged, time and large-number errors persist,
+and the second pizza reply now repeats and loses preferences. Some
+shorter wording/stress improves. This is mixed research evidence, not
+a claim of overall improvement; step600 is neither continuation nor
+demo eligible. Automatic targets are not independent human/factual gold.
+The same203-row stock native evaluation is now running on the factory
+GPU against an independent step1800 snapshot, SHA256
+`88868867d2928aed9bcb983ed757e288c1568cf0e31a6264830e082ee0c998ec`.
+Its launch is recorded in `research/v41-context-followup/step1800/native-launch.json`;
+its generated predictions have not yet been manually reviewed.
+
+All56 available first-answer sources in prompt slice256..319 were read
+with actual history/system. Eight missing/incomplete prompt outputs
+were excluded. Thirty-one sources were retained unchanged; all31
+automatic accent targets were then read in full. Seven targets with
+missing or malformed stress were quarantined unchanged. The remaining
+24 records comprise20 train and four originally heldout groups. No
+heldout group was reassigned and no prediction-driven target was edited.
+Source/target receipts and the hash-bound GO review are under
+`research/v41-scored-next/first256to320-*`.
+
+Stock feature export/audit completed exit0 without OOM, checking all24
+records for exact identity/target IDs, finite BF16 paired2560-dimensional
+features, token lengths and metadata/source hashes. Four stock assembly
+commands completed exit0: the new full dataset/cache is
+`data/{hidden-plan,freeze-features}-v41-first320-google83-qa`, with99,671
+train,3,598 validation and2,302 byte-identical frozen rows. The fresh
+contextual cohort has203 train and ten heldouts. Ordered source appendices
+were checked; live V41 inputs remain unchanged.
+
+V42 is prepared only, pending reviewed V41-final weights and stock fixed33
+plus fresh10 baselines. Replay has3,721 IDs, including3,238 contextual and
+483 numeric; factor64 yields334,094 positions and6,961 batch48 steps.
+All21 future final panels point to V42-final weights and cover781 rows.
+The future run and continuation-weight directory were absent at preflight.
+Latest prepared pointer: `research/v41-scored-next/LATEST_PREPARED.json`.
+No model/trainer implementation, demo or merge state changed.

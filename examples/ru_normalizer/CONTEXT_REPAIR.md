@@ -3028,3 +3028,42 @@ reviewed V41-final weights and fixed33/fresh15 baselines. Its run and
 warm-start directory were absent at preflight. Latest prepared pointer:
 `research/v41-scored-next/LATEST_PREPARED.json`. No model/trainer code,
 live inputs, demo or merge state changed.
+
+## First384 contextual preparation and step5400 callback
+
+V41 remains live without restart. All ten complete step5400 callback
+tuples were read and identity-matched against step4800. Validation CE is
+0.07420519. Only the phone output changes: `пятьсот` returns, but the
+standalone five is missing and sixty becomes fifty. The other nine,
+including the corrupt archive word, are unchanged. Receipt:
+`research/v41-context-followup/step5400-callback-manual-review.json`.
+
+For indices352–383,27 complete actual frozen-Qwen first answers were
+read in full with system/history; five were missing/incomplete. Eleven
+were retained before accenting. All11 followups to those sources were
+also read with their actual three-turn histories; seven were retained.
+Malformed text, invented prior history, unreliable facts and context
+loss were excluded unchanged. All18 accent targets were then read;
+three omitted multisyllabic stress and one had unresolved pronunciation.
+The14 retained records comprise12 train and two originally heldout
+first answers. No source/target was rewritten or heldout reassigned.
+Receipts: `research/v41-scored-next/first352to384*`.
+
+Stock CUDA export and all14 tensor audits completed exit0 without OOM.
+Four stock assembly commands completed exit0. Ordered appendices and
+frozen bytes were checked. Latest immutable full dataset/cache:
+`data/{hidden-plan,freeze-features}-v41-first384full-google96-qa`, with
+99,728 train,3,605 validation and2,302 frozen rows. Metadata SHA256:
+`5d80da1ed0cf600418e6ea1702ac428f9f5e3655a431f4d9c3b5948d7780d94b`.
+Fresh contextual cohort:247 train /17 heldouts. These remain reviewed
+automatic labels, not independent human/factual gold.
+
+Prepared V42 replay has3,778 IDs (3,282 contextual /496 numeric); factor64
+gives337,742 positions and7,037 batch48 steps. Relative to live V41,
+77 train and11 validation records were added. All21 future native panels
+cover788 rows and point to V42-final weights; the fresh baseline/panel
+use all17 fresh heldouts. This supersedes the unlaunched first352 plan.
+V42 still requires reviewed V41-final weights and stock fixed33/fresh17
+baselines. Its run and continuation directory were absent at preflight.
+Latest prepared pointer: `research/v41-scored-next/LATEST_PREPARED.json`.
+No model/trainer code, live input, demo or merge state changed.

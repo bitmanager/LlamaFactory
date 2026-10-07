@@ -4042,3 +4042,33 @@ and V47 step600 evaluation were retained for inspection. Docker's reported
 build cache was already zero after concurrent maintenance; direct dev
 checks also found no cache records in either default or Coolify builder.
 Other projects' containers/images and persistent volumes were not purged.
+
+## V47 final review and V48 continuation
+
+V47 exited0 without OOM after one epoch:9,745 steps,78.72 minutes,
+99.03 training positions/second including evaluation/saves. Final weight
+SHA256 is `75fc6a5cf98382ee1beb6cc32adcb253f722b7b701266a953c2b7e79510d792c`.
+On the identical11,150 validation rows, CE fell from V46's0.24649923
+to0.15028670. All26 final native panels (869 rows) bind this hash and
+retain baseline source/reference/system/history identities.
+
+164 critical tuples were covered:87 complete source/system/history/
+reference/prediction tuples reread and77 exact prior full-tuple reuse.
+The remaining13 callbacks3000–9745 contain five distinct new tuples,
+all read and matched to actual validation inputs. Numeric WER improves
+29.91→28.49%, Balalaika64 improves6.20→5.75%, Saiga16 improves10.55→5.28%,
+and demos improve27.66→23.40%. Contextual19 slightly worsens5.58→5.80%.
+Balalaika64 exact including silver stress labels rises5→14/64; raw content
+exact stays39/64 and invalid-stress rows fall5→4. Rare words, large numeric
+magnitudes, acronym spelling, dropped words and repetition remain wrong.
+The archive callback still inserts/repeats payment text. This is research
+continuation eligibility, not production quality or demo promotion.
+Receipts: `research/v47-balalaika-bulk-mix/final`.
+
+V48 was launched on the same GPU0 from reviewed model-only V47 with fresh
+optimizer/schedule and unchanged trainer/model/config: BF16, batch48,
+LR1e-6, one epoch and the same213,424 train/11,150 validation corpus.
+No new unique data was admitted in V48; it consolidates the first epoch
+of the large Balalaika addition. Numeric/history replay remains unchanged.
+It will run the same26 final native panels. Launch/plan receipts:
+`research/v48-balalaika-bulk-followup`. The one-GPU demo remains V45.
